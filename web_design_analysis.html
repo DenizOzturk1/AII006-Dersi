@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Design Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #fff;
+    color: #111;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.65;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 40px 80px;
+  }
+
+  h1 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 48px;
+  }
+
+  .site-section {
+    margin-bottom: 56px;
+  }
+
+  .site-title {
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2px;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 400;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  .tag-appeal   { background: #eaf7e4; color: #3a7c2a; }
+  .tag-unappeal { background: #fdeaea; color: #a03030; }
+
+  .site-url {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 24px;
+  }
+
+  .site-url a { color: #888; text-decoration: none; }
+  .site-url a:hover { text-decoration: underline; }
+
+  .q-container {
+    margin-bottom: 32px;
+  }
+
+  .screenshot-placeholder {
+    width: 100%;
+    min-height: 180px;
+    background: #fcfcfc;
+    border: 1px dashed #e0e0e0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 12px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    overflow: hidden;
+  }
+
+  .screenshot-placeholder img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .q-row {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 0 16px;
+    padding: 14px 0;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .q-row:last-child { border-bottom: 1px solid #f0f0f0; }
+
+  .q-key {
+    font-size: 12px;
+    color: #bbb;
+    padding-top: 1px;
+    font-weight: 500;
+  }
+
+  .q-val { color: #333; }
+  .q-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 6px;
+  }
+  .q-ans {
+    color: #111;
+  }
+  .q-ans strong { color: #111; font-weight: 500; }
+
+  .reasons-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .reasons-list li {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 8px;
+    color: #555;
+  }
+
+  .r-num { color: #bbb; font-size: 12px; padding-top: 1px; }
+  .r-label { font-weight: 500; color: #111; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #e8e8e8;
+    margin: 0 0 56px;
+  }
+
+  footer {
+    font-size: 12px;
+    color: #bbb;
+    margin-top: 40px;
+  }
+
+  @media print {
+    .screenshot-placeholder { border: 1px solid #eee; background: none; }
+    .site-section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Web Design Analysis</h1>
+<p class="subtitle">Two websites examined - Nike (appealing) and Notion (unappealing)</p>
+
+<!-- NIKE -->
+<div class="site-section">
+  <div class="site-title">
+    Nike
+    <span class="tag tag-appeal">Appealing</span>
+  </div>
+  <div class="site-url"><a href="https://www.nike.com" target="_blank">https://www.nike.com</a></div>
+
+  <div class="q-container">
+    <div class="screenshot-placeholder">
+      <!-- Resim eklemek için src="" içine resim dosyasının adını yazın -->
+      <img src="AII006_hw8_2soru/Logo_NIKE.png" alt="Nike Screenshot">
+    </div>
+    <div class="q-row">
+      <span class="q-key">a.</span>
+      <div class="q-val">
+        <span class="q-label">What is the URL of the website?</span>
+        <div class="q-ans">https://www.nike.com</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-container">
+    <div class="screenshot-placeholder">
+      <img src="AII006_hw8_2soru/Ekran Görüntüsü (1427).png" alt="Nike Table Usage Screenshot">
+    </div>
+    <div class="q-row">
+      <span class="q-key">b.</span>
+      <div class="q-val">
+        <span class="q-label">Does this page use tables? If so, for what purpose?</span>
+        <div class="q-ans">Generally, <strong>no</strong>. Nike uses modern layout techniques like Flexbox and CSS Grid instead of traditional HTML tables for product presentations. Tables are primarily reserved for technical data, such as "Size Charts" in the footer or product details.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-container">
+    <div class="screenshot-placeholder">
+      <img src="AII006_hw8_2soru/Ekran Görüntüsü (1426).png" alt="Nike CSS Usage Screenshot">
+    </div>
+    <div class="q-row">
+      <span class="q-key">c.</span>
+      <div class="q-val">
+        <span class="q-label">Does this page use CSS? If so, for what purpose?</span>
+        <div class="q-ans"><strong>Yes, quite commonly.</strong> It's used for its minimalist page layout, high-quality typography (Nike's signature bold fonts), and responsive design that ensures the site looks good on every device</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-container">
+    <div class="screenshot-placeholder">
+      <img src="AII006_hw8_2soru/Ekran Görüntüsü (1428).png" alt="Nike Appealing Reasons Screenshot">
+    </div>
+    <div class="q-row">
+      <span class="q-key">d.</span>
+      <div class="q-val">
+        <span class="q-label">Is this page appealing or unappealing? List three reasons.</span>
+        <div class="q-ans">
+          <strong>Appealing.</strong>
+          <ul class="reasons-list">
+            <li><span class="r-num">1.</span><span><span class="r-label">Minimalist design:</span> The simple use of white space allows products to stand out without distracting elements.</span></li>
+            <li><span class="r-num">2.</span><span><span class="r-label">Clear Purpose:</span> The purpose (shopping and brand identity) is immediately clear from the moment the page loads.</span></li>
+            <li><span class="r-num">3.</span><span><span class="r-label">Simplicity:</span> The descriptions are extremely clear, making it very easy for the user to learn to navigate and find what they need.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-container">
+    <div class="q-row">
+      <span class="q-key">e.</span>
+      <div class="q-val">
+        <span class="q-label">If this page is unappealing, what would you do to improve it?</span>
+        <div class="q-ans" style="color:#bbb;">Im considering page is appealing.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+
+
+
+
+<!-- NOTION -->
+<div class="site-section">
+  <div class="site-title">
+    Notion
+    <span class="tag tag-unappeal">Unappealing</span>
+  </div>
+  <div class="site-url"><a href="https://www.notion.com" target="_blank">https://www.notion.com</a></div>
+
+  <div class="q-container">
+    <div class="screenshot-placeholder">
+      <img src="AII006_hw8_2soru/Notion-Emblem.png" alt="Notion Screenshot">
+    </div>
+    <div class="q-row">
+      <span class="q-key">a.</span>
+      <div class="q-val">
+        <span class="q-label">What is the URL of the website?</span>
+        <div class="q-ans">https://www.notion.com</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-container">
+    <div class="screenshot-placeholder">
+      <img src="AII006_hw8_2soru/Ekran Görüntüsü (1417).png" alt="Notion Table Usage Screenshot">
+    </div>
+    <div class="q-row">
+      <span class="q-key">b.</span>
+      <div class="q-val">
+        <span class="q-label">Does this page use tables? If so, for what purpose?</span>
+        <div class="q-ans"><strong>Yes</strong>. Tables (or table-like CSS structures) are used for organizing complex information, such as the "Savings Calculator" and comparison lists of features and pricing</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-container">
+    <div class="screenshot-placeholder">
+      <img src="AII006_hw8_2soru/Ekran Görüntüsü (1418).png" alt="Notion CSS Usage Screenshot">
+    </div>
+    <div class="q-row">
+      <span class="q-key">c.</span>
+      <div class="q-val">
+        <span class="q-label">Does this page use CSS? If so, for what purpose?</span>
+        <div class="q-ans"><strong>Yes</strong>It is used for complex page layouts, managing a huge density of information, and styling various interactive UI elements like the "night shift" theme or AI agent icons</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-container">
+    <div class="screenshot-placeholder">
+      <img src="AII006_hw8_2soru/Ekran Görüntüsü (1425).png" alt="Notion Unappealing Reasons Screenshot">
+    </div>
+    <div class="q-row">
+      <span class="q-key">d.</span>
+      <div class="q-val">
+        <span class="q-label">Is this page appealing or unappealing? List three reasons.</span>
+        <div class="q-ans">
+          <strong>Unappealing.</strong>
+          <ul class="reasons-list">
+            <li><span class="r-num">1.</span><span><span class="r-label">Overwhelming Density:</span> The page presents too many features (Docs, Projects, AI, Mail, etc.) at once, which can be "scary" for new users</span></li>
+            <li><span class="r-num">2.</span><span><span class="r-label">Visual Strain:</span> The layout is cluttered with numerous headings and usage examples (Teams, Initiatives, Training), making it difficult to see</span></li>
+            <li><span class="r-num">3.</span><span><span class="r-label">Ambiguous Purpose:</span> Because it tries to be "everything" (an "AI everything app"), it is difficult to quickly understand its core service</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-container">
+    <div class="screenshot-placeholder">
+      <img src="AII006_hw8_2soru/Ekran Görüntüsü (1423).png" alt="Notion Improvement Screenshot">
+    </div>
+    <div class="q-row">
+      <span class="q-key">e.</span>
+      <div class="q-val">
+        <span class="q-label">If this page is unappealing, what would you do to improve it?</span>
+        <div class="q-ans">To improve the page, I would simplify it by using more blank space on the homepage and grouping features into separate, clickable tabs instead of listing them all on the main landing page. A single, clear primary call to action would help reduce the "intimidating" feeling of having too many options</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Web Design Analysis - Homework 8 (2. Question)
+</footer>
+
+</body>
+</html>

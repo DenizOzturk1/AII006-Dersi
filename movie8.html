@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>movie8.html</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    :root{
+      --bg:#ede8df;
+      --card:#f7f3ed;
+      --dark:#151515;
+      --sepia:#5c4a45;
+      --soft:#8b7b72;
+      --accent:#9f1f1f;
+    }
+
+    body{
+        background:var(--bg);
+        color:var(--dark);
+        font-family:'Poppins', sans-serif;
+
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        min-height:100vh;
+    }
+
+
+    .filmstrip{
+      width:100%;
+      height:50px;
+      background:#111;
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+    }
+
+    .filmstrip-holes{
+      display:flex;
+      gap:14px;
+      padding:0 20px;
+    }
+
+    .hole{
+      width:20px;
+      height:28px;
+      background:var(--bg);
+      opacity:.15;
+      border-radius:3px;
+    }
+
+
+    .hero{
+      width:100%;
+      max-width:850px;
+      padding:60px 40px 30px;
+    }
+
+    .hero p{
+      text-transform:uppercase;
+      letter-spacing:.3em;
+      color:var(--sepia);
+      font-size:.7rem;
+      margin-bottom:18px;
+      border-left:3px solid var(--accent);
+      padding-left:12px;
+    }
+
+    .hero h1{
+        font-family:'Playfair Display', serif;
+        font-size:7rem;
+        line-height:.9;
+        font-weight:700;
+    }
+
+    .hero h1 span{
+      font-style:italic;
+      font-weight:300;
+      color:var(--sepia);
+    }
+
+    .hero-sub{
+      margin-top:18px;
+      color:var(--soft);
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      font-size:.8rem;
+    }
+
+    .line{
+      width:100%;
+      max-width:850px;
+      height:1px;
+      background:linear-gradient(to right,var(--sepia),transparent);
+      opacity:.4;
+    }
+
+
+    .table-wrap{
+      width:100%;
+      max-width:850px;
+      padding:20px 40px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:var(--card);
+      border:2px solid var(--sepia);
+    }
+
+    caption{
+      text-align:left;
+      margin-bottom:14px;
+      color:var(--soft);
+      letter-spacing:.3em;
+      text-transform:uppercase;
+      font-size:.7rem;
+    }
+
+    tr{
+      border-bottom:1px solid rgba(0,0,0,.1);
+    }
+
+    tr:last-child{
+      border-bottom:none;
+    }
+
+    th{
+        font-family:'Poppins', sans-serif;
+        font-weight:600;
+    }
+
+    td{
+      padding:22px 28px;
+      line-height:1.8;
+      font-size:1rem;
+      color:#2f2f2f;
+      background:#f8f5f0;
+    }
+
+
+    .review-link{
+      text-decoration:none;
+      color:var(--accent);
+      border-bottom:1px solid rgba(159,31,31,.4);
+    }
+
+    .review-link:hover{
+      color:var(--dark);
+      border-color:var(--dark);
+    }
+
+
+    footer{
+      margin:40px 0 20px;
+      color:var(--soft);
+      font-style:italic;
+      font-size:.9rem;
+    }
+
+    footer a{
+      color:var(--sepia);
+      text-decoration:none;
+      border-bottom:1px dotted var(--sepia);
+    }
+
+    .filmstrip-bottom{
+      width:100%;
+      height:50px;
+      background:#111;
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+      margin-top:auto;
+    }
+
+  </style>
+</head>
+
+<body>
+
+
+ <div class="filmstrip">
+  <div class="filmstrip-holes">
+
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+
+  </div>
+</div>
+
+
+  <section class="hero">
+    <p>My Favorite Movie</p>
+
+    <h1><span>Interstellar</span></h1>
+
+    <div class="hero-sub">
+      2014 · Christopher Nolan
+    </div>
+  </section>
+
+  <div class="line"></div>
+
+
+  <div class="table-wrap">
+
+    <table>
+
+      <caption>Movie Details</caption>
+
+      <tr>
+        <th>Title</th>
+        <td>Interstellar</td>
+      </tr>
+
+      <tr>
+        <th>Director</th>
+        <td>Christopher Nolan</td>
+      </tr>
+
+      <tr>
+        <th>Leading Actor</th>
+        <td>Matthew McConaughey</td>
+      </tr>
+
+      <tr>
+        <th>Leading Actress</th>
+        <td>Anne Hathaway</td>
+      </tr>
+
+      <tr>
+        <th>Rating</th>
+        <td><span class="badge">PG-13</span></td>
+      </tr>
+
+      <tr>
+        <th>Description</th>
+        <td>
+          Interstellar follows a group of astronauts who travel through a wormhole in search of a new habitable planet at a time when Earth is facing enviromental collapse. The film combines emotional storytelling with stunning visuals and scientific discoveries about space, gravity and time.
+        </td>
+      </tr>
+
+      <tr>
+        <th>Review</th>
+        <td>
+          <a class="review-link"
+             href="https://www.rogerebert.com/reviews/interstellar-2014"
+             target="_blank">
+            Read Review on RogerEbert.com
+          </a>
+        </td>
+      </tr>
+
+    </table>
+
+  </div>
+
+
+  <footer>
+    This file was created by 
+    <a href="mailto:20210504@neu.edu.tr">20210504@neu.edu.tr</a>
+  </footer>
+
+
+<div class="filmstrip-bottom">
+  <div class="filmstrip-holes">
+
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>  
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>  
+    <div class="hole"></div><div class="hole"></div><div class="hole"></div>            
+  </div>
+</div>
+</body>
+</html>

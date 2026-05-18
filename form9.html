@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Music Survey</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f2f0ed;
+      font-family: Georgia, serif;
+      color: #2c2c2c;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .form-wrapper {
+      background-color: #ffffff;
+      border: 1px solid #d4d0ca;
+      border-radius: 4px;
+      padding: 36px 40px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      font-weight: normal;
+      letter-spacing: 0.02em;
+      color: #1a1a1a;
+      margin-bottom: 28px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #3d7a5e;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-family: Georgia, serif;
+      font-size: 0.95rem;
+      color: #2c2c2c;
+      background-color: #fafaf8;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #3d7a5e;
+      background-color: #fff;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    fieldset {
+      border: 1px solid #d4d0ca;
+      border-radius: 3px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+
+    legend {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #3d7a5e;
+      padding: 0 6px;
+    }
+
+    .radio-group label,
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      text-transform: none;
+      letter-spacing: 0;
+      color: #2c2c2c;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+
+    .radio-group label:last-child,
+    .checkbox-group label:last-child {
+      margin-bottom: 0;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      accent-color: #3d7a5e;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    input[type="submit"],
+    input[type="reset"] {
+      padding: 9px 24px;
+      font-family: Georgia, serif;
+      font-size: 0.9rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+      border: 1px solid #3d7a5e;
+    }
+
+    input[type="submit"] {
+      background-color: #3d7a5e;
+      color: #fff;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #2e5f48;
+    }
+
+    input[type="reset"] {
+      background-color: #fff;
+      color: #3d7a5e;
+    }
+
+    input[type="reset"]:hover {
+      background-color: #f0f5f2;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-wrapper">
+  <h1>Music Survey</h1>
+
+  <form action="http://www.uyar.com/teaching/ecc006/2017spring/login.php" method="post">
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name">
+    </div>
+
+    <div class="form-group">
+      <label for="email">E-Mail</label>
+      <input type="email" id="email" name="email">
+    </div>
+
+    <fieldset>
+      <legend>Favorite Types of Music</legend>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="music" value="pop"> Pop</label>
+        <label><input type="checkbox" name="music" value="classical"> Classical</label>
+        <label><input type="checkbox" name="music" value="rock"> Rock</label>
+        <label><input type="checkbox" name="music" value="folk"> Folk</label>
+        <label><input type="checkbox" name="music" value="rap"> Rap</label>
+        <label><input type="checkbox" name="music" value="other"> Other</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>How often do you purchase Music CDs?</legend>
+      <div class="radio-group">
+        <label><input type="radio" name="purchase" value="weekly"> Weekly</label>
+        <label><input type="radio" name="purchase" value="fewperyear" checked> A few CDs each year</label>
+        <label><input type="radio" name="purchase" value="monthly"> Monthly</label>
+        <label><input type="radio" name="purchase" value="never"> Never purchase</label>
+      </div>
+    </fieldset>
+
+    <div class="form-group">
+      <label for="location">Where do you listen to Music?</label>
+      <select id="location" name="location" size="3">
+        <option value="home">At home</option>
+        <option value="car">In the car</option>
+        <option value="mp3">Anywhere (MP3 Player)</option>
+        <option value="work">At work</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="role">What role does music play in your life?</label>
+      <textarea id="role" name="role" cols="60" rows="3"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <input type="submit" value="Submit">
+      <input type="reset" value="Reset">
+    </div>
+
+  </form>
+</div>
+
+</body>
+</html>

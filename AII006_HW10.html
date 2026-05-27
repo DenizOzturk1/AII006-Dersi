@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Commerce Survey - AII006 HW10</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inconsolata:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream:#faf6ef; --warm:#f2ead8; --warm2:#e8ddc8;
+      --border:#d4c8b0; --border2:#c2b49a;
+      --maroon:#5c1520; --maroon2:#7a2030; --maroon-lt:#a04050;
+      --gold:#8a6830; --gold-lt:#b8924a;
+      --ink:#1e1208; --ink2:#4a3020; --muted:#8a7060;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--cream);color:var(--ink);font-family:'EB Garamond',serif;font-size:16px;line-height:1.8}
+    .top-rule{height:6px;background:var(--maroon)}
+
+
+    .masthead{background:var(--cream);border-bottom:3px double var(--border2);padding:48px 64px 36px;text-align:center}
+    .masthead-eyebrow{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+    .masthead h1{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,7vw,84px);font-weight:500;line-height:1;color:var(--ink);margin-bottom:14px}
+    .masthead h1 em{font-style:calibri;color:var(--maroon)}
+    .masthead-sub{font-family:'EB Garamond',serif;font-size:16px;font-style:calibri;color:var(--muted);margin-bottom:28px}
+    .masthead-meta{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:20px;border-top:1px solid var(--border)}
+    .masthead-meta span b{color:var(--ink2);font-weight:500}
+
+
+    .numbers-bar{background:var(--maroon);display:flex;justify-content:center;flex-wrap:wrap}
+    .nb-item{padding:22px 48px;text-align:center;border-right:1px solid rgba(255,255,255,.12)}
+    .nb-item:last-child{border-right:none}
+    .nb-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:#f5ede0;line-height:1;margin-bottom:3px}
+    .nb-lbl{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,237,224,.5)}
+
+
+    .form-wrap{background:var(--warm);border-bottom:3px double var(--border2);padding:56px 64px}
+    .form-header{text-align:center;margin-bottom:40px}
+    .form-header h2{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:var(--maroon);margin-bottom:8px}
+    .form-header p{font-size:14px;font-style:calibri;color:var(--muted)}
+    .form-inner{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+    .q-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:24px 28px}
+    .q-num{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+    .q-text{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--ink);margin-bottom:16px;line-height:1.3}
+    .q-options{display:flex;flex-direction:column;gap:10px}
+    .radio-lbl{display:flex;align-items:center;gap:12px;cursor:pointer;font-size:15px;color:var(--ink2);padding:10px 14px;border-radius:4px;border:1px solid var(--border);transition:background .15s,border-color .15s}
+    .radio-lbl:hover{background:var(--warm);border-color:var(--border2)}
+    .radio-lbl input[type=radio]{accent-color:var(--maroon);width:16px;height:16px;flex-shrink:0}
+    .radio-lbl.selected{background:rgba(92,21,32,.06);border-color:var(--maroon)}
+    .q-input{width:100%;border:1px solid var(--border);border-radius:4px;padding:10px 14px;font-family:'EB Garamond',serif;font-size:15px;color:var(--ink);background:#fff;outline:none;transition:border-color .15s}
+    .q-input:focus{border-color:var(--maroon)}
+    .submit-btn{display:block;width:100%;padding:14px;background:var(--maroon);color:#f5ede0;font-family:'Inconsolata',monospace;font-size:13px;letter-spacing:.18em;text-transform:uppercase;border:none;border-radius:4px;cursor:pointer;transition:background .2s}
+    .submit-btn:hover{background:var(--maroon2)}
+    .form-success{display:none;text-align:center;padding:20px;background:rgba(92,21,32,.07);border:1px solid var(--maroon);border-radius:6px;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--maroon);font-style:calibri}
+
+
+    .page-body{max-width:1040px;margin:0 auto;padding:56px 48px 80px}
+    .sec{margin-bottom:60px}
+    .sec-head{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+    .sec-letter{font-family:'Cormorant Garamond',serif;font-size:13px;font-style:calibri;color:var(--maroon);background:var(--warm);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .sec-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--maroon);letter-spacing:.01em}
+    .sec-rule{flex:1;height:1px;background:var(--border)}
+
+
+    .sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border2);border-radius:4px;overflow:hidden;margin-bottom:22px}
+    .sum-card{padding:28px 24px;background:#fff;text-align:center;border-right:1px solid var(--border)}
+    .sum-card:last-child{border-right:none}
+    .sum-card.hi{background:var(--maroon)}
+    .sum-num{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:600;color:var(--maroon);line-height:1;margin-bottom:6px;transition:all .4s}
+    .sum-card.hi .sum-num{color:#f5ede0}
+    .sum-lbl{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    .sum-card.hi .sum-lbl{color:rgba(245,237,224,.55)}
+
+
+    .barchart{display:flex;flex-direction:column;gap:16px}
+    .bar-row{display:grid;grid-template-columns:160px 1fr 60px;align-items:center;gap:14px}
+    .bar-label{font-family:'Calibri',sans-serif;font-size:15px;color:var(--ink2);text-align:right}
+    .bar-track{height:30px;background:var(--warm2);border-radius:2px;overflow:hidden;border:1px solid var(--border)}
+    .bar-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.22,1,.36,1)}
+    .bar-fill.a{background:var(--maroon)}
+    .bar-fill.b{background:var(--gold)}
+    .bar-fill.c{background:var(--border2)}
+    .bar-val{font-family:'Calibri',sans-serif;font-size:20px;font-weight:600;color:var(--maroon);transition:all .4s}
+
+
+    .gender-block{display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start}
+    .gender-strip-lbl{font-family:'Calibri',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+    .gender-strip{width:300px;height:48px;display:flex;border-radius:3px;overflow:hidden;border:1px solid var(--border2)}
+    .gs{display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;transition:width .8s cubic-bezier(.22,1,.36,1)}
+    .gs.m{background:var(--maroon);color:#f5ede0}
+    .gs.f{background:var(--gold-lt);color:var(--ink)}
+    .gender-legend{margin-top:14px;display:flex;gap:20px}
+    .gl{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink2)}
+    .gl-dot{width:9px;height:9px;border-radius:50%}
+
+
+    .age-chart{display:flex;flex-direction:column;gap:10px}
+    .age-row{display:grid;grid-template-columns:72px 1fr 110px;align-items:center;gap:14px}
+    .age-tag{font-family:'Calibri',sans-serif;font-size:11px;color:var(--muted);text-align:right}
+    .age-track{height:26px;background:var(--warm2);border-radius:2px;overflow:hidden;border:1px solid var(--border)}
+    .age-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.22,1,.36,1)}
+    .age-meta{font-family:'Calibri',sans-serif;font-size:11px;color:var(--ink2);transition:all .4s}
+
+
+    .edu-tbl{width:100%;border-collapse:collapse}
+    .edu-tbl thead tr{border-bottom:2px solid var(--maroon)}
+    .edu-tbl th{font-family:'Calibri',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--maroon);padding:8px 14px;text-align:left;font-weight:400}
+    .edu-tbl td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:15px}
+    .edu-tbl tr:last-child td{border-bottom:none}
+    .edu-tbl tr:hover td{background:rgba(92,21,32,.03)}
+    .mt{width:90px;height:7px;background:var(--warm2);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;border:1px solid var(--border)}
+    .mf{height:100%;background:var(--maroon);border-radius:3px;transition:width .8s cubic-bezier(.22,1,.36,1)}
+
+
+    .sites-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+    .site-card{background:#fff;border:1px solid var(--border);border-radius:4px;padding:20px 16px;transition:box-shadow .2s,transform .2s}
+    .site-card:hover{box-shadow:0 4px 18px rgba(92,21,32,.08);transform:translateY(-2px)}
+    .site-card.r1{background:var(--maroon);border-color:var(--maroon);color:#f5ede0}
+    .site-card.r2{background:var(--maroon2);border-color:var(--maroon2);color:#f5ede0}
+    .site-rank{font-family:'Calibri',sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+    .site-card.r1 .site-rank,.site-card.r2 .site-rank{color:rgba(245,237,224,.45)}
+    .site-name{font-family:'Cormorant Garamond', serif;font-size:23px;font-weight:600;color:var(--maroon);margin-bottom:8px}
+    .site-card.r1 .site-name,.site-card.r2 .site-name{color:#f5ede0}
+    .site-bar-track{height:4px;background:var(--warm2);border-radius:2px;overflow:hidden;margin-bottom:7px}
+    .site-card.r1 .site-bar-track,.site-card.r2 .site-bar-track{background:rgba(255,255,255,.15)}
+    .site-bar-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .8s cubic-bezier(.22,1,.36,1)}
+    .site-card.r1 .site-bar-fill,.site-card.r2 .site-bar-fill{background:var(--gold-lt)}
+    .site-pct{font-family:'Calibri',sans-serif;font-size:11px;color:var(--muted)}
+    .site-card.r1 .site-pct,.site-card.r2 .site-pct{color:rgba(245,237,224,.45)}
+    .site-why{font-size:12px;font-style:calibri;color:var(--muted);margin-top:5px;line-height:1.5}
+    .site-card.r1 .site-why,.site-card.r2 .site-why{color:rgba(245,237,224,.45)}
+
+
+    .resp-wrapper{border:1px solid var(--border2);border-radius:4px;overflow:hidden}
+    .resp-tbl{width:100%;border-collapse:collapse;font-size:13px}
+    .resp-tbl thead tr{background:var(--maroon)}
+    .resp-tbl th{font-family:'Calibri',sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,237,224,.75);padding:10px 12px;text-align:left;font-weight:400;white-space:nowrap}
+    .resp-tbl td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;font-family:'Calibri',sans-serif;font-size:14px;color:var(--ink2)}
+    .resp-tbl tr:last-child td{border-bottom:none}
+    .resp-tbl tr:nth-child(even) td{background:var(--warm)}
+    .resp-tbl tr:hover td{background:rgba(92,21,32,.04)}
+    .resp-tbl td.yes{color:var(--maroon);font-weight:500}
+    .resp-tbl td.no{color:var(--muted)}
+    .resp-tbl tr.new-row td{background:rgba(92,21,32,.08)!important;font-style:calibri}
+    .show-more-btn{display:block;width:100%;padding:14px;background:var(--warm);border:none;border-top:1px solid var(--border);font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--maroon);cursor:pointer;transition:background .2s,color .2s}
+    .show-more-btn:hover{background:var(--maroon);color:#f5ede0}
+
+
+    .note{font-size:14px;font-style:calibri;color:var(--muted);margin-top:20px;padding-left:16px;border-left:2px solid var(--gold-lt);line-height:1.75}
+
+
+    .conc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+    .conc-card{background:#fff;border:1px solid var(--border);border-radius:4px;padding:24px 20px;position:relative}
+    .conc-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--maroon);border-radius:4px 0 0 4px}
+    .conc-card.alt::before{background:var(--gold)}
+    .conc-card h3{font-family:'Calibri',sans-serif;font-size:18px;font-weight:600;color:var(--maroon);margin-bottom:8px;line-height:1.3}
+    .conc-card p{font-size:14px;color:var(--ink2);line-height:1.75}
+    .src{display:block;margin-top:10px;font-family:'Calibri',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+    .src:hover{color:var(--maroon)}
+
+
+    footer{background:var(--maroon);color:rgba(245,237,224,.65);padding:32px 64px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;border-top:4px solid var(--maroon2)}
+    footer p{font-family:'Calibri',sans-serif;font-size:11px;letter-spacing:.06em;line-height:1.9}
+    footer a{color:var(--gold-lt);text-decoration:none;font-family:'Calibri',sans-serif;font-size:12px;border-bottom:1px solid rgba(184,146,74,.4);padding-bottom:2px}
+    footer a:hover{color:#f5ede0;border-color:#f5ede0}
+
+    @media(max-width:640px){
+      .masthead,.form-wrap,.page-body,footer{padding-left:20px;padding-right:20px}
+      .sum-grid{grid-template-columns:1fr 1fr}
+      .bar-row{grid-template-columns:90px 1fr 44px}
+      .gender-strip{width:100%}
+      .nb-item{padding:18px 24px}
+    }
+  </style>
+</head>
+<body>
+<div class="top-rule"></div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-eyebrow">AII006 - Homework Assignment #10</div>
+  <h1>How Popular Is<br><em>E-Commerce?</em></h1>
+  <p class="masthead-sub">A survey of 20 individuals on online shopping habits</p>
+  <div class="masthead-meta">
+    <span>Prepared by <b>Deniz</b></span>
+    <span>Sample Size <b id="hdr-total">20 people</b></span>
+    <span>Average Age <b>~25</b></span>
+    <span>Contact <b><a href="mailto:20210504@std.neu.edu.tr" style="color:var(--ink2);text-decoration:none;border:none;">20210504@std.neu.edu.tr</a></b></span>
+  </div>
+</header>
+
+<!-- KEY NUMBERS -->
+<div class="numbers-bar">
+  <div class="nb-item"><div class="nb-num" id="nb-total">20</div><div class="nb-lbl">Respondents</div></div>
+  <div class="nb-item"><div class="nb-num" id="nb-purchased">17</div><div class="nb-lbl">Purchased Online</div></div>
+  <div class="nb-item"><div class="nb-num" id="nb-rate">85%</div><div class="nb-lbl">Conversion Rate</div></div>
+  <div class="nb-item"><div class="nb-num">~25</div><div class="nb-lbl">Average Age</div></div>
+  <div class="nb-item"><div class="nb-num" id="nb-gender">63/37</div><div class="nb-lbl">Male / Female %</div></div>
+</div>
+
+<!-- SURVEY FORM -->
+<div class="form-wrap">
+  <div class="form-header">
+    <h2>Participate in the Survey</h2>
+    <p>Fill in the form below - your response will be added to the results in real time.</p>
+  </div>
+  <div class="form-inner">
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-num">Question 1 of 6</div>
+      <div class="q-text">Have you ever purchased an item online?</div>
+      <div class="q-options" id="q1-options">
+        <label class="radio-lbl"><input type="radio" name="q1" value="yes"> Yes, I have purchased online</label>
+        <label class="radio-lbl"><input type="radio" name="q1" value="no"> No, I have only browsed</label>
+        <label class="radio-lbl"><input type="radio" name="q1" value="never"> I have never visited an online store</label>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card" id="q2-card" style="display:none">
+      <div class="q-num">Question 2 of 6</div>
+      <div class="q-text">How often do you purchase online?</div>
+      <div class="q-options">
+        <label class="radio-lbl"><input type="radio" name="q2" value="weekly"> Once a week or more</label>
+        <label class="radio-lbl"><input type="radio" name="q2" value="monthly"> Once a month</label>
+        <label class="radio-lbl"><input type="radio" name="q2" value="yearly"> Once a year or less</label>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-num">Question 3 of 6</div>
+      <div class="q-text">What is your age range?</div>
+      <div class="q-options">
+        <label class="radio-lbl"><input type="radio" name="q3" value="18-25"> 18 – 25</label>
+        <label class="radio-lbl"><input type="radio" name="q3" value="26-39"> 26 – 39</label>
+        <label class="radio-lbl"><input type="radio" name="q3" value="40-50"> 40 – 50</label>
+        <label class="radio-lbl"><input type="radio" name="q3" value="50+"> Over 50</label>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-num">Question 4 of 6</div>
+      <div class="q-text">What is your gender?</div>
+      <div class="q-options">
+        <label class="radio-lbl"><input type="radio" name="q4" value="male"> Male</label>
+        <label class="radio-lbl"><input type="radio" name="q4" value="female"> Female</label>
+        <label class="radio-lbl"><input type="radio" name="q4" value="other"> Prefer not to say</label>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-num">Question 5 of 6</div>
+      <div class="q-text">What is your highest level of education?</div>
+      <div class="q-options">
+        <label class="radio-lbl"><input type="radio" name="q5" value="highschool"> High School Graduate</label>
+        <label class="radio-lbl"><input type="radio" name="q5" value="somecollege"> Some College / Vocational</label>
+        <label class="radio-lbl"><input type="radio" name="q5" value="university"> University (Undergraduate)</label>
+        <label class="radio-lbl"><input type="radio" name="q5" value="graduate"> Graduate School</label>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-num">Question 6 of 6</div>
+      <div class="q-text">What is your favourite online shopping site?</div>
+      <div class="q-options">
+        <label class="radio-lbl"><input type="radio" name="q6" value="Trendyol"> Trendyol</label>
+        <label class="radio-lbl"><input type="radio" name="q6" value="Temu"> Temu</label>
+        <label class="radio-lbl"><input type="radio" name="q6" value="Amazon"> Amazon</label>
+        <label class="radio-lbl"><input type="radio" name="q6" value="Hepsiburada"> Hepsiburada</label>
+        <label class="radio-lbl"><input type="radio" name="q6" value="Other"> Other</label>
+      </div>
+    </div>
+
+    <button class="submit-btn" onclick="submitForm()">Submit Response</button>
+    <div class="form-success" id="form-success">✦ Thank you! Your response has been added to the results.</div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="page-body">
+
+  <!-- A -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-letter">a</div>
+      <h2 class="sec-title">Purchase Behaviour</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="sum-grid">
+      <div class="sum-card hi">
+        <div class="sum-num" id="stat-purchased">17</div>
+        <div class="sum-lbl">Purchased Online</div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-num" id="stat-browsed" style="color:var(--gold)">3</div>
+        <div class="sum-lbl">Browsed, Did Not Buy</div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-num" id="stat-rate">85%</div>
+        <div class="sum-lbl">Online Purchase Rate</div>
+      </div>
+    </div>
+    <p class="note">85% of respondents have made at least one online purchase. Non-buyers cited payment security concerns and preference for seeing products in person - consistent with Pew Internet findings on e-commerce non-adoption.</p>
+  </div>
+
+  <!-- C -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-letter">c</div>
+      <h2 class="sec-title">Purchase Frequency <span style="font-weight:400;font-size:18px;color:var(--muted)">(of buyers only)</span></h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="barchart">
+      <div class="bar-row">
+        <span class="bar-label">Once a month</span>
+        <div class="bar-track"><div class="bar-fill a" id="freq-monthly-bar" style="width:59%"></div></div>
+        <span class="bar-val" id="freq-monthly-val">10</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Once a week</span>
+        <div class="bar-track"><div class="bar-fill b" id="freq-weekly-bar" style="width:24%"></div></div>
+        <span class="bar-val" id="freq-weekly-val">4</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Once a year</span>
+        <div class="bar-track"><div class="bar-fill c" id="freq-yearly-bar" style="width:18%"></div></div>
+        <span class="bar-val" id="freq-yearly-val">3</span>
+      </div>
+    </div>
+    <p class="note">Monthly purchasing is the dominant pattern, in line with opnion surveys data showing habitual monthly online shopping among 18–34 year-olds globally.</p>
+  </div>
+
+  <!-- D -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-letter">d</div>
+      <h2 class="sec-title">Age Distribution</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="age-chart">
+      <div class="age-row">
+        <span class="age-tag">18–25</span>
+        <div class="age-track"><div class="age-fill" id="age-a-bar" style="width:65%;background:var(--maroon)"></div></div>
+        <span class="age-meta" id="age-a-meta">13 people · 65%</span>
+      </div>
+      <div class="age-row">
+        <span class="age-tag">26–39</span>
+        <div class="age-track"><div class="age-fill" id="age-b-bar" style="width:20%;background:var(--gold)"></div></div>
+        <span class="age-meta" id="age-b-meta">4 people · 20%</span>
+      </div>
+      <div class="age-row">
+        <span class="age-tag">40–50</span>
+        <div class="age-track"><div class="age-fill" id="age-c-bar" style="width:10%;background:var(--border2)"></div></div>
+        <span class="age-meta" id="age-c-meta">2 people · 10%</span>
+      </div>
+      <div class="age-row">
+        <span class="age-tag">Over 50</span>
+        <div class="age-track"><div class="age-fill" id="age-d-bar" style="width:5%;background:#c0b090"></div></div>
+        <span class="age-meta" id="age-d-meta">1 person · 5%</span>
+      </div>
+    </div>
+    <p class="note">The 18–25 bracket dominates. Pew Internet confirms this age group shops online more frequently than any other demographic.</p>
+  </div>
+
+  <!-- E -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-letter">e</div>
+      <h2 class="sec-title">Gender</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="gender-block">
+      <div>
+        <div class="gender-strip-lbl">Proportion of respondents</div>
+        <div class="gender-strip">
+          <div class="gs m" id="gender-male-seg">Male 63%</div>
+          <div class="gs f" id="gender-female-seg">Female 37%</div>
+        </div>
+        <div class="gender-legend">
+          <div class="gl"><div class="gl-dot" style="background:var(--maroon)"></div><span id="gender-male-lbl">Male · ~13 people</span></div>
+          <div class="gl"><div class="gl-dot" style="background:var(--gold-lt)"></div><span id="gender-female-lbl">Female · ~7 people</span></div>
+        </div>
+      </div>
+      <p class="note" style="margin-top:0;flex:1;min-width:200px;">Female respondents reported higher per-session spending on fashion platforms. opion surveys projects women will surpass men in online retail spend globally by 2026.</p>
+    </div>
+  </div>
+
+  <!-- F -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-letter">f</div>
+      <h2 class="sec-title">Education Level</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <table class="edu-tbl">
+      <thead><tr><th>Level</th><th>Count</th><th>Distribution</th><th>%</th></tr></thead>
+      <tbody>
+        <tr><td>University (Undergraduate)</td><td id="edu-uni-n">10</td><td><span class="mt"><span class="mf" id="edu-uni-bar" style="width:100%"></span></span></td><td id="edu-uni-pct">50%</td></tr>
+        <tr><td>High School Graduate</td><td id="edu-hs-n">5</td><td><span class="mt"><span class="mf" id="edu-hs-bar" style="width:50%"></span></span></td><td id="edu-hs-pct">25%</td></tr>
+        <tr><td>Graduate School</td><td id="edu-grad-n">3</td><td><span class="mt"><span class="mf" id="edu-grad-bar" style="width:30%"></span></span></td><td id="edu-grad-pct">15%</td></tr>
+        <tr><td>Some College / Vocational</td><td id="edu-some-n">2</td><td><span class="mt"><span class="mf" id="edu-some-bar" style="width:20%"></span></span></td><td id="edu-some-pct">10%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- G -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-letter">g</div>
+      <h2 class="sec-title">Favourite Online Shopping Sites</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="sites-grid" id="sites-grid">
+    </div>
+  </div>
+
+  <!-- RESPONDENTS TABLE -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-letter" style="font-size:11px;font-style:normal;">≡</div>
+      <h2 class="sec-title">Individual Survey Responses</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="resp-wrapper">
+      <table class="resp-tbl">
+        <thead>
+          <tr>
+            <th>#</th><th>Age</th><th>Gender</th><th>Education</th>
+            <th>Purchased?</th><th>Frequency</th><th>Favourite Site</th>
+          </tr>
+        </thead>
+        <tbody id="resp-tbody"></tbody>
+      </table>
+      <button class="show-more-btn" id="show-more-btn" onclick="toggleRows()">Show All Responses ↓</button>
+    </div>
+  </div>
+
+  <!-- CONCLUSIONS -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-letter" style="font-style:normal;font-size:12px;">✦</div>
+      <h2 class="sec-title">Conclusions</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="conc-grid">
+      <div class="conc-card">
+        <h3>Summary Trendyol</h3>
+        <p>TRENDYOL.COM is chosen because it has plenty of different fashion items and fast deliveries. It is also preferred by almost half of the participants (40%) since it is locally dominant and provides good customer services</p>
+        <a href="https://www.trendyol.com" target="_blank" class="src">↗ Visit Trendyol.com</a>
+      </div>
+      <div class="conc-card alt">
+        <h3>Summary Temu</h3>
+        <p>TEMU.COM is preferred due to low prices and numerous products that are not always available somewhere else. It is preferred by 25% of the surveyed because of its variety of products and low prices</p>
+        <a href="https://www.temu.com" target="_blank" class="src">↗ Visit Temu.com</a>
+      </div>
+      <div class="conc-card">
+        <h3>Summary Amazon</h3>
+        <p>AMAZON.COM is chosen due to its trustworthy nature and good customer experience. It is chosen by 20% of respondents because of its availability internationally and trustworthy nature</p>
+        <a href="https://www.amazon.com" target="_blank" class="src">↗ Visit Amazon.com</a>
+      </div>
+      <div class="conc-card alt">
+        <h3>Summary Hepsiburada</h3>
+        <p>HEPSIBURADA.COM is chosen as a trustworthy competitor that has good infrastructure and is available locally. It is chosen by 10% of our survey participants</p>
+        <a href="https://www.hepsiburada.com" target="_blank" class="src">↗ Visit Hepsiburada.com</a>
+      </div>
+      <div class="conc-card">
+        <h3>Why do You Choose E-commerce?</h3>
+        <p>E-commerce websites provide the opportunity to shop anytime from anywhere and compare prices immediately. Almost all (85%) of our group is used to using e-commerce regularly</p>
+      </div>
+      <div class="conc-card alt">
+        <h3>Barriers to Shop Online</h3>
+        <p>Security issues and need to see products before purchase make some people shop offline. It is 15% of the total number of our respondents</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div>
+    <p>AII006 - Homework Assignment 10 · Prepared by Deniz</p>
+    <p>Source: Experience and Opinion Survey</p>
+  </div>
+  <a href="mailto:20210504@std.neu.edu.tr">✉ 20210504@std.neu.edu.tr</a>
+</footer>
+
+<script>
+// ── INITIAL DATA ──
+const data = {
+  total: 20,
+  purchased: 17,
+  browsed: 3,
+  freq: { weekly: 4, monthly: 10, yearly: 3 },
+  age:  { '18-25': 13, '26-39': 4, '40-50': 2, '50+': 1 },
+  gender: { male: 13, female: 7, other: 0 },
+  edu: { university: 10, highschool: 5, graduate: 3, somecollege: 2 },
+  sites: { Trendyol: 8, Temu: 5, Amazon: 4, Hepsiburada: 2, Other: 1 },
+  rows: [
+    [1,22,'Male','University','Yes','Monthly','Trendyol'],
+    [2,23,'Female','University','Yes','Weekly','Trendyol'],
+    [3,24,'Male','University','Yes','Monthly','Temu'],
+    [4,21,'Male','High School','Yes','Monthly','Trendyol'],
+    [5,25,'Female','University','Yes','Weekly','Trendyol'],
+    [6,26,'Male','Graduate School','Yes','Monthly','Amazon'],
+    [7,22,'Male','University','Yes','Monthly','Temu'],
+    [8,28,'Female','Graduate School','Yes','Weekly','Trendyol'],
+    [9,23,'Male','University','Yes','Yearly','Amazon'],
+    [10,20,'Male','University','Yes','Monthly','Temu'],
+    [11,31,'Male','Graduate School','Yes','Monthly','Amazon'],
+    [12,24,'Female','University','Yes','Monthly','Temu'],
+    [13,27,'Male','High School','Yes','Monthly','Hepsiburada'],
+    [14,22,'Male','University','Yes','Weekly','Trendyol'],
+    [15,35,'Male','High School','Yes','Yearly','Hepsiburada'],
+    [16,29,'Female','Some College','Yes','Monthly','Trendyol'],
+    [17,23,'Male','University','Yes','Yearly','Amazon'],
+    [18,44,'Male','High School','No - browsed only','-','-'],
+    [19,48,'Female','Some College','No - browsed only','-','-'],
+    [20,57,'Male','High School','No - browsed only','-','-'],
+  ]
+};
+
+let showAll = false;
+
+// ── RENDER TABLE ──
+function renderTable() {
+  const tbody = document.getElementById('resp-tbody');
+  tbody.innerHTML = '';
+  const limit = showAll ? data.rows.length : 4;
+  data.rows.forEach((r, i) => {
+    if (i >= limit) return;
+    const tr = document.createElement('tr');
+    if (i >= 20) tr.className = 'new-row'; 
+    const purchased = r[4];
+    const isYes = purchased === 'Yes';
+    tr.innerHTML = `<td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td>
+      <td class="${isYes ? 'yes' : 'no'}">${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td>`;
+    tbody.appendChild(tr);
+  });
+  const btn = document.getElementById('show-more-btn');
+  if (data.rows.length <= 4) { btn.style.display = 'none'; return; }
+  btn.style.display = 'block';
+  btn.textContent = showAll ? 'Show Less ↑' : `Show All ${data.rows.length} Responses ↓`;
+}
+
+function toggleRows() { showAll = !showAll; renderTable(); }
+
+// ── RENDER SITES ──
+function renderSites() {
+  const grid = document.getElementById('sites-grid');
+  const sorted = Object.entries(data.sites).sort((a,b) => b[1]-a[1]);
+  const max = sorted[0][1];
+  const siteWhy = {
+    Trendyol: 'Fashion & personal care, fast delivery, easy returns',
+    Temu: 'Ultra-low prices, enormous product variety',
+    Amazon: 'Global selection, trusted brand',
+    Hepsiburada: 'Local Turkish platform',
+    Other: 'n11, GittiGidiyor, etc.'
+  };
+  const buyers = data.purchased;
+  grid.innerHTML = sorted.map(([name, count], idx) => {
+    const pct = buyers > 0 ? Math.round(count / buyers * 100) : 0;
+    const barW = max > 0 ? Math.round(count / max * 100) : 0;
+    const cls = idx === 0 ? 'site-card r1' : idx === 1 ? 'site-card r2' : 'site-card';
+    const rank = idx === 0 ? '#1 Most Popular' : idx === 1 ? '#2 Most Popular' : `#${idx+1}`;
+    return `<div class="${cls}">
+      <div class="site-rank">${rank}</div>
+      <div class="site-name">${name}</div>
+      <div class="site-bar-track"><div class="site-bar-fill" style="width:${barW}%"></div></div>
+      <div class="site-pct">${count} respondents · ${pct}%</div>
+      <div class="site-why">${siteWhy[name] || ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function updateStats() {
+  const t = data.total;
+  const p = data.purchased;
+  const rate = t > 0 ? Math.round(p / t * 100) : 0;
+  const buyers = p;
+
+  document.getElementById('hdr-total').textContent = t + ' people';
+  document.getElementById('nb-total').textContent = t;
+  document.getElementById('nb-purchased').textContent = p;
+  document.getElementById('nb-rate').textContent = rate + '%';
+
+  const gm = data.gender.male, gf = data.gender.female;
+  const gt = gm + gf || 1;
+  document.getElementById('nb-gender').textContent =
+    Math.round(gm/gt*100) + '/' + Math.round(gf/gt*100);
+
+  document.getElementById('stat-purchased').textContent = p;
+  document.getElementById('stat-browsed').textContent = data.browsed;
+  document.getElementById('stat-rate').textContent = rate + '%';
+
+  const fw = data.freq.weekly, fm = data.freq.monthly, fy = data.freq.yearly;
+  const ftotal = fw + fm + fy || 1;
+  document.getElementById('freq-monthly-bar').style.width = Math.round(fm/ftotal*100) + '%';
+  document.getElementById('freq-weekly-bar').style.width  = Math.round(fw/ftotal*100) + '%';
+  document.getElementById('freq-yearly-bar').style.width  = Math.round(fy/ftotal*100) + '%';
+  document.getElementById('freq-monthly-val').textContent = fm;
+  document.getElementById('freq-weekly-val').textContent  = fw;
+  document.getElementById('freq-yearly-val').textContent  = fy;
+
+  const ageMap = {
+    'a': '18-25', 'b': '26-39', 'c': '40-50', 'd': '50+'
+  };
+  Object.entries(ageMap).forEach(([key, range]) => {
+    const n = data.age[range] || 0;
+    const pct = t > 0 ? Math.round(n / t * 100) : 0;
+    document.getElementById(`age-${key}-bar`).style.width = pct + '%';
+    document.getElementById(`age-${key}-meta`).textContent = `${n} ${n===1?'person':'people'} · ${pct}%`;
+  });
+
+  const mPct = Math.round(gm/gt*100), fPct = 100 - mPct;
+  document.getElementById('gender-male-seg').style.width  = mPct + '%';
+  document.getElementById('gender-female-seg').style.width = fPct + '%';
+  document.getElementById('gender-male-seg').textContent  = `Male ${mPct}%`;
+  document.getElementById('gender-female-seg').textContent = `Female ${fPct}%`;
+  document.getElementById('gender-male-lbl').textContent   = `Male · ${gm} people`;
+  document.getElementById('gender-female-lbl').textContent = `Female · ${gf} people`;
+
+  const eduTotal = Object.values(data.edu).reduce((a,b)=>a+b,0) || 1;
+  const maxEdu = Math.max(...Object.values(data.edu));
+  const eduMap = {
+    university: 'uni', highschool: 'hs', graduate: 'grad', somecollege: 'some'
+  };
+  Object.entries(eduMap).forEach(([key, id]) => {
+    const n = data.edu[key] || 0;
+    const pct = Math.round(n / eduTotal * 100);
+    const barW = maxEdu > 0 ? Math.round(n / maxEdu * 100) : 0;
+    document.getElementById(`edu-${id}-n`).textContent   = n;
+    document.getElementById(`edu-${id}-bar`).style.width = barW + '%';
+    document.getElementById(`edu-${id}-pct`).textContent = pct + '%';
+  });
+
+  renderSites();
+
+  renderTable();
+}
+
+
+document.querySelectorAll('input[name="q1"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('q2-card').style.display =
+      r.value === 'yes' ? 'block' : 'none';
+  });
+});
+
+
+document.querySelectorAll('.radio-lbl').forEach(lbl => {
+  lbl.querySelector('input').addEventListener('change', () => {
+    const name = lbl.querySelector('input').name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(i => {
+      i.closest('.radio-lbl').classList.remove('selected');
+    });
+    lbl.classList.add('selected');
+  });
+});
+
+function getVal(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : null;
+}
+
+function submitForm() {
+  const q1 = getVal('q1');
+  const q3 = getVal('q3');
+  const q4 = getVal('q4');
+  const q5 = getVal('q5');
+  const q6 = getVal('q6');
+
+  if (!q1 || !q3 || !q4 || !q5) {
+    alert('Please answer all required questions before submitting.');
+    return;
+  }
+  if (q1 === 'yes' && !getVal('q2')) {
+    alert('Please answer Question 2 (purchase frequency).');
+    return;
+  }
+
+  data.total += 1;
+
+  if (q1 === 'yes') {
+    data.purchased += 1;
+    const freq = getVal('q2');
+    if (freq === 'weekly')  data.freq.weekly  += 1;
+    if (freq === 'monthly') data.freq.monthly += 1;
+    if (freq === 'yearly')  data.freq.yearly  += 1;
+  } else {
+    data.browsed += 1;
+  }
+
+  if (q3) data.age[q3] = (data.age[q3] || 0) + 1;
+
+  if (q4 === 'male')   data.gender.male   += 1;
+  if (q4 === 'female') data.gender.female += 1;
+  if (q4 === 'other')  data.gender.other  += 1;
+
+  const eduMap2 = { highschool:'highschool', somecollege:'somecollege', university:'university', graduate:'graduate' };
+  if (q5 && eduMap2[q5]) data.edu[eduMap2[q5]] += 1;
+
+  if (q6) data.sites[q6] = (data.sites[q6] || 0) + 1;
+
+
+  const ageLabel  = q3;
+  const genderLbl = q4.charAt(0).toUpperCase() + q4.slice(1);
+  const eduLabel  = { highschool:'High School', somecollege:'Some College', university:'University', graduate:'Graduate School' }[q5] || q5;
+  const purchased = q1 === 'yes' ? 'Yes' : 'No - browsed only';
+  const freqLabel = q1 === 'yes'
+    ? ({ weekly:'Weekly', monthly:'Monthly', yearly:'Yearly' }[getVal('q2')] || '-')
+    : '-';
+  const site = q1 === 'yes' && q6 ? q6 : '-';
+
+  data.rows.push([data.total, ageLabel, genderLbl, eduLabel, purchased, freqLabel, site]);
+
+
+  showAll = true;
+
+  updateStats();
+
+
+  document.getElementById('form-success').style.display = 'block';
+  document.querySelector('.submit-btn').disabled = true;
+  document.querySelector('.submit-btn').style.opacity = '.5';
+
+
+  setTimeout(() => {
+    document.querySelector('.page-body').scrollIntoView({ behavior: 'smooth' });
+  }, 500);
+}
+
+
+updateStats();
+</script>
+</body>
+</html>

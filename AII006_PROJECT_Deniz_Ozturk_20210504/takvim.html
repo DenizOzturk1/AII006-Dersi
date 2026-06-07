@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mevsimlik Takvim - My Sillage</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .today-btn {
+      font-family: var(--font-ui); font-size: .58rem; letter-spacing: .15em;
+      text-transform: uppercase; padding: .45rem .9rem;
+      border: 1px solid rgba(212,168,67,.2); border-radius: 3px;
+      color: var(--text-muted); cursor: pointer; background: none; transition: all .25s;
+    }
+    .today-btn:hover, .today-btn.active {
+      border-color: var(--gold-bright); color: var(--gold-bright); background: var(--gold-subtle);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-main">My Sillage</span>
+      <span class="brand-sub">Curated by Obsession</span>
+      <span class="brand-author">Deniz Öztürk 20210504</span>
+    </a>
+    <div class="nav-right">
+      <div class="lang-toggle" onclick="toggleLanguage()" title="Dil Değiştir / Change Language" data-tr-title="Dil Değiştir / Change Language" data-en-title="Change Language / Dil Değiştir">
+        <span class="lang-btn lang-btn-tr">TR</span>
+        <span class="lang-btn lang-btn-en">EN</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a></li>
+        <li><a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a></li>
+        <li><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+        <li><a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a></li>
+        <li><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a></li>
+        <li><a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a></li>
+        <li><a href="takvim.html" class="active" data-tr="Takvim" data-en="Calendar">Takvim</a></li>
+        <li><a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a></li>
+        <li><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a></li>
+      </ul>
+      <div class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir" data-tr-title="Tema Değiştir" data-en-title="Toggle Theme">
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+        <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-hero">
+      <div class="hero-eyebrow" style="justify-content:center;margin-bottom:1rem;" data-tr="Planlayıcı" data-en="Planner">Planlayıcı</div>
+      <h1 class="page-hero-title" data-tr="Koku <em>Takvimi</em>" data-en="Fragrance <em>Calendar</em>">Koku <em>Takvimi</em></h1>
+      <p class="page-hero-sub" data-tr="Hangi gün ne sıktın? · Performans takibi · Planlama" data-en="What did you wear today? · Performance tracking · Planning">Hangi gün ne sıktın? · Performans takibi · Planlama</p>
+    </div>
+
+
+
+    <section class="section" style="padding-top:60px;padding-bottom:60px;">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Günlük Öneri" data-en="Daily Suggestion">Günlük Öneri</div>
+        <h2 class="section-title" data-tr="Bugün <em>Ne Süreyim?</em>" data-en="What to <em>Wear Today?</em>">Bugün <em>Ne Süreyim?</em></h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div style="max-width:800px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;" class="reveal">
+
+
+        <div style="background:var(--bg-card);border:1px solid var(--gold-border);border-radius:10px;padding:1.6rem;display:flex;flex-direction:column;gap:1.2rem;">
+          <div style="font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Bugünkü Koşullar" data-en="Today's Conditions">Bugünkü Koşullar</div>
+
+          <div>
+            <div style="font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.5rem;" data-tr="Hava" data-en="Weather">Hava</div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;" id="todayHava">
+              <button class="today-btn active" data-hava="sicak" onclick="todaySelect(this,'hava')">🌞 Sıcak</button>
+              <button class="today-btn" data-hava="ilik" onclick="todaySelect(this,'hava')">🌤 Ilık</button>
+              <button class="today-btn" data-hava="serin" onclick="todaySelect(this,'hava')">🍂 Serin</button>
+              <button class="today-btn" data-hava="soguk" onclick="todaySelect(this,'hava')">❄️ Soğuk</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.5rem;" data-tr="Hava" data-en="Weather">Hava</div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;" id="todayHava">
+              <button class="today-btn active" data-hava="sicak" onclick="todaySelect(this,'hava')" data-tr="🌞 Sıcak" data-en="🌞 Hot">🌞 Sıcak</button>
+              <button class="today-btn" data-hava="ilik" onclick="todaySelect(this,'hava')" data-tr="🌤 Ilık" data-en="🌤 Warm">🌤 Ilık</button>
+              <button class="today-btn" data-hava="serin" onclick="todaySelect(this,'hava')" data-tr="🍂 Serin" data-en="🍂 Cool">🍂 Serin</button>
+              <button class="today-btn" data-hava="soguk" onclick="todaySelect(this,'hava')" data-tr="❄️ Soğuk" data-en="❄️ Cold">❄️ Soğuk</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.5rem;" data-tr="Ortam" data-en="Environment">Ortam</div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;" id="todayOrtam">
+              <button class="today-btn active" data-ortam="gunluk" onclick="todaySelect(this,'ortam')" data-tr="🏙 Günlük" data-en="🏙 Daily">🏙 Günlük</button>
+              <button class="today-btn" data-ortam="ofis" onclick="todaySelect(this,'ortam')" data-tr="💼 Ofis" data-en="💼 Office">💼 Ofis</button>
+              <button class="today-btn" data-ortam="randevu" onclick="todaySelect(this,'ortam')" data-tr="🌹 Randevu" data-en="🌹 Date">🌹 Randevu</button>
+              <button class="today-btn" data-ortam="gece" onclick="todaySelect(this,'ortam')" data-tr="🌙 Gece" data-en="🌙 Night">🌙 Gece</button>
+              <button class="today-btn" data-ortam="spor" onclick="todaySelect(this,'ortam')" data-tr="🏃 Spor" data-en="🏃 Sport">🏃 Spor</button>
+            </div>
+          </div>
+        </div>
+
+
+        <div style="background:linear-gradient(135deg,#0d1221,#111827);border:1px solid var(--gold-bright);border-radius:10px;padding:1.6rem;display:flex;flex-direction:column;justify-content:center;gap:.8rem;">
+          <div style="font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Bugün için önerin" data-en="Your recommendation for today">Bugün için önerin</div>
+          <div style="font-size:2.5rem;" id="todayIcon">🌿</div>
+          <div style="font-family:var(--font-display);font-size:1.6rem;color:var(--gold-bright);line-height:1.1;" id="todayName">Mancera Cedrat Boise</div>
+          <div style="font-size:.7rem;color:var(--text-secondary);line-height:1.7;" id="todayReason" data-tr="Sıcak havada narenciye açılışı, patchouli bazı saatlerce hissedilir. Günlük kullanım için mükemmel denge." data-en="Citrus opening in hot weather, patchouli base felt for hours. Perfect balance for daily use.">Sıcak havada narenciye açılışı, patchouli bazı saatlerce hissedilir. Günlük kullanım için mükemmel denge.</div>
+          <div style="font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted);padding:.4rem .8rem;border:1px solid rgba(212,168,67,.15);border-radius:3px;display:inline-block;margin-top:.2rem;" id="todaySprey" data-tr="2 sprey önerilir" data-en="2 sprays recommended">2 sprey önerilir</div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section" style="background:var(--bg-secondary);padding-top:60px;">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Planlama" data-en="Planning">Planlama</div>
+        <h2 class="section-title" data-tr="Özel Gün <em>Takvimi</em>" data-en="Special Day <em>Calendar</em>">Özel Gün <em>Takvimi</em></h2>
+        <div class="section-divider"></div>
+        <p style="font-size:.78rem;color:var(--text-secondary);margin-top:1rem;" data-tr="Özel günlerini ekle - o güne uygun parfüm önerisi belirir." data-en="Add your special days - perfume recommendations appear for that day.">Özel günlerini ekle - o güne uygun parfüm önerisi belirir.</p>
+      </div>
+
+      <div style="max-width:800px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;">
+
+        <div style="background:var(--bg-card);border:1px solid var(--gold-border);border-radius:10px;padding:1.6rem;display:flex;flex-direction:column;gap:1rem;">
+          <div style="font-family:var(--font-display);font-size:1.3rem;color:var(--gold-bright);" data-tr="Etkinlik Ekle" data-en="Add Event">Etkinlik Ekle</div>
+
+          <div>
+            <label style="font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-dim);display:block;margin-bottom:.4rem;" data-tr="Tarih" data-en="Date">Tarih</label>
+            <input type="date" id="eventDate" style="width:100%;background:var(--bg-secondary);border:1px solid var(--gold-border);border-radius:4px;color:var(--text-primary);font-family:var(--font-ui);font-size:.75rem;padding:.7rem .9rem;outline:none;"/>
+          </div>
+
+          <div>
+            <label style="font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-dim);display:block;margin-bottom:.4rem;" data-tr="Etkinlik Tipi" data-en="Event Type">Etkinlik Tipi</label>
+            <select id="eventType" style="width:100%;background:var(--bg-secondary);border:1px solid var(--gold-border);border-radius:4px;color:var(--text-primary);font-family:var(--font-ui);font-size:.72rem;padding:.7rem .9rem;cursor:pointer;outline:none;">
+              <option value="romantik" data-tr="🌹 Romantik Buluşma" data-en="🌹 Romantic Date">🌹 Romantik Buluşma</option>
+              <option value="is" data-tr="💼 İş Görüşmesi" data-en="💼 Job Interview">💼 İş Görüşmesi</option>
+              <option value="gece" data-tr="🎭 Gece Etkinliği" data-en="🎭 Night Event">🎭 Gece Etkinliği</option>
+              <option value="dogumgunu" data-tr="🎂 Doğum Günü" data-en="🎂 Birthday">🎂 Doğum Günü</option>
+              <option value="spor" data-tr="🏃 Spor / Outdoor" data-en="🏃 Sport / Outdoor">🏃 Spor / Outdoor</option>
+              <option value="resmi" data-tr="🎩 Resmi Davet" data-en="🎩 Formal Event">🎩 Resmi Davet</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-dim);display:block;margin-bottom:.4rem;" data-tr="Etkinlik Adı (opsiyonel)" data-en="Event Name (optional)">Etkinlik Adı (opsiyonel)</label>
+            <input type="text" id="eventName" placeholder="Örn: Selin'in doğum günü..." data-tr-placeholder="Örn: Selin'in doğum günü..." data-en-placeholder="e.g.: Selin's birthday..." style="width:100%;background:var(--bg-secondary);border:1px solid var(--gold-border);border-radius:4px;color:var(--text-primary);font-family:var(--font-ui);font-size:.75rem;padding:.7rem .9rem;outline:none;"/>
+          </div>
+
+          <button type="button" onclick="addNewEvent()" style="background:var(--gold-subtle);border:1px solid var(--gold-bright);color:var(--gold-bright);font-family:var(--font-ui);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;padding:.8rem;border-radius:4px;cursor:pointer;transition:all .3s;" onmouseover="this.style.background='var(--gold-bright)';this.style.color='var(--bg-primary)'" onmouseout="this.style.background='var(--gold-subtle)';this.style.color='var(--gold-bright)'" data-tr="+ Etkinlik Ekle" data-en="+ Add Event">
+            + Etkinlik Ekle
+          </button>
+        </div>
+
+
+        <div>
+          <div style="font-family:var(--font-display);font-size:1.3rem;color:var(--gold-bright);margin-bottom:1rem;" data-tr="Etkinliklerim" data-en="My Events">Etkinliklerim</div>
+          <div id="eventList" style="display:flex;flex-direction:column;gap:.7rem;">
+            <div style="font-size:.65rem;color:var(--text-muted);text-align:center;padding:1.5rem;border:1px dashed rgba(212,168,67,.15);border-radius:8px;" data-tr="Henüz etkinlik eklenmedi." data-en="No events added yet.">Henüz etkinlik eklenmedi.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section">
+      <div class="season-grid">
+
+
+        <div class="season-card season-ilkbahar reveal">
+          <div class="season-header">
+            <div class="season-icon">🌸</div>
+            <div class="season-name" data-tr="İlkbahar" data-en="Spring">İlkbahar</div>
+            <div class="season-motto" data-tr="Uyanış · Taze Başlangıçlar · Çiçekler" data-en="Awakening · Fresh Beginnings · Flowers">Uyanış · Taze Başlangıçlar · Çiçekler</div>
+          </div>
+          <div class="season-months">
+            <span class="month-pill" data-tr="Mart" data-en="March">Mart</span>
+            <span class="month-pill" data-tr="Nisan" data-en="April">Nisan</span>
+            <span class="month-pill" data-tr="Mayıs" data-en="May">Mayıs</span>
+          </div>
+          <div class="season-perfumes">
+            <div class="sp-item">
+              <span class="sp-icon">🍋</span>
+              <div class="sp-body">
+                <div class="sp-name">Mancera Cedrat Boise</div>
+                <div class="sp-family" data-tr="Narenciye · Odunsu" data-en="Citrus · Woody">Narenciye · Odunsu</div>
+              </div>
+              <span class="sp-when" data-tr="Sabah" data-en="Morning">Sabah</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">🌸</span>
+              <div class="sp-body">
+                <div class="sp-name">YSL MYSLF EDP</div>
+                <div class="sp-family" data-tr="Çiçeksi · Odunsu" data-en="Floral · Woody">Çiçeksi · Odunsu</div>
+              </div>
+              <span class="sp-when" data-tr="Gündüz" data-en="Daytime">Gündüz</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">🌊</span>
+              <div class="sp-body">
+                <div class="sp-name">Ex Nihilo Blue Talisman</div>
+                <div class="sp-family" data-tr="Aquatik · Taze" data-en="Aquatic · Fresh">Aquatik · Taze</div>
+              </div>
+              <span class="sp-when" data-tr="Akşam" data-en="Evening">Akşam</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">💫</span>
+              <div class="sp-body">
+                <div class="sp-name">LV Imagination</div>
+                <div class="sp-family" data-tr="Narenciye · Çay" data-en="Citrus · Tea">Narenciye · Çay</div>
+              </div>
+              <span class="sp-when" data-tr="Ofis" data-en="Office">Ofis</span>
+            </div>
+          </div>
+          <div class="season-tip" data-tr="<strong>Kural:</strong> İlkbaharda narenciye ve çiçeksi notalar açık havada büyülü bir şekilde yayılır. Ağır oryantaller çok boğucu gelir - beklet." data-en="<strong>Rule:</strong> In spring, citrus and floral notes spread magically outdoors. Heavy orientals feel too suffocating - keep them for later."><strong>Kural:</strong> İlkbaharda narenciye ve çiçeksi notalar açık havada büyülü bir şekilde yayılır. Ağır oryantaller çok boğucu gelir - beklet.</div>
+        </div>
+
+
+        <div class="season-card season-yaz reveal delay-1">
+          <div class="season-header">
+            <div class="season-icon">☀️</div>
+            <div class="season-name" data-tr="Yaz" data-en="Summer">Yaz</div>
+            <div class="season-motto" data-tr="Özgürlük · Enerji · Deniz" data-en="Freedom · Energy · Marine">Özgürlük · Enerji · Deniz</div>
+          </div>
+          <div class="season-months">
+            <span class="month-pill" data-tr="Haziran" data-en="June">Haziran</span>
+            <span class="month-pill" data-tr="Temmuz" data-en="July">Temmuz</span>
+            <span class="month-pill" data-tr="Ağustos" data-en="August">Ağustos</span>
+          </div>
+          <div class="season-perfumes">
+            <div class="sp-item">
+              <span class="sp-icon">🏆</span>
+              <div class="sp-body">
+                <div class="sp-name">Paco Rabanne Invictus EDT</div>
+                <div class="sp-family" data-tr="Aquatik · Taze" data-en="Aquatic · Fresh">Aquatik · Taze</div>
+              </div>
+              <span class="sp-when" data-tr="Her an" data-en="Anytime">Her an</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">🌺</span>
+              <div class="sp-body">
+                <div class="sp-name">JPG Paradise Garden</div>
+                <div class="sp-family" data-tr="Tropikal · Çiçeksi" data-en="Tropical · Floral">Tropikal · Çiçeksi</div>
+              </div>
+              <span class="sp-when" data-tr="Plaj" data-en="Beach">Plaj</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">🍊</span>
+              <div class="sp-body">
+                <div class="sp-name">BVLGARi Tygar</div>
+                <div class="sp-family" data-tr="Narenciye · Ambroxan" data-en="Citrus · Ambroxan">Narenciye · Ambroxan</div>
+              </div>
+              <span class="sp-when" data-tr="Gündüz" data-en="Daytime">Gündüz</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">🥭</span>
+              <div class="sp-body">
+                <div class="sp-name">SHL God of Fire</div>
+                <div class="sp-family" data-tr="Tropikal · Niche" data-en="Tropical · Niche">Tropikal · Niche</div>
+              </div>
+              <span class="sp-when" data-tr="Gece" data-en="Night">Gece</span>
+            </div>
+          </div>
+          <div class="season-tip" data-tr="<strong>Kural:</strong> Sıcakta yoğun parfümler boğucuya döner. Daha az sık, daha hafif seç. Terleme parfümü güçlendirir - dozunu yarıya indir." data-en="<strong>Rule:</strong> In heat, intense perfumes turn suffocating. Spray less, choose lighter. Sweating strengthens the perfume - cut the dose in half."><strong>Kural:</strong> Sıcakta yoğun parfümler boğucuya döner. Daha az sık, daha hafif seç. Terleme parfümü güçlendirir - dozunu yarıya indir.</div>
+        </div>
+
+
+        <div class="season-card season-sonbahar reveal delay-2">
+          <div class="season-header">
+            <div class="season-icon">🍂</div>
+            <div class="season-name" data-tr="Sonbahar" data-en="Autumn">Sonbahar</div>
+            <div class="season-motto" data-tr="Derinlik · Sıcaklık · Karanlık" data-en="Depth · Warmth · Darkness">Derinlik · Sıcaklık · Karanlık</div>
+          </div>
+          <div class="season-months">
+            <span class="month-pill" data-tr="Eylül" data-en="September">Eylül</span>
+            <span class="month-pill" data-tr="Ekim" data-en="October">Ekim</span>
+            <span class="month-pill" data-tr="Kasım" data-en="November">Kasım</span>
+          </div>
+          <div class="season-perfumes">
+            <div class="sp-item">
+              <span class="sp-icon">🌿</span>
+              <div class="sp-body">
+                <div class="sp-name">Mancera Cedrat Boise</div>
+                <div class="sp-family" data-tr="Odunsu · Narenciye" data-en="Woody · Citrus">Odunsu · Narenciye</div>
+              </div>
+              <span class="sp-when" data-tr="Gündüz" data-en="Daytime">Gündüz</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">🌶️</span>
+              <div class="sp-body">
+                <div class="sp-name">V&R Spicebomb EDT</div>
+                <div class="sp-family" data-tr="Baharatlı · Deri" data-en="Spicy · Leather">Baharatlı · Deri</div>
+              </div>
+              <span class="sp-when" data-tr="Akşam" data-en="Evening">Akşam</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">👔</span>
+              <div class="sp-body">
+                <div class="sp-name">Prada Paradigme</div>
+                <div class="sp-family" data-tr="Odunsu · Amber" data-en="Woody · Amber">Odunsu · Amber</div>
+              </div>
+              <span class="sp-when" data-tr="Ofis" data-en="Office">Ofis</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">☕</span>
+              <div class="sp-body">
+                <div class="sp-name">D&G The One</div>
+                <div class="sp-family" data-tr="Oryantal · Tütünsü" data-en="Oriental · Tobacco">Oryantal · Tütünsü</div>
+              </div>
+              <span class="sp-when" data-tr="Gece" data-en="Night">Gece</span>
+            </div>
+          </div>
+          <div class="season-tip" data-tr="<strong>Kural:</strong> Sonbahar hava sıcaklığı parfümü yavaş ama derinlemesine açar. Daha kalıcı notalar bu mevsimde en parlak halini bulur - cesaretli seç." data-en="<strong>Rule:</strong> Autumn air temperature opens the perfume slowly but deeply. More lasting notes find their brightest state in this season - choose boldly."><strong>Kural:</strong> Sonbahar hava sıcaklığı parfümü yavaş ama derinlemesine açar. Daha kalıcı notalar bu mevsimde en parlak halini bulur - cesaretli seç.</div>
+        </div>
+
+
+        <div class="season-card season-kis reveal delay-3">
+          <div class="season-header">
+            <div class="season-icon">❄️</div>
+            <div class="season-name" data-tr="Kış" data-en="Winter">Kış</div>
+            <div class="season-motto" data-tr="Yoğunluk · Duman · Lüks" data-en="Intensity · Smoke · Luxury">Yoğunluk · Duman · Lüks</div>
+          </div>
+          <div class="season-months">
+            <span class="month-pill" data-tr="Aralık" data-en="December">Aralık</span>
+            <span class="month-pill" data-tr="Ocak" data-en="January">Ocak</span>
+            <span class="month-pill" data-tr="Şubat" data-en="February">Şubat</span>
+          </div>
+          <div class="season-perfumes">
+            <div class="sp-item">
+              <span class="sp-icon">⚡</span>
+              <div class="sp-body">
+                <div class="sp-name">Dior Sauvage Elixir</div>
+                <div class="sp-family" data-tr="Baharatlı · Odunsu" data-en="Spicy · Woody">Baharatlı · Odunsu</div>
+              </div>
+              <span class="sp-when" data-tr="Her an" data-en="Anytime">Her an</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">🔥</span>
+              <div class="sp-body">
+                <div class="sp-name">Boss Bottled Absolu</div>
+                <div class="sp-family" data-tr="Reçineli · Tütsü" data-en="Resinous · Incense">Reçineli · Tütsü</div>
+              </div>
+              <span class="sp-when" data-tr="Akşam" data-en="Evening">Akşam</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">🌙</span>
+              <div class="sp-body">
+                <div class="sp-name">JPG Le Male Elixir</div>
+                <div class="sp-family" data-tr="Tatlı · Fougère" data-en="Sweet · Fougère">Tatlı · Fougère</div>
+              </div>
+              <span class="sp-when" data-tr="Gece" data-en="Night">Gece</span>
+            </div>
+            <div class="sp-item">
+              <span class="sp-icon">🖤</span>
+              <div class="sp-body">
+                <div class="sp-name">Tom Ford Black Orchid</div>
+                <div class="sp-family" data-tr="Floral Dark · Niche" data-en="Floral Dark · Niche">Floral Dark · Niche</div>
+              </div>
+              <span class="sp-when" data-tr="Özel gün" data-en="Special occasion">Özel gün</span>
+            </div>
+          </div>
+          <div class="season-tip" data-tr="<strong>Kural:</strong> Soğuk hava ağır molekülleri yavaş çözdürür - bu en yoğun parfümlerin bile makul göründüğü mevsim. 1-2 ekstra sprey hakkın var." data-en="<strong>Rule:</strong> Cold air dissolves heavy molecules slowly - this is the season where even the most intense perfumes look reasonable. You have 1-2 extra spray rights."><strong>Kural:</strong> Soğuk hava ağır molekülleri yavaş çözdürür - bu en yoğun parfümlerin bile makul göründüğü mevsim. 1-2 ekstra sprey hakkın var.</div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section" style="background:var(--bg-secondary);">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Aylık Öneri" data-en="Monthly Suggestion">Aylık Öneri</div>
+        <h2 class="section-title" data-tr="12 Ay <em>12 Öneri</em>" data-en="12 Months <em>12 Suggestions</em>">12 Ay <em>12 Öneri</em></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;max-width:1100px;margin:0 auto;">
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Ocak" data-en="January">Ocak</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">Boss Bottled Absolu</div><p class="card-text" style="font-size:.68rem;" data-tr="Kışın en soğuk anı - tütsü ve deri yak." data-en="The coldest moment of winter - burn incense and leather.">Kışın en soğuk anı - tütsü ve deri yak.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Şubat" data-en="February">Şubat</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">JPG Le Male Elixir</div><p class="card-text" style="font-size:.68rem;" data-tr="Sevgililer ayı - tatlı güç en iyi bu ayda." data-en="Valentine's month - sweet power is best this month.">Sevgililer ayı - tatlı güç en iyi bu ayda.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Mart" data-en="March">Mart</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">YSL MYSLF</div><p class="card-text" style="font-size:.68rem;" data-tr="İlkbaharın ilk günleri - çiçek ve güç." data-en="First days of spring - flowers and power.">İlkbaharın ilk günleri - çiçek ve güç.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Nisan" data-en="April">Nisan</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">Mancera Cedrat Boise</div><p class="card-text" style="font-size:.68rem;" data-tr="Yağmur sonrası toprak + narenciye = mükemmel." data-en="Soil after rain + citrus = perfect.">Yağmur sonrası toprak + narenciye = mükemmel.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Mayıs" data-en="May">Mayıs</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">LV Imagination</div><p class="card-text" style="font-size:.68rem;" data-tr="Güneşli ofis sabahları için biçilmiş kaftan." data-en="Perfect for sunny office mornings.">Güneşli ofis sabahları için biçilmiş kaftan.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Haziran" data-en="June">Haziran</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">Paco Rabanne Invictus</div><p class="card-text" style="font-size:.68rem;" data-tr="Yaz başlıyor - şampiyonun kokusu sahneye çıkıyor." data-en="Summer starts - the champion's scent takes the stage.">Yaz başlıyor - şampiyonun kokusu sahneye çıkıyor.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Temmuz" data-en="July">Temmuz</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">JPG Paradise Garden</div><p class="card-text" style="font-size:.68rem;" data-tr="Plaj, deniz, özgürlük - tropikal cennete giriş." data-en="Beach, sea, freedom - entry to tropical paradise.">Plaj, deniz, özgürlük - tropikal cennete giriş.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Ağustos" data-en="August">Ağustos</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">BVLGARi Tygar</div><p class="card-text" style="font-size:.68rem;" data-tr="Yaz gecesi açık havada greyfurt-ambroxan patlaması." data-en="Grapefruit-ambroxan blast outdoors on a summer night.">Yaz gecesi açık havada greyfurt-ambroxan patlaması.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Eylül" data-en="September">Eylül</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">V&R Spicebomb EDT</div><p class="card-text" style="font-size:.68rem;" data-tr="Sonbaharın ilk soğuğu - baharatlar uyanıyor." data-en="The first cold of autumn - spices are awakening.">Sonbaharın ilk soğuğu - baharatlar uyanıyor.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Ekim" data-en="October">Ekim</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">D&G The One</div><p class="card-text" style="font-size:.68rem;" data-tr="Yağmurlu Ekim akşamları - tütün ve amber." data-en="Rainy October evenings - tobacco and amber.">Yağmurlu Ekim akşamları - tütün ve amber.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Kasım" data-en="November">Kasım</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">Arabians Tonka</div><p class="card-text" style="font-size:.68rem;" data-tr="Karanlık Kasım - safran ve oud ile ısın." data-en="Dark November - warm up with saffron and oud.">Karanlık Kasım - safran ve oud ile ısın.</p></div>
+        <div class="card reveal" style="padding:1.2rem 1.4rem;"><div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Aralık" data-en="December">Aralık</div><div class="card-title" style="font-size:1.1rem;margin:.3rem 0;">Dior Sauvage Elixir</div><p class="card-text" style="font-size:.68rem;" data-tr="Yılın son ayı - en güçlü silahını çek." data-en="The last month of the year - draw your strongest weapon.">Yılın son ayı - en güçlü silahını çek.</p></div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="footer-brand">My Sillage</div>
+    <div class="footer-tagline" data-tr="Curated by Obsession · Est. 2024" data-en="Curated by Obsession · Est. 2024">Curated by Obsession · Est. 2024</div>
+    <div class="footer-author" data-tr="Deniz Öztürk 20210504 tarafından yapıldı" data-en="by Deniz Öztürk 20210504">Deniz Öztürk 20210504 tarafından yapıldı</div>
+    <nav class="footer-links">
+      <a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a>
+      <a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+      <a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a>
+      <a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a>
+      <a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a>
+    </nav>
+    <p class="footer-copy" data-tr="© 2024 My Sillage - Tüm hakları saklıdır." data-en="© 2024 My Sillage - All rights reserved.">© 2024 My Sillage - Tüm hakları saklıdır.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+  <script>
+            if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); const icon = document.getElementById('themeIcon'); if(icon) icon.textContent = '🌙'; }
+
+
+    const todayState = { hava:'sicak', ortam:'gunluk' };
+    const todayDB = {
+      sicak:  { gunluk:{n:'Mancera Cedrat Boise',i:'🌿',r:{tr:'Sıcakta narenciye açılışı, derin patchouli bazı ile mükemmel denge.',en:'Citrus opening in heat, perfect balance with deep patchouli base.'},s:{tr:'2 sprey',en:'2 sprays'}},
+                ofis:  {n:'LV Imagination',i:'💫',r:{tr:'Hafif ve zarif - ofiste kimseyi rahatsız etmez, ama fark edilirsin.',en:'Light and elegant - doesn\'t disturb anyone in the office, but you get noticed.'},s:{tr:'1-2 sprey',en:'1-2 sprays'}},
+                randevu:{n:'YSL MYSLF EDP',i:'🌸',r:{tr:'Portakal çiçeği sıcakta büyüleyici açılır. Modern ve ilgi çekici.',en:'Orange blossom opens enchantingly in heat. Modern and interesting.'},s:{tr:'2 sprey',en:'2 sprays'}},
+                gece:  {n:'SHL God of Fire',i:'🥭',r:{tr:'Tropikal yaz gecesi için efsanevi kombinezon - mango + oud.',en:'Legendary combination for tropical summer night - mango + oud.'},s:{tr:'1-2 sprey',en:'1-2 sprays'}},
+                spor:  {n:'Paco Rabanne Invictus',i:'🏆',r:{tr:'Sıcakta taze aquatik notalar spor enerjisini artırır.',en:'Fresh aquatic notes in heat increase sport energy.'},s:{tr:'2 sprey',en:'2 sprays'}}},
+      ilik:   { gunluk:{n:'BVLGARi Tygar',i:'🍋',r:{tr:'Greyfurt + ambroxan: ılık havanın en güzel parfümü.',en:'Grapefruit + ambroxan: the most beautiful perfume of warm weather.'},s:{tr:'2 sprey',en:'2 sprays'}},
+                ofis:  {n:'Prada Paradigme',i:'👔',r:{tr:'Zarif balsemik yapı ofis için biçilmiş kaftan.',en:'Elegant balsamic structure is perfect for the office.'},s:{tr:'2 sprey',en:'2 sprays'}},
+                randevu:{n:'JPG Paradise Garden',i:'🌺',r:{tr:'Tropikal çiçekli açılış ılık havada uzun süre kalır.',en:'Tropical floral opening lasts a long time in warm weather.'},s:{tr:'2 sprey',en:'2 sprays'}},
+                gece:  {n:'D&G The One',i:'☕',r:{tr:'Ilık gece + amber + tütün = romantizmin kokusu.',en:'Warm night + amber + tobacco = the scent of romance.'},s:{tr:'2-3 sprey',en:'2-3 sprays'}},
+                spor:  {n:'Ex Nihilo Blue Talisman',i:'🌊',r:{tr:'Aquatik ve ferah - ılık havada mükemmel.',en:'Aquatic and fresh - perfect in warm weather.'},s:{tr:'2 sprey',en:'2 sprays'}}},
+      serin:  { gunluk:{n:'V&R Spicebomb EDT',i:'🌶️',r:{tr:'Serin havanın baharatları açması için ideal an.',en:'Ideal moment for cool air to open up spices.'},s:{tr:'3 sprey',en:'3 sprays'}},
+                ofis:  {n:'Mancera Cedrat Boise',i:'🌿',r:{tr:'Sonbahar ofisi için her zaman güvenli ve rafine.',en:'Always safe and refined for the autumn office.'},s:{tr:'2 sprey',en:'2 sprays'}},
+                randevu:{n:'Montale Arabians Tonka',i:'⚫',r:{tr:'Safran + oud serin havada sizi sarmalar.',en:'Saffron + oud wraps around you in cool weather.'},s:{tr:'2 sprey',en:'2 sprays'}},
+                gece:  {n:'Boss Bottled Absolu',i:'🔥',r:{tr:'Frankincense serin gecede en güçlü halini sergiler.',en:'Frankincense displays its strongest form on a cool night.'},s:{tr:'2-3 sprey',en:'2-3 sprays'}},
+                spor:  {n:'Paco Rabanne Invictus',i:'🏆',r:{tr:'Serin havada aquatik notalar yine de taze kalır.',en:'Aquatic notes still stay fresh in cool weather.'},s:{tr:'2 sprey',en:'2 sprays'}}},
+      soguk:  { gunluk:{n:'Dior Sauvage Elixir',i:'⚡',r:{tr:'Soğuk hava + Elixir = mükemmel yavaş açılım. Gün boyunca kalır.',en:'Cold air + Elixir = perfect slow evolution. Stays throughout the day.'},s:{tr:'2 sprey',en:'2 sprays'}},
+                ofis:  {n:'Prada Paradigme',i:'👔',r:{tr:'Soğuk ofis sabahı için sıcak balsemik yapı.',en:'Warm balsamic structure for a cold office morning.'},s:{tr:'2 sprey',en:'2 sprays'}},
+                randevu:{n:'JPG Le Male Elixir',i:'🌙',r:{tr:'Tatlı + derin + soğuk kış = romantizmin en güçlü hali.',en:'Sweet + deep + cold winter = strongest form of romance.'},s:{tr:'1 sprey',en:'1 spray'}},
+                gece:  {n:'Tom Ford Black Orchid',i:'🖤',r:{tr:'Soğuk kış gecesi ve Black Orchid: unutulmaz bir kombinasyon.',en:'Cold winter night and Black Orchid: an unforgettable combination.'},s:{tr:'2 sprey',en:'2 sprays'}},
+                spor:  {n:'BVLGARi Tygar',i:'🍋',r:{tr:'Soğukta greyfurt + vetiver canlılığı yüksek tutar.',en:'Grapefruit + vetiver in cold weather keeps vitality high.'},s:{tr:'3 sprey',en:'3 sprays'}}}
+    };
+
+    function todaySelect(btn, group) {
+      btn.parentElement.querySelectorAll('.today-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      todayState[group] = btn.getAttribute('data-' + group);
+      updateToday();
+    }
+    window.todaySelect = todaySelect;
+
+    function updateToday() {
+      const lang = (typeof getCurrentLanguage === 'function') ? getCurrentLanguage() : 'tr';
+      const rec = todayDB[todayState.hava]?.[todayState.ortam];
+      if (!rec) return;
+      document.getElementById('todayIcon').textContent = rec.i;
+      document.getElementById('todayName').textContent = rec.n;
+      document.getElementById('todayReason').textContent = rec.r[lang];
+      document.getElementById('todaySprey').textContent = rec.s[lang] + (lang === 'en' ? ' recommended' : ' önerilir');
+    }
+
+
+    const eventParfums = {
+      romantik: { p:'JPG Le Male Elixir',   why:{tr:'Tatlı, sarmalayan, yakın mesafede sizi unutulmaz kılar.',en:'Sweet, enveloping, makes you unforgettable at close range.'} },
+      is:       { p:'Mancera Cedrat Boise',  why:{tr:'Güçlü ama agresif değil - mesleki güven verir.',en:'Strong but not aggressive - gives professional confidence.'} },
+      gece:     { p:'Tom Ford Black Orchid', why:{tr:'Gece etkinlikleri için karanlık ve büyüleyici.',en:'Dark and enchanting for night events.'} },
+      dogumgunu:{ p:'Montale Arabians Tonka',why:{tr:'Kutlama enerjisine uygun sıcak ve neşeli oryantal.',en:'Warm and cheerful oriental suitable for celebration energy.'} },
+      spor:     { p:'Paco Rabanne Invictus', why:{tr:'Şampiyon enerjisi - spor ortamlarında öne çıkar.',en:'Champion energy - stands out in sport environments.'} },
+      resmi:    { p:'Dior Sauvage Elixir',  why:{tr:'Herkesin tanıdığı otoriter güç - resmi davetlerde zirve.',en:'Authoritative power recognized by everyone - peak at formal events.'} },
+    };
+
+    let storedEvents = localStorage.getItem('parfumEvents');
+    let events = [];
+    try {
+      events = JSON.parse(storedEvents) || [];
+      if (!Array.isArray(events)) events = [];
+    } catch(e) {
+      events = [];
+    }
+
+    window.addNewEvent = function() {
+      const date = document.getElementById('eventDate').value;
+      const type = document.getElementById('eventType').value;
+      const name = document.getElementById('eventName').value.trim();
+      const lang = (typeof getCurrentLanguage === 'function') ? getCurrentLanguage() : 'tr';
+      if (!date) { alert(lang === 'en' ? 'Please select a date.' : 'Lütfen tarih seç.'); return; }
+      events.push({ date, type, name });
+      events.sort((a,b) => a.date.localeCompare(b.date));
+      localStorage.setItem('parfumEvents', JSON.stringify(events));
+      document.getElementById('eventName').value = '';
+      renderEvents();
+    }
+
+    window.deleteEvent = function(idx) {
+      events.splice(idx, 1);
+      localStorage.setItem('parfumEvents', JSON.stringify(events));
+      renderEvents();
+    }
+
+    function renderEvents() {
+      const lang = (typeof getCurrentLanguage === 'function') ? getCurrentLanguage() : 'tr';
+      const list = document.getElementById('eventList');
+      if (!events.length) {
+        list.innerHTML = `<div style="font-size:.65rem;color:var(--text-muted);text-align:center;padding:1.5rem;border:1px dashed rgba(212,168,67,.15);border-radius:8px;" data-tr="Henüz etkinlik eklenmedi." data-en="No events added yet.">${lang === 'en' ? 'No events added yet.' : 'Henüz etkinlik eklenmedi.'}</div>`;
+        return;
+      }
+      const typeIcons = { romantik:'🌹', is:'💼', gece:'🎭', dogumgunu:'🎂', spor:'🏃', resmi:'🎩' };
+      list.innerHTML = events.map((ev, i) => {
+        const rec = eventParfums[ev.type];
+        const d = new Date(ev.date);
+        const dateStr = d.toLocaleDateString(lang === 'en' ? 'en-US' : 'tr-TR', { day:'numeric', month:'long' });
+        return `<div style="background:var(--bg-card);border:1px solid rgba(212,168,67,.12);border-radius:8px;padding:1rem 1.2rem;position:relative;">
+          <button onclick="deleteEvent(${i})" style="position:absolute;top:.7rem;right:.8rem;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:.8rem;" title="${lang === 'en' ? 'Delete' : 'Sil'}">✕</button>
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;">
+            <span style="font-size:1.1rem;">${typeIcons[ev.type]||'📅'}</span>
+            <div>
+              <div style="font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);">${dateStr}</div>
+              <div style="font-family:var(--font-display);font-size:1rem;color:var(--text-primary);">${ev.name || ev.type}</div>
+            </div>
+          </div>
+          <div style="background:var(--bg-secondary);border-radius:6px;padding:.7rem .9rem;">
+            <div style="font-size:.52rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.2rem;" data-tr="Önerilen Parfüm" data-en="Recommended Perfume">${lang === 'en' ? 'Recommended Perfume' : 'Önerilen Parfüm'}</div>
+            <div style="font-family:var(--font-display);font-size:.95rem;color:var(--gold-bright);">${rec.p}</div>
+            <div style="font-size:.62rem;color:var(--text-secondary);margin-top:.2rem;">${rec.why[lang]}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    window.addEventListener('languageChanged', () => {
+      updateToday();
+      renderEvents();
+    });
+
+    updateToday();
+    renderEvents();
+
+      </script>
+</body>
+</html>

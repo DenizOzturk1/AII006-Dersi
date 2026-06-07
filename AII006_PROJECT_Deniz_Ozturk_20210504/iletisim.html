@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fikirler & Mağazalar - My Sillage</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+
+    .idea-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .idea-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(212,168,67,0.12);
+      border-radius: 8px;
+      padding: 1.8rem;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: .8rem;
+    }
+    .idea-card:hover { border-color: var(--gold-border); background: var(--bg-card-hover); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+    .idea-icon   { font-size: 2rem; }
+    .idea-tag    { font-size: .55rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold-dim); }
+    .idea-title  { font-family: var(--font-display); font-size: 1.3rem; color: var(--text-primary); line-height: 1.2; }
+    .idea-desc   { font-size: .74rem; color: var(--text-secondary); line-height: 1.75; }
+    .idea-steps  { list-style: none; display: flex; flex-direction: column; gap: .4rem; margin-top: .2rem; }
+    .idea-steps li { font-size: .7rem; color: var(--text-secondary); display: flex; gap: .6rem; align-items: flex-start; }
+    .idea-steps li::before { content: '◆'; color: var(--gold-dim); font-size: .5rem; margin-top: .2rem; flex-shrink: 0; }
+
+
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .store-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(212,168,67,0.12);
+      border-radius: 8px;
+      padding: 1.6rem;
+      transition: var(--transition);
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+    .store-card:hover { border-color: var(--gold-border); background: var(--bg-card-hover); }
+    .store-num { font-family: var(--font-display); font-size: 2.5rem; color: var(--gold-border); line-height: 1; min-width: 44px; }
+    .store-body { display: flex; flex-direction: column; gap: .35rem; }
+    .store-name { font-family: var(--font-display); font-size: 1.2rem; color: var(--gold-bright); }
+    .store-type { font-size: .55rem; letter-spacing: .3em; text-transform: uppercase; color: var(--text-muted); }
+    .store-desc { font-size: .72rem; color: var(--text-secondary); line-height: 1.65; }
+    .store-tag  { display: inline-block; font-size: .55rem; letter-spacing: .2em; text-transform: uppercase; padding: .25rem .7rem; border: 1px solid var(--gold-border); border-radius: 2px; color: var(--gold-dim); margin-top: .3rem; }
+
+
+    .store-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; }
+    .store-btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-family: var(--font-ui);
+      font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+      padding: .5rem 1.1rem; border-radius: 3px;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.25s ease;
+    }
+    .store-btn-map {
+      background: rgba(212,168,67,0.1);
+      border: 1px solid var(--gold-border);
+      color: var(--gold-bright);
+    }
+    .store-btn-map:hover { background: var(--gold-bright); color: var(--bg-primary); }
+    .store-btn-web {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-secondary);
+    }
+    .store-btn-web:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+
+
+    .suggest-box {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 8px;
+      padding: 2.5rem;
+    }
+    .radio-group { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
+    .radio-pill {
+      cursor: pointer;
+      font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+      padding: .45rem 1rem;
+      border: 1px solid rgba(212,168,67,0.2);
+      border-radius: 2px;
+      color: var(--text-muted);
+      transition: var(--transition);
+      user-select: none;
+    }
+    .radio-pill.selected, .radio-pill:hover { border-color: var(--gold-bright); color: var(--gold-bright); background: var(--gold-subtle); }
+    .success-msg { display:none; background:rgba(20,50,30,0.4); border:1px solid rgba(80,180,100,0.3); border-radius:8px; padding:1.2rem 1.5rem; font-size:.78rem; color:#6fcf97; margin-top:1rem; text-align:center; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-main">My Sillage</span>
+      <span class="brand-sub">Curated by Obsession</span>
+      <span class="brand-author">Deniz Öztürk 20210504</span>
+    </a>
+    <div class="nav-right">
+      <div class="lang-toggle" onclick="toggleLanguage()" title="Dil Değiştir / Change Language" data-tr-title="Dil Değiştir / Change Language" data-en-title="Change Language / Dil Değiştir">
+        <span class="lang-btn lang-btn-tr">TR</span>
+        <span class="lang-btn lang-btn-en">EN</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a></li>
+        <li><a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a></li>
+        <li><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+        <li><a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a></li>
+        <li><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a></li>
+        <li><a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a></li>
+        <li><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a></li>
+        <li><a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a></li>
+        <li><a href="iletisim.html" class="active" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a></li>
+      </ul>
+      <div class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir" data-tr-title="Tema Değiştir" data-en-title="Toggle Theme">
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+        <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <div class="page-hero">
+      <div class="hero-eyebrow" style="justify-content:center;margin-bottom:1rem;" data-tr="Bağlantıda Kal" data-en="Stay Connected">Bağlantıda Kal</div>
+      <h1 class="page-hero-title" data-tr="Fikirler & <em>Mağazalar</em>" data-en="Ideas & <em>Stores</em>">Fikirler & <em>Mağazalar</em></h1>
+      <p class="page-hero-sub" data-tr="Bize ulaşın · Deneyim alanları · Sosyal medya" data-en="Contact us · Experience zones · Social media">Bize ulaşın · Deneyim alanları · Sosyal medya</p>
+    </div>
+
+
+    <section class="section">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Nereden Başlamalısın?" data-en="Where Should You Start?">Nereden Başlamalısın?</div>
+        <h2 class="section-title" data-tr="Hobini <em>Büyütmek</em> İçin 6 Yol" data-en="6 Ways to <em>Grow</em> Your Hobby">Hobini <em>Büyütmek</em> İçin 6 Yol</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="idea-grid">
+
+        <div class="idea-card reveal">
+          <div class="idea-icon">🧪</div>
+          <div class="idea-tag" data-tr="Keşfetme · Başlangıç" data-en="Discovery · Beginning">Keşfetme · Başlangıç</div>
+          <div class="idea-title" data-tr="Decant & Sample Koleksiyonu" data-en="Decant & Sample Collection">Decant & Sample Koleksiyonu</div>
+          <p class="idea-desc" data-tr="Pahalı şişe almadan önce 2–5ml decant'lar toplayarak geniş bir koku haritası çıkar. Hem bütçeni korur hem de damak zevkini eğitirsin." data-en="Create a wide scent map by collecting 2–5ml decants before buying expensive bottles. It both protects your budget and trains your palate.">Pahalı şişe almadan önce 2–5ml decant'lar toplayarak geniş bir koku haritası çıkar. Hem bütçeni korur hem de damak zevkini eğitirsin.</p>
+          <ul class="idea-steps">
+            <li data-tr="Fragrantica ve Basenotes'ta favorilerini listele" data-en="List your favorites on Fragrantica and Basenotes">Fragrantica ve Basenotes'ta favorilerini listele</li>
+            <li data-tr="Türkiye'deki decant gruplarını ve Trendyol/Hepsiburada mağazalarını takip et" data-en="Follow decant groups in Turkey and Trendyol/Hepsiburada stores">Türkiye'deki decant gruplarını ve Trendyol/Hepsiburada mağazalarını takip et</li>
+            <li data-tr="Her ayı farklı bir koku ailesine ayır" data-en="Dedicate each month to a different scent family">Her ayı farklı bir koku ailesine ayır</li>
+          </ul>
+        </div>
+
+        <div class="idea-card reveal delay-1">
+          <div class="idea-icon">📓</div>
+          <div class="idea-tag" data-tr="Gelişim · Belgeleme" data-en="Development · Documentation">Gelişim · Belgeleme</div>
+          <div class="idea-title" data-tr="Parfüm Günlüğü Tut" data-en="Keep a Perfume Journal">Parfüm Günlüğü Tut</div>
+          <p class="idea-desc" data-tr="Her parfüm deneyimini tarih, hava durumu, ortam ve kişisel izlenimle not al. Zamanla zevkinin nasıl evrildiğini görmek inanılmaz derecede tatmin edici." data-en="Take notes on every perfume experience with date, weather, environment, and personal impression. It's incredibly satisfying to see how your taste evolves over time.">Her parfüm deneyimini tarih, hava durumu, ortam ve kişisel izlenimle not al. Zamanla zevkinin nasıl evrildiğini görmek inanılmaz derecede tatmin edici.</p>
+          <ul class="idea-steps">
+            <li data-tr="Not: üst nota - orta nota - alt nota algın" data-en="Note: top note - middle note - base note perception">Not: üst nota - orta nota - alt nota algın</li>
+            <li data-tr="Sillage (yayılım) ve kalıcılık derecelendirmesi ekle" data-en="Add Sillage (projection) and longevity rating">Sillage (yayılım) ve kalıcılık derecelendirmesi ekle</li>
+            <li data-tr="Parfümün sende uyandırdığı duygu veya anıyı yaz" data-en="Write the emotion or memory the perfume evokes in you">Parfümün sende uyandırdığı duygu veya anıyı yaz</li>
+          </ul>
+        </div>
+
+        <div class="idea-card reveal delay-2">
+          <div class="idea-icon">🌐</div>
+          <div class="idea-tag" data-tr="Topluluk · Bilgi" data-en="Community · Knowledge">Topluluk · Bilgi</div>
+          <div class="idea-title" data-tr="Parfüm Topluluklarına Katıl" data-en="Join Perfume Communities">Parfüm Topluluklarına Katıl</div>
+          <p class="idea-desc" data-tr="Reddit r/fragrance, Fragrantica forumları ve Türkiye'deki parfüm Discord ve Facebook grupları; tavsiye, takas ve sohbet için eşsiz kaynaklardır." data-en="Reddit r/fragrance, Fragrantica forums, and perfume Discord and Facebook groups in Turkey; unique resources for advice, trade, and chat.">Reddit r/fragrance, Fragrantica forumları ve Türkiye'deki parfüm Discord ve Facebook grupları; tavsiye, takas ve sohbet için eşsiz kaynaklardır.</p>
+          <ul class="idea-steps">
+            <li data-tr="r/fragrance · r/malefrags subredditlerini takip et" data-en="Follow r/fragrance · r/malefrags subreddits">r/fragrance · r/malefrags subredditlerini takip et</li>
+            <li data-tr='\"Erkek Parfüm Severler Türkiye\" gruplarını ara' data-en='Search for \"Erkek Parfüm Severler Türkiye\" groups'>"Erkek Parfüm Severler Türkiye" gruplarını ara</li>
+            <li data-tr="SOTD (Scent of the Day) paylaşımlarına katıl" data-en="Join SOTD (Scent of the Day) posts">SOTD (Scent of the Day) paylaşımlarına katıl</li>
+          </ul>
+        </div>
+
+        <div class="idea-card reveal">
+          <div class="idea-icon">🎓</div>
+          <div class="idea-tag" data-tr="Derinleşme · Uzmanlık" data-en="Deepening · Expertise">Derinleşme · Uzmanlık</div>
+          <div class="idea-title" data-tr="Parfüm Tarihi & Kimyasını Öğren" data-en="Learn Perfume History & Chemistry">Parfüm Tarihi & Kimyasını Öğren</div>
+          <p class="idea-desc" data-tr="Luca Turin'in \"The Secret of Scent\" kitabı ile Perfume Society'nin ücretsiz kaynaklarına başvur. Aroma kimyası bilmek tercihlerin neden değiştiğini açıklar." data-en="Refer to Luca Turin's \"The Secret of Scent\" book and the Perfume Society's free resources. Knowing aroma chemistry explains why preferences change.">Luca Turin'in "The Secret of Scent" kitabı ile Perfume Society'nin ücretsiz kaynaklarına başvur. Aroma kimyası bilmek tercihlerin neden değiştiğini açıklar.</p>
+          <ul class="idea-steps">
+            <li data-tr='\"Perfume: The Story of a Murderer\" filmini izle' data-en='Watch \"Perfume: The Story of a Murderer\" movie'>"Perfume: The Story of a Murderer" filmini izle</li>
+            <li data-tr="Fragrantica'nın olfaktif aile rehberini oku" data-en="Read Fragrantica's olfactory family guide">Fragrantica'nın olfaktif aile rehberini oku</li>
+            <li data-tr="Temel aroma kimikalleri (Ambroxan, ISO E Super) araştır" data-en="Research basic aroma chemicals (Ambroxan, ISO E Super)">Temel aroma kimikalleri (Ambroxan, ISO E Super) araştır</li>
+          </ul>
+        </div>
+
+        <div class="idea-card reveal delay-1">
+          <div class="idea-icon">🛠️</div>
+          <div class="idea-tag" data-tr="Yaratıcılık · DIY" data-en="Creativity · DIY">Yaratıcılık · DIY</div>
+          <div class="idea-title" data-tr="Kendi Koku Kolajını Oluştur" data-en="Create Your Own Scent Collage">Kendi Koku Kolajını Oluştur</div>
+          <p class="idea-desc" data-tr="İki parfümü birbiriyle layering yaparak (katmanlayarak) kendi imzanı yarat. Örneğin bir aquatik üzerine odunsu bir EDT sıkmak bambaşka bir deneyim açar." data-en="Create your own signature by layering two perfumes with each other. For example, spraying a woody EDT over an aquatic opens up a completely different experience.">İki parfümü birbiriyle layering yaparak (katmanlayarak) kendi imzanı yarat. Örneğin bir aquatik üzerine odunsu bir EDT sıkmak bambaşka bir deneyim açar.</p>
+          <ul class="idea-steps">
+            <li data-tr="Önce benzer ailelerden parfümleri dene (güvenli)" data-en="Try perfumes from similar families first (safe)">Önce benzer ailelerden parfümleri dene (güvenli)</li>
+            <li data-tr="Zıt kategorileri miksliyorsan nota uyumuna dikkat et" data-en="Pay attention to note harmony if mixing opposite categories">Zıt kategorileri miksliyorsan nota uyumuna dikkat et</li>
+            <li data-tr="Başarılı kombinasyonu günlüğüne kaydet, paylaş" data-en="Record the successful combination in your journal, share it">Başarılı kombinasyonu günlüğüne kaydet, paylaş</li>
+          </ul>
+        </div>
+
+        <div class="idea-card reveal delay-2">
+          <div class="idea-icon">🎁</div>
+          <div class="idea-tag" data-tr="Sosyal · Hediyeleşme" data-en="Social · Gifting">Sosyal · Hediyeleşme</div>
+          <div class="idea-title" data-tr="Takas & Hediye Kültürü" data-en="Swap & Gift Culture">Takas & Hediye Kültürü</div>
+          <p class="idea-desc" data-tr="Sevmediğin şişeleri parfüm takası gruplarında değerlendirmek hem bütçeni kurtarır hem yeni arkadaşlıklar doğurur. Yakınlarına kişiselleştirilmiş parfüm önerileri yapmak da harika bir hobby uzantısı." data-en="Evaluating bottles you don't like in perfume swap groups both saves your budget and creates new friendships. Making personalized perfume recommendations to your loved ones is also a great hobby extension.">Sevmediğin şişeleri parfüm takası gruplarında değerlendirmek hem bütçeni kurtarır hem yeni arkadaşlıklar doğurur. Yakınlarına kişiselleştirilmiş parfüm önerileri yapmak da harika bir hobby uzantısı.</p>
+          <ul class="idea-steps">
+            <li data-tr="Açılmamış şişeler için swap gruplarına katıl" data-en="Join swap groups for unopened bottles">Açılmamış şişeler için swap gruplarına katıl</li>
+            <li data-tr="Yakınlarının kişilik tipine uygun parfüm öner" data-en="Recommend perfumes suitable for your loved ones' personality type">Yakınlarının kişilik tipine uygun parfüm öner</li>
+            <li data-tr="Doğum günleri için kişiselleştirilmiş decant seti hazırla" data-en="Prepare a personalized decant set for birthdays">Doğum günleri için kişiselleştirilmiş decant seti hazırla</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section" style="background:var(--bg-secondary);padding-top:60px;padding-bottom:60px;">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Koleksiyoncu Rehberi" data-en="Collector's Guide">Koleksiyoncu Rehberi</div>
+        <h2 class="section-title" data-tr="Bütçeni <em>Akıllıca</em> Yönet" data-en="Manage Your Budget <em>Wisely</em>">Bütçeni <em>Akıllıca</em> Yönet</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div style="max-width:800px;margin:0 auto;" class="reveal">
+        <div class="tip-item" style="margin-bottom:1rem;">
+          <div class="tip-number" style="font-size:1.5rem;">💡</div>
+          <div class="tip-content">
+            <h3 style="color:var(--gold-bright);" data-tr="Önce decant, sonra tam şişe" data-en="Decant first, full bottle later">Önce decant, sonra tam şişe</h3>
+            <p data-tr="Hiçbir parfümü, en az 3 gün farklı koşullarda (ofis, gece, yaz) test etmeden tam şişe alma. 5ml decant satın almak saatler süren pişmanlıklardan kurtarır." data-en="Don't buy a full bottle of any perfume without testing it for at least 3 days in different conditions (office, night, summer). Buying a 5ml decant saves you from hours of regret.">Hiçbir parfümü, en az 3 gün farklı koşullarda (ofis, gece, yaz) test etmeden tam şişe alma. 5ml decant satın almak saatler süren pişmanlıklardan kurtarır.</p>
+          </div>
+        </div>
+        <div class="tip-item" style="margin-bottom:1rem;">
+          <div class="tip-number" style="font-size:1.5rem;">💡</div>
+          <div class="tip-content">
+            <h3 style="color:var(--gold-bright);" data-tr="Parfüm fuarlarını ve outlet'leri takip et" data-en="Follow perfume fairs and outlets">Parfüm fuarlarını ve outlet'leri takip et</h3>
+            <p data-tr="Beymen Club, Boyner ve Vakko gibi mağazalarda dönemsel indirimler yaşanır. Duty-free fırsatları ve resmi online mağazalar sertifikalı ürün garantisi sunar." data-en="Periodic discounts occur in stores like Beymen Club, Boyner, and Vakko. Duty-free opportunities and official online stores offer certified product guarantees.">Beymen Club, Boyner ve Vakko gibi mağazalarda dönemsel indirimler yaşanır. Duty-free fırsatları ve resmi online mağazalar sertifikalı ürün garantisi sunar.</p>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-number" style="font-size:1.5rem;">⚠️</div>
+          <div class="tip-content">
+            <h3 style="color:#eb8080;" data-tr="Sosyal Medya Seline Kapılma" data-en="Don't Get Swept Away by Social Media">Sosyal Medya Seline Kapılma</h3>
+            <p data-tr="TikTok ve YouTube algoritmaları \"hype\" parfüm satmak için tasarlanmış. Her \"en iyi erkek parfümü\" listesini filtrele, kendi burnunu eğit ve kendi kararını ver." data-en="TikTok and YouTube algorithms are designed to sell \"hype\" perfumes. Filter every \"best men's perfume\" list, train your own nose, and make your own decision.">TikTok ve YouTube algoritmaları "hype" parfüm satmak için tasarlanmış. Her "en iyi erkek parfümü" listesini filtrele, kendi burnunu eğit ve kendi kararını ver.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Nerede Alınır?" data-en="Where to Buy?">Nerede Alınır?</div>
+        <h2 class="section-title" data-tr="En İyi <em>Parfüm Mağazaları</em>" data-en="Best <em>Perfume Stores</em>">En İyi <em>Parfüm Mağazaları</em></h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="store-grid">
+
+        <div class="store-card reveal">
+          <div class="store-num">01</div>
+          <div class="store-body">
+            <div class="store-name">Fragrantica</div>
+            <div class="store-type" data-tr="Referans Sitesi · Ücretsiz" data-en="Reference Site · Free">Referans Sitesi · Ücretsiz</div>
+            <p class="store-desc" data-tr="Parfüm dünyasının ansiklopedisi. Nota bilgileri, yorumlar, olfaktif aileler ve \"benzer parfüm\" önerileri için vazgeçilmez. Koleksiyon takibi ve kişisel listeler yapabilirsin." data-en="The encyclopedia of the perfume world. Indispensable for note information, reviews, olfactory families, and \"similar perfume\" suggestions. You can track your collection and create personal lists.">Parfüm dünyasının ansiklopedisi. Nota bilgileri, yorumlar, olfaktif aileler ve "benzer parfüm" önerileri için vazgeçilmez. Koleksiyon takibi ve kişisel listeler yapabilirsin.</p>
+            <span class="store-tag">🌐 fragrantica.com</span>
+            <div class="store-actions">
+              <a class="store-btn store-btn-web" href="https://www.fragrantica.com" target="_blank" data-tr="🌐 Siteyi Ziyaret Et" data-en="🌐 Visit Site">🌐 Siteyi Ziyaret Et</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="store-card reveal delay-1">
+          <div class="store-num">02</div>
+          <div class="store-body">
+            <div class="store-name">Boyner / Beymen</div>
+            <div class="store-type" data-tr="Türkiye · Fiziksel & Online" data-en="Turkey · Physical & Online">Türkiye · Fiziksel & Online</div>
+            <p class="store-desc" data-tr="YSL, Hugo Boss, Prada, Dior ve Chanel gibi lüks designerları orijinal garantisiyle bulabileceğin güvenilir zincirlerin başında. Test tezgâhları mevcut." data-en="One of the leading reliable chains where you can find luxury designers like YSL, Hugo Boss, Prada, Dior, and Chanel with an original guarantee. Test counters are available.">YSL, Hugo Boss, Prada, Dior ve Chanel gibi lüks designerları orijinal garantisiyle bulabileceğin güvenilir zincirlerin başında. Test tezgâhları mevcut.</p>
+            <span class="store-tag" data-tr="🏬 Türkiye geneli" data-en="🏬 Across Turkey">🏬 Türkiye geneli</span>
+            <div class="store-actions">
+              <a class="store-btn store-btn-map" href="https://www.google.com/maps/search/Boyner+ma%C4%9Fazas%C4%B1/@41.015,28.979,12z" target="_blank" data-tr="📍 Konumu Gör" data-en="📍 See Location">📍 Konumu Gör</a>
+              <a class="store-btn store-btn-web" href="https://www.boyner.com.tr" target="_blank" data-tr="🌐 Siteyi Ziyaret Et" data-en="🌐 Visit Site">🌐 Siteyi Ziyaret Et</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="store-card reveal delay-2">
+          <div class="store-num">03</div>
+          <div class="store-body">
+            <div class="store-name">Sephora</div>
+            <div class="store-type" data-tr="Global Zincir · Türkiye'de Var" data-en="Global Chain · Available in Turkey">Global Zincir · Türkiye'de Var</div>
+            <p class="store-desc" data-tr="Geniş designer yelpazesi, numune servisi ve sadakat puanı sistemi. Özellikle YSL, Giorgio Armani ve Prada'yı test etmek için ideal ortam sunar." data-en="Wide range of designers, sample service, and loyalty point system. Offers an ideal environment to test especially YSL, Giorgio Armani, and Prada.">Geniş designer yelpazesi, numune servisi ve sadakat puanı sistemi. Özellikle YSL, Giorgio Armani ve Prada'yı test etmek için ideal ortam sunar.</p>
+            <span class="store-tag" data-tr="🏬 Büyük şehirlerde" data-en="🏬 In major cities">🏬 Büyük şehirlerde</span>
+            <div class="store-actions">
+              <a class="store-btn store-btn-map" href="https://www.google.com/maps/place/?q=place_id:ChIJi73Opu3HyhQR6SnZ-4fgSjQ" target="_blank" data-tr="📍 Konumu Gör" data-en="📍 See Location">📍 Konumu Gör</a>
+              <a class="store-btn store-btn-web" href="https://www.sephora.com.tr" target="_blank" data-tr="🌐 Siteyi Ziyaret Et" data-en="🌐 Visit Site">🌐 Siteyi Ziyaret Et</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="store-card reveal">
+          <div class="store-num">04</div>
+          <div class="store-body">
+            <div class="store-name">Jomashop</div>
+            <div class="store-type" data-tr="Online · Amerika · Uluslararası" data-en="Online · USA · International">Online · Amerika · Uluslararası</div>
+            <p class="store-desc" data-tr="Lüks parfümleri %40–60 indirimli bulabileceğin güvenilir Amerikan discount mağazası. BVLGARi, Mancera ve SHL gibi niche markaları da stoklar." data-en="A reliable American discount store where you can find luxury perfumes with a 40–60% discount. Also stocks niche brands like BVLGARi, Mancera, and SHL.">Lüks parfümleri %40–60 indirimli bulabileceğin güvenilir Amerikan discount mağazası. BVLGARi, Mancera ve SHL gibi niche markaları da stoklar.</p>
+            <span class="store-tag">🌐 jomashop.com</span>
+            <div class="store-actions">
+              <a class="store-btn store-btn-web" href="https://www.jomashop.com/fragrances.html" target="_blank" data-tr="🌐 Siteyi Ziyaret Et" data-en="🌐 Visit Site">🌐 Siteyi Ziyaret Et</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="store-card reveal delay-1">
+          <div class="store-num">05</div>
+          <div class="store-body">
+            <div class="store-name">Louis Vuitton Boutique</div>
+            <div class="store-type" data-tr="Sadece Mağazada · Premium" data-en="In-Store Only · Premium">Sadece Mağazada · Premium</div>
+            <p class="store-desc" data-tr="LV Imagination gibi parfümleri sadece resmi LV mağazalarından veya louisvuitton.com üzerinden satın alabilirsin. Sahte ürün riski sıfır." data-en="You can only buy perfumes like LV Imagination from official LV stores or through louisvuitton.com. Zero risk of fake products.">LV Imagination gibi parfümleri sadece resmi LV mağazalarından veya louisvuitton.com üzerinden satın alabilirsin. Sahte ürün riski sıfır.</p>
+            <span class="store-tag" data-tr="🏬 İstanbul Nişantaşı / Zorlu" data-en="🏬 Istanbul Nisantasi / Zorlu">🏬 İstanbul Nişantaşı / Zorlu</span>
+            <div class="store-actions">
+              <a class="store-btn store-btn-map" href="https://www.google.com/maps/place/?q=place_id:ChIJo6yIP2S3yhQRUBY379ewuks" target="_blank" data-tr="📍 Konumu Gör" data-en="📍 See Location">📍 Konumu Gör</a>
+              <a class="store-btn store-btn-web" href="https://tr.louisvuitton.com" target="_blank" data-tr="🌐 Siteyi Ziyaret Et" data-en="🌐 Visit Site">🌐 Siteyi Ziyaret Et</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="store-card reveal delay-2">
+          <div class="store-num">06</div>
+          <div class="store-body">
+            <div class="store-name">Decant Grupları (TR)</div>
+            <div class="store-type" data-tr="Facebook / Discord · Güven Esaslı" data-en="Facebook / Discord · Trust-Based">Facebook / Discord · Güven Esaslı</div>
+            <p class="store-desc" data-tr="\"Erkek Parfüm Severler\", \"Niche Parfüm Türkiye\" gibi gruplarda hem alım-satım hem takas yapabilirsin. Satıcı yorumlarını dikkatlice oku." data-en="You can buy, sell, and trade in groups like \"Erkek Parfüm Severler\", \"Niche Parfüm Türkiye\". Read seller reviews carefully.">"Erkek Parfüm Severler", "Niche Parfüm Türkiye" gibi gruplarda hem alım-satım hem takas yapabilirsin. Satıcı yorumlarını dikkatlice oku.</p>
+            <span class="store-tag">📱 Facebook · Instagram · Discord</span>
+            <div class="store-actions">
+              <a class="store-btn store-btn-web" href="https://www.facebook.com/groups/search/results/?q=parfüm+türkiye" target="_blank" data-tr="📱 Gruba Git" data-en="📱 Go to Group">📱 Gruba Git</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="store-card reveal">
+          <div class="store-num">07</div>
+          <div class="store-body">
+            <div class="store-name">Parfümsepeti / Gratis</div>
+            <div class="store-type" data-tr="Türkiye · Online & Fiziksel" data-en="Turkey · Online & Physical">Türkiye · Online & Fiziksel</div>
+            <p class="store-desc" data-tr="Orta ve üst segment designer parfümleri için uygun fiyatlı Türkiye alternatifleri. Dönemsel kampanyalar ve hızlı kargo avantajı." data-en="Affordable alternatives in Turkey for medium and high-end designer perfumes. Advantage of periodic campaigns and fast shipping.">Orta ve üst segment designer parfümleri için uygun fiyatlı Türkiye alternatifleri. Dönemsel kampanyalar ve hızlı kargo avantajı.</p>
+            <span class="store-tag">🌐 parfumsepeti.com · gratis.com.tr</span>
+            <div class="store-actions">
+              <a class="store-btn store-btn-map" href="https://www.google.com/maps/place/?q=place_id:ChIJTYvoOgfHyhQRN2IZfb4rX_0" target="_blank" data-tr="📍 Gratis Konumu Gör" data-en="📍 See Gratis Location">📍 Gratis Konumu Gör</a>
+              <a class="store-btn store-btn-web" href="https://www.parfumsepeti.com" target="_blank" data-tr="🌐 Parfümsepeti" data-en="🌐 Parfümsepeti">🌐 Parfümsepeti</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="store-card reveal delay-1">
+          <div class="store-num">08</div>
+          <div class="store-body">
+            <div class="store-name">Duty Free (THY / İGA)</div>
+            <div class="store-type" data-tr="Havalimanı · Seyahat Avantajı" data-en="Airport · Travel Advantage">Havalimanı · Seyahat Avantajı</div>
+            <p class="store-desc" data-tr="Yurt dışı seyahatlerinde THY ve İstanbul Havalimanı duty-free'de lüks parfümleri KDV'siz ve daha düşük fiyatla bulabilirsin. Özellikle SHL ve LV için değerli fırsat." data-en="On international travels, you can find luxury perfumes VAT-free and at lower prices at THY and Istanbul Airport duty-free. A valuable opportunity especially for SHL and LV.">Yurt dışı seyahatlerinde THY ve İstanbul Havalimanı duty-free'de lüks parfümleri KDV'siz ve daha düşük fiyatla bulabilirsin. Özellikle SHL ve LV için değerli fırsat.</p>
+            <span class="store-tag" data-tr="✈️ İstanbul, Ankara, İzmir" data-en="✈️ Istanbul, Ankara, Izmir">✈️ İstanbul, Ankara, İzmir</span>
+            <div class="store-actions">
+              <a class="store-btn store-btn-map" href="https://www.google.com/maps/place/?q=place_id:ChIJcbOUkVa2yhQR7UdicubAYz0" target="_blank" data-tr="📍 Havalimanı Konumu" data-en="📍 Airport Location">📍 Havalimanı Konumu</a>
+              <a class="store-btn store-btn-web" href="https://www.unifree.com.tr" target="_blank" data-tr="🌐 Siteyi Ziyaret Et" data-en="🌐 Visit Site">🌐 Siteyi Ziyaret Et</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section" style="padding-top:0;">
+      <div class="section-header reveal">
+        <div class="section-eyebrow">İstanbul Parfüm Haritası</div>
+        <h2 class="section-title">Mağazaları <em>Haritada</em> Gör</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div style="max-width:1100px;margin:0 auto;border-radius:10px;overflow:hidden;border:1px solid var(--gold-border);box-shadow:0 10px 40px rgba(0,0,0,0.4);">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m40!1m8!1m3!1d96136.78!2d28.979!3d41.022!3m2!1i1024!2i768!4f13.1!4m29!3e0!4m5!1s ChIJi73Opu3HyhQR6SnZ-4fgSjQ!2sSephora+Ba%C4%9Fdat+Caddesi!3m2!1d40.9623799!2d29.07718!4m5!1sChIJo6yIP2S3yhQRUBY379ewuks!2sLouis+Vuitton+Nisantasi!3m2!1d41.0495334!2d28.9923093!4m5!1sChIJUaglDEi5yhQR_l_D_t4PVcM!2sBoyner+%C4%B0stanbul!3m2!1d41.03547!2d28.95945!4m5!1sChIJcbOUkVa2yhQR7UdicubAYz0!2s%C4%B0stanbul+Airport+Duty+Free!3m2!1d41.2674512!2d28.7423236!5e0!3m2!1str!2str!4v1700000000000"
+          width="100%"
+          height="420"
+          style="border:0;display:block;filter:invert(90%) hue-rotate(180deg) saturate(0.7);"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Parfüm Mağazaları Haritası">
+        </iframe>
+      </div>
+      <p style="max-width:1100px;margin:.8rem auto 0;font-size:.62rem;color:var(--text-muted);letter-spacing:.1em;text-align:center;">
+        📍 Sephora Bağdat Caddesi &nbsp;·&nbsp; Louis Vuitton Nişantaşı &nbsp;·&nbsp; Boyner İstanbul &nbsp;·&nbsp; İstanbul Havalimanı Duty Free
+      </p>
+    </section>
+
+
+    <section class="section" style="background:var(--bg-secondary);padding-top:60px;">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Kişiselleştirilmiş Öneri" data-en="Personalized Recommendation">Kişiselleştirilmiş Öneri</div>
+        <h2 class="section-title" data-tr="Sana <em>Uygun</em> Kokuyu Bul" data-en="Find the Scent That <em>Suits</em> You">Sana <em>Uygun</em> Kokuyu Bul</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="suggest-box reveal">
+        <div class="section-eyebrow" style="justify-content:flex-start;margin-bottom:1.5rem;" data-tr="Tercihlerini Belirt" data-en="Specify Your Preferences">Tercihlerini Belirt</div>
+
+        <div class="form-group">
+          <label class="form-label" data-tr="En sevdiğin koku ailesi" data-en="Your favorite scent family">En sevdiğin koku ailesi</label>
+          <div class="radio-group" id="family">
+            <span class="radio-pill" onclick="toggle(this,'family')" data-tr="Odunsu" data-en="Woody">Odunsu</span>
+            <span class="radio-pill" onclick="toggle(this,'family')" data-tr="Oryantal" data-en="Oriental">Oryantal</span>
+            <span class="radio-pill" onclick="toggle(this,'family')" data-tr="Aquatik" data-en="Aquatic">Aquatik</span>
+            <span class="radio-pill" onclick="toggle(this,'family')" data-tr="Tatlı" data-en="Sweet">Tatlı</span>
+            <span class="radio-pill" onclick="toggle(this,'family')" data-tr="Narenciye" data-en="Citrus">Narenciye</span>
+            <span class="radio-pill" onclick="toggle(this,'family')" data-tr="Baharatlı" data-en="Spicy">Baharatlı</span>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:1.2rem;">
+          <label class="form-label" data-tr="Ne zaman kullanacaksın?" data-en="When will you use it?">Ne zaman kullanacaksın?</label>
+          <div class="radio-group" id="occasion">
+            <span class="radio-pill" onclick="toggle(this,'occasion')" data-tr="Günlük / Ofis" data-en="Daily / Office">Günlük / Ofis</span>
+            <span class="radio-pill" onclick="toggle(this,'occasion')" data-tr="Gece / Buluşma" data-en="Night / Date">Gece / Buluşma</span>
+            <span class="radio-pill" onclick="toggle(this,'occasion')" data-tr="Özel Gün" data-en="Special Occasion">Özel Gün</span>
+            <span class="radio-pill" onclick="toggle(this,'occasion')" data-tr="Spor / Dışarı" data-en="Sport / Outdoor">Spor / Dışarı</span>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:1.2rem;">
+          <label class="form-label" data-tr="Bütçe aralığı" data-en="Budget range">Bütçe aralığı</label>
+          <div class="radio-group" id="budget">
+            <span class="radio-pill" onclick="toggle(this,'budget')" data-tr="Altı 500₺" data-en="Under 500₺">Altı 500₺</span>
+            <span class="radio-pill" onclick="toggle(this,'budget')" data-tr="500₺ – 1500₺" data-en="500₺ – 1500₺">500₺ – 1500₺</span>
+            <span class="radio-pill" onclick="toggle(this,'budget')" data-tr="1500₺ – 4000₺" data-en="1500₺ – 4000₺">1500₺ – 4000₺</span>
+            <span class="radio-pill" onclick="toggle(this,'budget')" data-tr="4000₺ üstü" data-en="Above 4000₺">4000₺ üstü</span>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:1.2rem;">
+          <label class="form-label" for="msg" data-tr="Ek düşüncen veya sorun" data-en="Additional thought or question">Ek düşüncen veya sorun</label>
+          <textarea class="form-textarea" id="msg" placeholder="Örneğin: 'Tygar'ı denedim ve çok sevdim, benzeri neler var?' ya da 'İlk niche parfümüm için ne önerirsin?'" data-tr-placeholder="Örneğin: 'Tygar'ı denedim ve çok sevdim, benzeri neler var?' ya da 'İlk niche parfümüm için ne önerirsin?'" data-en-placeholder="For example: 'I tried Tygar and loved it, what are some similar ones?' or 'What do you recommend for my first niche perfume?'" style="min-height:110px;"></textarea>
+        </div>
+
+        <button class="btn btn-gold" style="width:100%;padding:1rem;justify-content:center;margin-top:.5rem;" onclick="submitForm()">
+          <span data-tr="Öneri Al" data-en="Get Recommendation">Öneri Al</span>
+        </button>
+
+        <div class="success-msg" id="successMsg" data-tr="✔ Teşekkürler! Tercihlerini aldık. En kısa sürede kişisel parfüm önerinle döneceğiz." data-en="✔ Thanks! We've received your preferences. We'll get back to you with your personal perfume recommendation as soon as possible.">
+          ✔ Teşekkürler! Tercihlerini aldık. En kısa sürede kişisel parfüm önerinle döneceğiz.
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="footer-brand">My Sillage</div>
+    <div class="footer-tagline" data-tr="Curated by Obsession · Est. 2024" data-en="Curated by Obsession · Est. 2024">Curated by Obsession · Est. 2024</div>
+    <div class="footer-author" data-tr="Deniz Öztürk 20210504 tarafından yapıldı" data-en="by Deniz Öztürk 20210504">Deniz Öztürk 20210504 tarafından yapıldı</div>
+    <nav class="footer-links">
+      <a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a>
+      <a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+      <a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a>
+      <a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a>
+      <a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a><a href="iletisim.html" data-tr="Fikirler & Mağazalar" data-en="Ideas & Stores">Fikirler & Mağazalar</a>
+    </nav>
+    <p class="footer-copy" data-tr="© 2024 My Sillage - Tüm hakları saklıdır." data-en="© 2024 My Sillage - All rights reserved.">© 2024 My Sillage - Tüm hakları saklıdır.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+  <script>
+            if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); const icon = document.getElementById('themeIcon'); if(icon) icon.textContent = '🌙'; }
+
+    function toggle(el, groupId) {
+      const group = document.getElementById(groupId);
+      group.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function submitForm() {
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('msg').value = '';
+      document.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('selected'));
+    }
+
+      </script>
+</body>
+</html>

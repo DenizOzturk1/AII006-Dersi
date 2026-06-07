@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MY SILLAGE - Erkek Parfümleri</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-main">My Sillage</span>
+      <span class="brand-sub">Curated by Obsession</span>
+      <span class="brand-author">Deniz Öztürk 20210504</span>
+    </a>
+    <div class="nav-right">
+      <div class="lang-toggle" onclick="toggleLanguage()" title="Dil Değiştir / Change Language">
+        <span class="lang-btn lang-btn-tr">TR</span>
+        <span class="lang-btn lang-btn-en">EN</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a></li>
+        <li><a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a></li>
+        <li><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+        <li><a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a></li>
+        <li><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a></li>
+        <li><a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a></li>
+        <li><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a></li>
+        <li><a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a></li>
+        <li><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a></li>
+      </ul>
+      <div class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir">
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+        <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+
+
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow animate-fade-up" data-tr="Tutkuyla Seçilmiş" data-en="Curated with Passion">Tutkuyla Seçilmiş</div>
+        <h1 class="animate-fade-up delay-1" data-tr="Erkeğin <span>Sessiz</span><br>Gücü" data-en="The <span>Silent</span><br>Power of Men">Erkeğin <span>Sessiz</span><br>Gücü</h1>
+        <p class="hero-subtitle animate-fade-up delay-2" data-tr="Derin notalar · Kalıcı izler · Eşsiz kimlik" data-en="Deep notes · Lasting traces · Unique identity">Derin notalar · Kalıcı izler · Eşsiz kimlik</p>
+        <div class="animate-fade-up delay-3" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <a href="koleksiyon.html" class="btn btn-gold" data-tr="<span>Koleksiyonu Keşfet</span>" data-en="<span>Discover Collection</span>"><span>Koleksiyonu Keşfet</span></a>
+          <a href="test.html" class="btn btn-outline" data-tr="<span>DNA Testini Yap</span>" data-en="<span>Take DNA Test</span>"><span>DNA Testini Yap</span></a>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section" style="background:var(--bg-secondary);">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="My Sillage" data-en="My Sillage">My Sillage</div>
+        <h2 class="section-title" data-tr="Parfümün <em>Sanatı</em>" data-en="The <em>Art</em> of Perfume">Parfümün <em>Sanatı</em></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal delay-1">
+          <div class="card-img">
+            <img src="assets/images/üç nota piramidi.avif" alt="Notalar"/>
+          </div>
+          <div class="card-body">
+            <div class="card-tag" data-tr="Koku Katmanları" data-en="Scent Layers">Koku Katmanları</div>
+            <div class="card-title" data-tr="Üç Nota Piramidi" data-en="Three Note Pyramid">Üç Nota Piramidi</div>
+            <p class="card-text" data-tr="Üst, orta ve alt notaların mükemmel dengesi ile cildinizde saatler boyu evrilen bir koku hikâyesi." data-en="A fragrance story that evolves on your skin for hours with the perfect balance of top, heart, and base notes.">Üst, orta ve alt notaların mükemmel dengesi ile cildinizde saatler boyu evrilen bir koku hikâyesi.</p>
+          </div>
+        </div>
+        <div class="card reveal delay-2">
+          <div class="card-img">
+            <img src="assets/images/armani prive oud royal.jpg" alt="Armani Privé Oud Royal"/>
+          </div>
+          <div class="card-body">
+            <div class="card-tag" data-tr="Armani Privé · Oud Royal" data-en="Armani Privé · Oud Royal">Armani Privé · Oud Royal</div>
+            <div class="card-title" data-tr="Seçkin Hammaddeler" data-en="Elite Ingredients">Seçkin Hammaddeler</div>
+            <p class="card-text" data-tr="Giorgio Armani'nin Privé koleksiyonundan: kraliyet oudu, gül ve bergamot. Lüks parfümerinin ham madde kalitesini tanımak için mükemmel referans." data-en="From Giorgio Armani's Privé collection: royal oud, rose, and bergamot. A perfect reference for recognizing the ingredient quality of luxury perfumery.">Giorgio Armani'nin Privé koleksiyonundan: kraliyet oudu, gül ve bergamot. Lüks parfümerinin ham madde kalitesini tanımak için mükemmel referans.</p>
+          </div>
+        </div>
+        <div class="card reveal delay-3">
+          <div class="card-img">
+            <img src="assets/images/followed by kerosene.jpg" alt="Followed Kerosene"/>
+          </div>
+          <div class="card-body">
+            <div class="card-tag" data-tr="Followed by Kerosene · Niche" data-en="Followed by Kerosene · Niche">Followed by Kerosene · Niche</div>
+            <div class="card-title" data-tr="12+ Saat Kalıcılık" data-en="12+ Hours Longevity">12+ Saat Kalıcılık</div>
+            <p class="card-text" data-tr="Kerosene gibi bağımsız niche evlerinin formülleri: yüksek yoğunluklu ham maddeler, sentetik kısıtlama yok. Sabah uyguladığın koku ertesi gün kıyafetinde yaşıyor." data-en="Formulas from independent niche houses like Kerosene: high-intensity raw materials, no synthetic restrictions. The scent you apply in the morning lives on your clothes the next day.">Kerosene gibi bağımsız niche evlerinin formülleri: yüksek yoğunluklu ham maddeler, sentetik kısıtlama yok. Sabah uyguladığın koku ertesi gün kıyafetinde yaşıyor.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Deniz Öztürk'ün Seçimi" data-en="Deniz Öztürk's Choice">Deniz Öztürk'ün Seçimi</div>
+        <h2 class="section-title" data-tr="Öne Çıkan <em>Parfümler</em>" data-en="Featured <em>Perfumes</em>">Öne Çıkan <em>Parfümler</em></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <div class="card-img">
+            <img src="assets/images/arabians tonka.jpg" alt="Montale Arabians Tonka"/>
+          </div>
+          <div class="card-body">
+            <div class="card-tag" data-tr="Oryantal · Tatlı · Oud" data-en="Oriental · Sweet · Oud">Oryantal · Tatlı · Oud</div>
+            <div class="card-title">Arabians Tonka</div>
+            <p class="card-text" data-tr="Montale'nin ikonik şişesinde safran, Bulgar gülü ve oud kalbinde tonka fasulyesi, amber and misk. Doğu'nun derin gizemini harmanlayan bir bağımlılık." data-en="Saffron, Bulgarian rose, and oud in Montale's iconic bottle, with tonka bean, amber, and musk at its heart. An addiction blending the deep mysteries of the East.">Montale'nin ikonik şişesinde safran, Bulgar gülü ve oud kalbinde tonka fasulyesi, amber and misk. Doğu'nun derin gizemini harmanlayan bir bağımlılık.</p>
+            <br/>
+            <a href="koleksiyon.html" class="btn btn-gold" style="padding:.7rem 1.5rem;font-size:.6rem;" data-tr="<span>İncele</span>" data-en="<span>View</span>"><span>İncele</span></a>
+          </div>
+        </div>
+        <div class="card reveal delay-1">
+          <div class="card-img">
+            <img src="assets/images/blue talisman.jpeg" alt="Ex nihilo Blue Talisman"/>
+          </div>
+          <div class="card-body">
+            <div class="card-tag" data-tr="Aquatik · Odunsu · Ferah" data-en="Aquatic · Woody · Fresh">Aquatik · Odunsu · Ferah</div>
+            <div class="card-title">Blue Talisman</div>
+            <p class="card-text" data-tr="Montale'den kristal açılış, sedir ve amber'e bırakır kendini. Hem dingin hem güçlü - mavi bir tılsımın özgürleştiren enerjisi." data-en="Crystal opening from Montale, leaves itself to cedar and amber. Both serene and powerful - the liberating energy of a blue talisman.">Montale'den kristal açılış, sedir ve amber'e bırakır kendini. Hem dingin hem güçlü - mavi bir tılsımın özgürleştiren enerjisi.</p>
+            <br/>
+            <a href="koleksiyon.html" class="btn btn-gold" style="padding:.7rem 1.5rem;font-size:.6rem;" data-tr="<span>İncele</span>" data-en="<span>View</span>"><span>İncele</span></a>
+          </div>
+        </div>
+        <div class="card reveal delay-2">
+          <div class="card-img">
+            <img src="assets/images/ganymede.avif" alt="Marc-Antoine Barrois Ganymede"/>
+          </div>
+          <div class="card-body">
+            <div class="card-tag" data-tr="Odunsu · Mineral · Niche" data-en="Woody · Mineral · Niche">Odunsu · Mineral · Niche</div>
+            <div class="card-title">Ganymede</div>
+            <p class="card-text" data-tr="Marc-Antoine Barrois & Quentin Bisch imzalı. İtalyan mandalina ve safranın metalik açılışı; akigalawood, süet ve immortelle tabanında uzayımsı derinlik." data-en="Signed by Marc-Antoine Barrois & Quentin Bisch. Metallic opening of Italian mandarin and saffron; cosmic depth on a base of akigalawood, suede, and immortelle.">Marc-Antoine Barrois & Quentin Bisch imzalı. İtalyan mandalina ve safranın metalik açılışı; akigalawood, süet ve immortelle tabanında uzayımsı derinlik.</p>
+            <br/>
+            <a href="koleksiyon.html" class="btn btn-gold" style="padding:.7rem 1.5rem;font-size:.6rem;" data-tr="<span>İncele</span>" data-en="<span>View</span>"><span>İncele</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section style="padding:80px 5%;background:var(--bg-secondary);text-align:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(212,168,67,0.05) 0%,transparent 70%);"></div>
+      <blockquote style="position:relative;max-width:700px;margin:0 auto;">
+        <div class="gold-line" style="margin-bottom:2rem;"></div>
+        <p style="font-family:var(--font-display);font-size:clamp(1.4rem,3vw,2.2rem);font-style:italic;color:var(--text-primary);line-height:1.5;margin-bottom:1.5rem;" data-tr="&quot;Bir parfüm, giydiğiniz en kişisel kıyafettir.<br>Sizi tanımlar, sizi hatırlatır, sizi bırakmaz.&quot;" data-en="&quot;A perfume is the most personal garment you wear.<br>It defines you, reminds of you, and never leaves you.&quot;">
+          "Bir parfüm, giydiğiniz en kişisel kıyafettir.<br>Sizi tanımlar, sizi hatırlatır, sizi bırakmaz."
+        </p>
+        <div class="section-eyebrow" style="justify-content:center;" data-tr="- My Sillage Manifesto" data-en="- My Sillage Manifesto">- My Sillage Manifesto</div>
+        <div class="gold-line" style="margin-top:2rem;"></div>
+      </blockquote>
+    </section>
+
+
+    <section class="section">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Keşfet" data-en="Explore">Keşfet</div>
+        <h2 class="section-title" data-tr="Tüm <em>Bölümler</em>" data-en="All <em>Sections</em>">Tüm <em>Bölümler</em></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;max-width:1100px;margin:0 auto;">
+        <a href="notalar.html" class="card reveal" style="text-align:center;padding:2rem 1rem;text-decoration:none;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">🌸</div>
+          <div class="card-title" style="font-size:1.1rem;" data-tr="Notalar" data-en="Notes">Notalar</div>
+          <p class="card-text" style="margin-top:.3rem;font-size:.68rem;" data-tr="Koku piramidi · Çark" data-en="Scent pyramid · Wheel">Koku piramidi · Çark</p>
+        </a>
+        <a href="kategoriler.html" class="card reveal delay-1" style="text-align:center;padding:2rem 1rem;text-decoration:none;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">🗂️</div>
+          <div class="card-title" style="font-size:1.1rem;" data-tr="Kategoriler" data-en="Categories">Kategoriler</div>
+          <p class="card-text" style="margin-top:.3rem;font-size:.68rem;" data-tr="Koku aileleri · Flip kartlar" data-en="Scent families · Flip cards">Koku aileleri · Flip kartlar</p>
+        </a>
+        <a href="koleksiyon.html" class="card reveal delay-2" style="text-align:center;padding:2rem 1rem;text-decoration:none;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">💎</div>
+          <div class="card-title" style="font-size:1.1rem;" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</div>
+          <p class="card-text" style="margin-top:.3rem;font-size:.68rem;" data-tr="14 gerçek parfüm · Filtre" data-en="14 real perfumes · Filter">14 gerçek parfüm · Filtre</p>
+        </a>
+        <a href="ipuclari.html" class="card reveal delay-3" style="text-align:center;padding:2rem 1rem;text-decoration:none;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">✨</div>
+          <div class="card-title" style="font-size:1.1rem;" data-tr="İpuçları" data-en="Tips">İpuçları</div>
+          <p class="card-text" style="margin-top:.3rem;font-size:.68rem;" data-tr="Uygulama · Saklama" data-en="Application · Storage">Uygulama · Saklama</p>
+        </a>
+        <a href="sozluk.html" class="card reveal" style="text-align:center;padding:2rem 1rem;text-decoration:none;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">📖</div>
+          <div class="card-title" style="font-size:1.1rem;" data-tr="Sözlük" data-en="Glossary">Sözlük</div>
+          <p class="card-text" style="margin-top:.3rem;font-size:.68rem;" data-tr="A–Z terimler · Rehber" data-en="A–Z terms · Guide">A–Z terimler · Rehber</p>
+        </a>
+        <a href="test.html" class="card reveal delay-1" style="text-align:center;padding:2rem 1rem;text-decoration:none;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">🧬</div>
+          <div class="card-title" style="font-size:1.1rem;" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</div>
+          <p class="card-text" style="margin-top:.3rem;font-size:.68rem;" data-tr="Koku ailen nedir?" data-en="What is your scent family?">Koku ailen nedir?</p>
+        </a>
+        <a href="takvim.html" class="card reveal delay-2" style="text-align:center;padding:2rem 1rem;text-decoration:none;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">📅</div>
+          <div class="card-title" style="font-size:1.1rem;" data-tr="Takvim" data-en="Calendar">Takvim</div>
+          <p class="card-text" style="margin-top:.3rem;font-size:.68rem;" data-tr="12 ay · Mevsim önerileri" data-en="12 months · Seasonal suggestions">12 ay · Mevsim önerileri</p>
+        </a>
+        <a href="koleksiyonum.html" class="card reveal delay-3" style="text-align:center;padding:2rem 1rem;text-decoration:none;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">🏆</div>
+          <div class="card-title" style="font-size:1.1rem;" data-tr="Köşem" data-en="My Corner">Köşem</div>
+          <p class="card-text" style="margin-top:.3rem;font-size:.68rem;" data-tr="Şişelerim · Wishlist · Günlük" data-en="My Bottles · Wishlist · Journal">Şişelerim · Wishlist · Günlük</p>
+        </a>
+        <a href="iletisim.html" class="card reveal" style="text-align:center;padding:2rem 1rem;text-decoration:none;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">💡</div>
+          <div class="card-title" style="font-size:1.1rem;" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</div>
+          <p class="card-text" style="margin-top:.3rem;font-size:.68rem;" data-tr="Öneriler · Mağazalar" data-en="Suggestions · Stores">Öneriler · Mağazalar</p>
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="footer-brand">My Sillage</div>
+    <div class="footer-tagline" data-tr="Curated by Obsession · Est. 2026" data-en="Curated by Obsession · Est. 2026">Curated by Obsession · Est. 2026</div>
+    <div class="footer-author" data-tr="Deniz Öztürk 20210504 tarafından yapıldı" data-en="by Deniz Öztürk 20210504">Deniz Öztürk 20210504 tarafından yapıldı</div>
+    <nav class="footer-links">
+      <a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a>
+      <a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+      <a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a>
+      <a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a>
+      <a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a>
+    </nav>
+    <p class="footer-copy" data-tr="© 2026 My Sillage - Tüm hakları saklıdır." data-en="© 2026 My Sillage - All rights reserved.">© 2026 My Sillage - Tüm hakları saklıdır.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parfüm DNA Testi - My Sillage</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+
+    .quiz-container { max-width: 680px; margin: 0 auto; }
+    .q-screen { display: none; flex-direction: column; gap: 1.4rem; animation: fadeUp .4s ease; }
+    .q-screen.active { display: flex; }
+    .result-screen { display: none; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; animation: fadeUp .5s ease; }
+    .result-screen.active { display: flex; }
+    .progress-bar { height: 3px; background: rgba(212,168,67,0.15); border-radius: 2px; overflow: hidden; margin-bottom: 2.5rem; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold-bright)); border-radius: 2px; transition: width .5s ease; }
+    .q-number { font-size:.55rem; letter-spacing:.4em; text-transform:uppercase; color:var(--gold-dim); }
+    .q-text { font-family:var(--font-display); font-size:1.8rem; color:var(--text-primary); line-height:1.3; }
+    .q-sub  { font-size:.7rem; color:var(--text-muted); letter-spacing:.1em; }
+    .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+    .opt-btn {
+      display:flex; flex-direction:column; gap:.4rem; padding:1.2rem 1.4rem;
+      background:var(--bg-card); border:1px solid rgba(212,168,67,.15);
+      border-radius:8px; cursor:pointer; transition:var(--transition); text-align:left;
+    }
+    .opt-btn:hover { border-color:var(--gold-border); background:var(--bg-card-hover); transform:translateY(-2px); }
+    .opt-icon { font-size:1.6rem; }
+    .opt-name { font-family:var(--font-display); font-size:1.15rem; color:var(--text-primary); }
+    .opt-desc { font-size:.62rem; color:var(--text-secondary); line-height:1.5; }
+    .result-big-icon { font-size:5rem; }
+    .result-family  { font-family:var(--font-display); font-size:2.8rem; color:var(--gold-bright); }
+    .result-subtitle{ font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gold-dim); }
+    .result-body { font-size:.8rem; color:var(--text-secondary); line-height:1.8; max-width:520px; }
+    .result-pills { display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; }
+    .result-pill { font-size:.58rem; letter-spacing:.15em; text-transform:uppercase; padding:.3rem .9rem; border:1px solid var(--gold-border); border-radius:20px; color:var(--gold-dim); }
+    .restart-btn { margin-top:1rem; }
+    @media(max-width:500px){ .options-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-main">My Sillage</span>
+      <span class="brand-sub">Curated by Obsession</span>
+      <span class="brand-author">Deniz Öztürk 20210504</span>
+    </a>
+    <div class="nav-right">
+      <div class="lang-toggle" onclick="toggleLanguage()" title="Dil Değiştir / Change Language" data-tr-title="Dil Değiştir / Change Language" data-en-title="Change Language / Dil Değiştir">
+        <span class="lang-btn lang-btn-tr">TR</span>
+        <span class="lang-btn lang-btn-en">EN</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a></li>
+        <li><a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a></li>
+        <li><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+        <li><a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a></li>
+        <li><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a></li>
+        <li><a href="test.html" class="active" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a></li>
+        <li><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a></li>
+        <li><a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a></li>
+        <li><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a></li>
+      </ul>
+      <div class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir" data-tr-title="Tema Değiştir" data-en-title="Toggle Theme">
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+        <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-hero">
+      <div class="hero-eyebrow" style="justify-content:center;margin-bottom:1rem;" data-tr="Kişilik Analizi" data-en="Personality Analysis">Kişilik Analizi</div>
+      <h1 class="page-hero-title" data-tr="Parfüm <em>DNA</em> Testi" data-en="Perfume <em>DNA</em> Test">Parfüm <em>DNA</em> Testi</h1>
+      <p class="page-hero-sub" data-tr="10 soru · Koku ailenini keşfet · Öneriler al" data-en="10 questions · Discover your scent family · Get recommendations">10 soru · Koku ailenini keşfet · Öneriler al</p>
+    </div>
+
+    <section class="section">
+      <div class="quiz-container">
+
+
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+
+        <div id="quiz-wrapper"></div>
+
+
+        <div class="result-screen" id="result-oriental">
+          <div class="result-big-icon">🏜️</div>
+          <div class="result-family" data-tr="Oryantal Ruh" data-en="Oriental Spirit">Oryantal Ruh</div>
+          <div class="result-subtitle" data-tr="Egzotik · Gizemli · Derin" data-en="Exotic · Mysterious · Deep">Egzotik · Gizemli · Derin</div>
+          <p class="result-body" data-tr="Sen oud'un kutsal dumanını, safranın metalik sıcaklığını ve amberin sarmalayıcı derinliğini taşıyan bir ruhsun. Sıradan değilsin - her ortamda farklılığın hissedilir. Doğu'nun kadim bilgeliği sende koku olarak yaşar." data-en="You are a soul carrying the sacred smoke of oud, the metallic warmth of saffron, and the enveloping depth of amber. You are not ordinary - your difference is felt in every environment. The ancient wisdom of the East lives in you as a scent.">Sen oud'un kutsal dumanını, safranın metalik sıcaklığını ve amberin sarmalayıcı derinliğini taşıyan bir ruhsun. Sıradan değilsin - her ortamda farklılığın hissedilir. Doğu'nun kadim bilgeliği sende koku olarak yaşar.</p>
+          <div class="result-pills" id="pills-oriental"></div>
+          <button class="btn btn-gold restart-btn" onclick="restart()"><span data-tr="Testi Tekrarla" data-en="Restart Quiz">Testi Tekrarla</span></button>
+          <button onclick="shareResult('Oryantal Ruh 🏜️')" style="
+            margin-top:.5rem; background:none; border:1px solid rgba(212,168,67,.3);
+            border-radius:4px; color:var(--gold-dim); font-family:var(--font-ui);
+            font-size:.58rem; letter-spacing:.2em; text-transform:uppercase;
+            padding:.6rem 1.4rem; cursor:pointer; transition:all .3s; width:100%;
+          " onmouseover="this.style.borderColor='var(--gold-bright)';this.style.color='var(--gold-bright)'"
+             onmouseout="this.style.borderColor='rgba(212,168,67,.3)';this.style.color='var(--gold-dim)'"
+             data-tr="📋 Sonucu Kopyala" data-en="📋 Copy Result">
+            📋 Sonucu Kopyala
+          </button>
+        </div>
+
+        <div class="result-screen" id="result-woody">
+          <div class="result-big-icon">🌲</div>
+          <div class="result-family" data-tr="Odunsu Karakter" data-en="Woody Character">Odunsu Karakter</div>
+          <div class="result-subtitle" data-tr="Güçlü · Toprak · Özgün" data-en="Strong · Earth · Original">Güçlü · Toprak · Özgün</div>
+          <p class="result-body" data-tr="Sedir ağaçlarının soğuk sesiyle, vetiverin toprak kökleriyle ve patchouli'nin koyu derinliğiyle tanımlanıyorsun. Doğayla barışık, güçlü ama gösterişsiz. Ormanın efendisi - konuşmadan fark ettirir." data-en="You are defined by the cold voice of cedar trees, the earthy roots of vetiver, and the dark depth of patchouli. At peace with nature, strong but unassuming. Master of the forest - noticed without speaking.">Sedir ağaçlarının soğuk sesiyle, vetiverin toprak kökleriyle ve patchouli'nin koyu derinliğiyle tanımlanıyorsun. Doğayla barışık, güçlü ama gösterişsiz. Ormanın efendisi - konuşmadan fark ettirir.</p>
+          <div class="result-pills" id="pills-woody"></div>
+          <button class="btn btn-gold restart-btn" onclick="restart()"><span data-tr="Testi Tekrarla" data-en="Restart Quiz">Testi Tekrarla</span></button>
+          <button onclick="shareResult('Odunsu Karakter 🌲')" style="
+            margin-top:.5rem; background:none; border:1px solid rgba(212,168,67,.3);
+            border-radius:4px; color:var(--gold-dim); font-family:var(--font-ui);
+            font-size:.58rem; letter-spacing:.2em; text-transform:uppercase;
+            padding:.6rem 1.4rem; cursor:pointer; transition:all .3s; width:100%;
+          " onmouseover="this.style.borderColor='var(--gold-bright)';this.style.color='var(--gold-bright)'"
+             onmouseout="this.style.borderColor='rgba(212,168,67,.3)';this.style.color='var(--gold-dim)'"
+             data-tr="📋 Sonucu Kopyala" data-en="📋 Copy Result">
+            📋 Sonucu Kopyala
+          </button>
+        </div>
+
+        <div class="result-screen" id="result-aquatic">
+          <div class="result-big-icon">🌊</div>
+          <div class="result-family" data-tr="Aquatik Özgürlük" data-en="Aquatic Freedom">Aquatik Özgürlük</div>
+          <div class="result-subtitle" data-tr="Taze · Dinamik · Sınırsız" data-en="Fresh · Dynamic · Limitless">Taze · Dinamik · Sınırsız</div>
+          <p class="result-body" data-tr="Deniz tuzunun özgürleştiren kokusu, bergamotun patlayıcı enerjisi ve miski okyanus nefesiyle tanımlanıyorsun. Hayatı tam yaşayan, hareket eden, özgür ruhlu. Koku izin de seni takip edemez - sen zaten çoktan gittin." data-en="You are defined by the liberating scent of sea salt, the explosive energy of bergamot, and the musk's oceanic breath. Living life to the fullest, moving, free-spirited. Even your scent trail can't keep up with you - you're already long gone.">Deniz tuzunun özgürleştiren kokusu, bergamotun patlayıcı enerjisi ve miski okyanus nefesiyle tanımlanıyorsun. Hayatı tam yaşayan, hareket eden, özgür ruhlu. Koku izin de seni takip edemez - sen zaten çoktan gittin.</p>
+          <div class="result-pills" id="pills-aquatic"></div>
+          <button class="btn btn-gold restart-btn" onclick="restart()"><span data-tr="Testi Tekrarla" data-en="Restart Quiz">Testi Tekrarla</span></button>
+          <button onclick="shareResult('Aquatik Özgürlük 🌊')" style="
+            margin-top:.5rem; background:none; border:1px solid rgba(212,168,67,.3);
+            border-radius:4px; color:var(--gold-dim); font-family:var(--font-ui);
+            font-size:.58rem; letter-spacing:.2em; text-transform:uppercase;
+            padding:.6rem 1.4rem; cursor:pointer; transition:all .3s; width:100%;
+          " onmouseover="this.style.borderColor='var(--gold-bright)';this.style.color='var(--gold-bright)'"
+             onmouseout="this.style.borderColor='rgba(212,168,67,.3)';this.style.color='var(--gold-dim)'"
+             data-tr="📋 Sonucu Kopyala" data-en="📋 Copy Result">
+            📋 Sonucu Kopyala
+          </button>
+        </div>
+
+        <div class="result-screen" id="result-spicy">
+          <div class="result-big-icon">🌶️</div>
+          <div class="result-family" data-tr="Baharatlı Güç" data-en="Spicy Power">Baharatlı Güç</div>
+          <div class="result-subtitle" data-tr="Karizmatik · Cesur · Isıtıcı" data-en="Charismatic · Bold · Warming">Karizmatik · Cesur · Isıtıcı</div>
+          <p class="result-body" data-tr="Karabiberin keskin cesareti, safranın metalik egzotizmi ve sıcak baharatların yakıcı enerjisiyle tanımlanıyorsun. Soğuk havalarda vücudunla birleşince unutulmaz olan, her ortamda iz bırakan güçlü karakter." data-en="You are defined by the sharp courage of black pepper, the metallic exoticism of saffron, and the burning energy of warm spices. An unforgettable powerful character that leaves a trail in every environment when combined with your body in cold weather.">Karabiberin keskin cesareti, safranın metalik egzotizmi ve sıcak baharatların yakıcı enerjisiyle tanımlanıyorsun. Soğuk havalarda vücudunla birleşince unutulmaz olan, her ortamda iz bırakan güçlü karakter.</p>
+          <div class="result-pills" id="pills-spicy"></div>
+          <button class="btn btn-gold restart-btn" onclick="restart()"><span data-tr="Testi Tekrarla" data-en="Restart Quiz">Testi Tekrarla</span></button>
+          <button onclick="shareResult('Baharatlı Güç 🌶️')" style="
+            margin-top:.5rem; background:none; border:1px solid rgba(212,168,67,.3);
+            border-radius:4px; color:var(--gold-dim); font-family:var(--font-ui);
+            font-size:.58rem; letter-spacing:.2em; text-transform:uppercase;
+            padding:.6rem 1.4rem; cursor:pointer; transition:all .3s; width:100%;
+          " onmouseover="this.style.borderColor='var(--gold-bright)';this.style.color='var(--gold-bright)'"
+             onmouseout="this.style.borderColor='rgba(212,168,67,.3)';this.style.color='var(--gold-dim)'"
+             data-tr="📋 Sonucu Kopyala" data-en="📋 Copy Result">
+            📋 Sonucu Kopyala
+          </button>
+        </div>
+
+        <div class="result-screen" id="result-sweet">
+          <div class="result-big-icon">🍯</div>
+          <div class="result-family" data-tr="Tatlı Büyü" data-en="Sweet Magic">Tatlı Büyü</div>
+          <div class="result-subtitle" data-tr="Davetkar · Sıcak · Bağımlılık Yapıcı" data-en="Inviting · Warm · Addictive">Davetkar · Sıcak · Bağımlılık Yapıcı</div>
+          <p class="result-body" data-tr="Tonka'nın kadifemsi tatlılığı, vanilyanın sarmalayıcı sıcaklığı ve benzoinin dumanlı derinliğiyle tanımlanıyorsun. Yakın mesafede seni deneyimleyenler bir daha unutamaz. Gecenin ve sıcak anların kokusu." data-en="You are defined by the velvety sweetness of tonka, the enveloping warmth of vanilla, and the smoky depth of benzoin. Those who experience you at close range will never forget. The scent of the night and warm moments.">Tonka'nın kadifemsi tatlılığı, vanilyanın sarmalayıcı sıcaklığı ve benzoinin dumanlı derinliğiyle tanımlanıyorsun. Yakın mesafede seni deneyimleyenler bir daha unutamaz. Gecenin ve sıcak anların kokusu.</p>
+          <div class="result-pills" id="pills-sweet"></div>
+          <button class="btn btn-gold restart-btn" onclick="restart()"><span data-tr="Testi Tekrarla" data-en="Restart Quiz">Testi Tekrarla</span></button>
+          <button onclick="shareResult('Tatlı Büyü 🍯')" style="
+            margin-top:.5rem; background:none; border:1px solid rgba(212,168,67,.3);
+            border-radius:4px; color:var(--gold-dim); font-family:var(--font-ui);
+            font-size:.58rem; letter-spacing:.2em; text-transform:uppercase;
+            padding:.6rem 1.4rem; cursor:pointer; transition:all .3s; width:100%;
+          " onmouseover="this.style.borderColor='var(--gold-bright)';this.style.color='var(--gold-bright)'"
+             onmouseout="this.style.borderColor='rgba(212,168,67,.3)';this.style.color='var(--gold-dim)'"
+             data-tr="📋 Sonucu Kopyala" data-en="📋 Copy Result">
+            📋 Sonucu Kopyala
+          </button>
+        </div>
+
+
+
+        <div id="histSection" style="margin-top:3rem;display:none;">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;">
+            <div style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold-bright);" data-tr="🕐 Önceki Testlerim" data-en="🕐 Previous Tests">🕐 Önceki Testlerim</div>
+            <button onclick="clearHistory()" style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .7rem;border:1px solid rgba(212,168,67,.2);border-radius:3px;color:var(--text-muted);cursor:pointer;background:none;" onmouseover="this.style.color='var(--gold-bright)'" onmouseout="this.style.color='var(--text-muted)'" data-tr="Temizle" data-en="Clear">Temizle</button>
+          </div>
+          <div id="histList" style="display:flex;flex-direction:column;gap:.7rem;"></div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="footer-brand">My Sillage</div>
+    <div class="footer-tagline">Curated by Obsession · Est. 2024</div>
+    <div class="footer-author" data-tr="Deniz Öztürk 20210504 tarafından yapıldı" data-en="by Deniz Öztürk 20210504">Deniz Öztürk 20210504 tarafından yapıldı</div>
+    <nav class="footer-links">
+      <a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a>
+      <a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+      <a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a>
+      <a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a>
+      <a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a>
+    </nav>
+    <p class="footer-copy" data-tr="© 2024 My Sillage - Tüm hakları saklıdır." data-en="© 2024 My Sillage - All rights reserved.">© 2024 My Sillage - Tüm hakları saklıdır.</p>
+  </footer>
+
+
+  <script src="js/perfumes.js"></script>
+
+  <script>
+            if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); const icon = document.getElementById('themeIcon'); if(icon) icon.textContent = '🌙'; }
+
+
+    const quizData = [
+      { id: 1, text: { tr: "Sabah kalktığında ilk hissin ne?", en: "What is your first feeling when you wake up?" }, sub: { tr: "İçgüdüsel cevabı seç - çok düşünme.", en: "Choose the instinctive answer - don't think too much." }, options: [
+        { key: "A", icon: "⚡", name: { tr: "Enerji & Hız", en: "Energy & Speed" }, desc: { tr: "Güne hazır, hareketli, dinamik", en: "Ready for the day, active, dynamic" } },
+        { key: "B", icon: "☕", name: { tr: "Sessiz & Derin", en: "Quiet & Deep" }, desc: { tr: "Yavaş, düşünceli, içe dönük", en: "Slow, thoughtful, introverted" } },
+        { key: "C", icon: "🌊", name: { tr: "Özgür & Rahat", en: "Free & Relaxed" }, desc: { tr: "Akışta, stressiz, doğayla uyumlu", en: "In the flow, stress-free, harmonious with nature" } },
+        { key: "D", icon: "🔥", name: { tr: "Tutkulu & Kararlı", en: "Passionate & Determined" }, desc: { tr: "Hedefli, güçlü, içi dolu", en: "Targeted, strong, full of substance" } }
+      ]},
+      { id: 2, text: { tr: "Hangi ortam seni en çok tanımlıyor?", en: "Which environment defines you the most?" }, sub: { tr: "Hayal et - kendini nerede daha iyi hissediyorsun?", en: "Imagine - where do you feel better?" }, options: [
+        { key: "A", icon: "🌲", name: { tr: "Dağ & Orman", en: "Mountain & Forest" }, desc: { tr: "Toprak, ahşap, özgün doğa", en: "Earth, wood, original nature" } },
+        { key: "B", icon: "🏙️", name: { tr: "Gece Şehri", en: "Night City" }, desc: { tr: "Işıklar, müzik, gizemli sokaklar", en: "Lights, music, mysterious streets" } },
+        { key: "C", icon: "🌊", name: { tr: "Açık Deniz", en: "Open Sea" }, desc: { tr: "Ufuk, tuz, sonsuz mavi", en: "Horizon, salt, endless blue" } },
+        { key: "D", icon: "🏜️", name: { tr: "Çöl & Doğu", en: "Desert & East" }, desc: { tr: "Egzotik, sıcak, kadim", en: "Exotic, warm, ancient" } }
+      ]},
+      { id: 3, text: { tr: "Parfümden ne istiyorsun?", en: "What do you want from a perfume?" }, sub: { tr: "En önemli kriterini seç.", en: "Choose your most important criterion." }, options: [
+        { key: "A", icon: "✨", name: { tr: "Fark Ettirmek", en: "Make a Difference" }, desc: { tr: "Odaya girince herkes duysun", en: "Everyone should hear it when entering the room" } },
+        { key: "B", icon: "🤫", name: { tr: "Gizli Cazip", en: "Secretly Attractive" }, desc: { tr: "Yakın mesafede hissedilen özel iz", en: "A special trail felt at close range" } },
+        { key: "C", icon: "🌿", name: { tr: "Taze & Temiz", en: "Fresh & Clean" }, desc: { tr: "Her gün rahat takılabilen ferahlık", en: "Freshness that can be worn comfortably every day" } },
+        { key: "D", icon: "🎭", name: { tr: "Karakter & Derinlik", en: "Character & Depth" }, desc: { tr: "Seni tanımlamak yetersiz kalsın", en: "Defining you should be insufficient" } }
+      ]},
+      { id: 4, text: { tr: "Hangi mevsimi seversin?", en: "Which season do you like?" }, sub: { tr: "En çok kendini kim gibi hissettiren?", en: "Which one makes you feel most like yourself?" }, options: [
+        { key: "A", icon: "🌸", name: { tr: "İlkbahar", en: "Spring" }, desc: { tr: "Yenilenme, taze başlangıçlar", en: "Renewal, fresh beginnings" } },
+        { key: "B", icon: "☀️", name: { tr: "Yaz", en: "Summer" }, desc: { tr: "Sıcak, özgür, enerjik", en: "Warm, free, energetic" } },
+        { key: "C", icon: "🍂", name: { tr: "Sonbahar", en: "Autumn" }, desc: { tr: "Derin, melankoli, güçlü", en: "Deep, melancholic, strong" } },
+        { key: "D", icon: "❄️", name: { tr: "Kış", en: "Winter" }, desc: { tr: "Sakin, karanlık, yoğun", en: "Calm, dark, intense" } }
+      ]},
+      { id: 5, text: { tr: "Hangi malzeme seni çekiyor?", en: "Which material attracts you?" }, sub: { tr: "Sezgisel seç - sana en yakın hangisi?", en: "Choose intuitively - which one is closest to you?" }, options: [
+        { key: "A", icon: "🍋", name: { tr: "Narenciye", en: "Citrus" }, desc: { tr: "Bergamot, limon, greyfurt", en: "Bergamot, lemon, grapefruit" } },
+        { key: "B", icon: "🌲", name: { tr: "Oud & Sandal", en: "Oud & Sandal" }, desc: { tr: "Derin, reçineli, odunsu", en: "Deep, resinous, woody" } },
+        { key: "C", icon: "🍯", name: { tr: "Amber & Vanilya", en: "Amber & Vanilla" }, desc: { tr: "Sıcak, sarmalayan, tatlı", en: "Warm, enveloping, sweet" } },
+        { key: "D", icon: "💫", name: { tr: "Misk & Ambroxan", en: "Musk & Ambroxan" }, desc: { tr: "Cilt gibi, mineral, gizemli", en: "Skin-like, mineral, mysterious" } }
+      ]},
+      { id: 6, text: { tr: "Giysi stilin genellikle nasıl?", en: "What is your clothing style usually like?" }, sub: { tr: "Dolabındaki baskın tarz hangisi?", en: "Which is the dominant style in your closet?" }, options: [
+        { key: "A", icon: "👔", name: { tr: "Klasik & Jilet", en: "Classic & Sharp" }, desc: { tr: "Takım elbise, gömlek, ciddi", en: "Suit, shirt, serious" } },
+        { key: "B", icon: "👕", name: { tr: "Spor & Rahat", en: "Sport & Relaxed" }, desc: { tr: "T-shirt, jean, günlük şıklık", en: "T-shirt, jean, daily elegance" } },
+        { key: "C", icon: "🧥", name: { tr: "Avangart & Modern", en: "Avant-garde & Modern" }, desc: { tr: "Siyah ağırlıklı, deri, farklı kesimler", en: "Mainly black, leather, different cuts" } },
+        { key: "D", icon: "📜", name: { tr: "Bohem & Vintage", en: "Bohemian & Vintage" }, desc: { tr: "Keten, toprak tonları, nostaljik", en: "Linen, earth tones, nostalgic" } }
+      ]},
+      { id: 7, text: { tr: "Hangi içecek seni en çok yansıtır?", en: "Which drink reflects you the most?" }, sub: { tr: "Damak tadın koku zevkini ele verir.", en: "Your palate reveals your fragrance taste." }, options: [
+        { key: "A", icon: "🍸", name: { tr: "Cin & Tonik", en: "Gin & Tonic" }, desc: { tr: "Ferah, buzlu, hafif acımsı", en: "Fresh, iced, slightly bitter" } },
+        { key: "B", icon: "🥃", name: { tr: "Viski & İsli", en: "Whiskey & Smoky" }, desc: { tr: "Koyu, meşe odunu, dumanlı", en: "Dark, oak wood, smoky" } },
+        { key: "C", icon: "☕", name: { tr: "Sıcak Çikolata", en: "Hot Chocolate" }, desc: { tr: "Tatlı, sarmalayan, huzurlu", en: "Sweet, enveloping, peaceful" } },
+        { key: "D", icon: "🍷", name: { tr: "Kırmızı Şarap", en: "Red Wine" }, desc: { tr: "Gövdesi yüksek, meyvemsi, baharatlı", en: "High body, fruity, spicy" } }
+      ]},
+      { id: 8, text: { tr: "Bir tatilde nereye gidersin?", en: "Where would you go on a vacation?" }, sub: { tr: "Ruhunun kaçmak istediği yer.", en: "The place your soul wants to escape to." }, options: [
+        { key: "A", icon: "🏖️", name: { tr: "Maldivler", en: "Maldives" }, desc: { tr: "Güneş, tropikal meyveler, deniz", en: "Sun, tropical fruits, sea" } },
+        { key: "B", icon: "🏰", name: { tr: "Londra / Paris", en: "London / Paris" }, desc: { tr: "Tarih, sanat, şehir kültürü", en: "History, art, city culture" } },
+        { key: "C", icon: "🏔️", name: { tr: "İskandinav Dağları", en: "Scandinavian Mountains" }, desc: { tr: "Kar, çam ağaçları, temiz hava", en: "Snow, pine trees, fresh air" } },
+        { key: "D", icon: "🕌", name: { tr: "Marakeş / İstanbul", en: "Marrakech / Istanbul" }, desc: { tr: "Baharat pazarları, otantik, mistik", en: "Spice markets, authentic, mystic" } }
+      ]},
+      { id: 9, text: { tr: "Karakterinin en güçlü yanı hangisi?", en: "What is the strongest part of your character?" }, sub: { tr: "Çevrendekiler seni nasıl bilir?", en: "How do those around you know you?" }, options: [
+        { key: "A", icon: "💎", name: { tr: "Güvenilirlik", en: "Reliability" }, desc: { tr: "Net, dürüst, sarsılmaz", en: "Clear, honest, unshakable" } },
+        { key: "B", icon: "🌌", name: { tr: "Yaratıcılık", en: "Creativity" }, desc: { tr: "Hayalperest, vizyoner, farklı", en: "Dreamer, visionary, different" } },
+        { key: "C", icon: "🔱", name: { tr: "Liderlik", en: "Leadership" }, desc: { tr: "Otoriter, karizmatik, yön veren", en: "Authoritative, charismatic, guiding" } },
+        { key: "D", icon: "🕊️", name: { tr: "Uyum", en: "Harmony" }, desc: { tr: "Sakin, huzurlu, dengeleyici", en: "Calm, peaceful, balancing" } }
+      ]},
+      { id: 10, text: { tr: "Hangi koku seni çocukluğuna götürür?", en: "Which scent takes you back to your childhood?" }, sub: { tr: "En derin koku hafızan.", en: "Your deepest fragrance memory." }, options: [
+        { key: "A", icon: "🧼", name: { tr: "Temiz Sabun", en: "Clean Soap" }, desc: { tr: "Yeni yıkanmış çarşaflar, saflık", en: "Freshly washed sheets, purity" } },
+        { key: "B", icon: "🥧", name: { tr: "Tarçınlı Kurabiye", en: "Cinnamon Cookie" }, desc: { tr: "Sıcak mutfak, vanilya, huzur", en: "Warm kitchen, vanilla, peace" } },
+        { key: "C", icon: "🌧️", name: { tr: "Yağmur Sonrası Toprak", en: "Soil After Rain" }, desc: { tr: "Islak çimen, ozon, tazelik", en: "Wet grass, ozone, freshness" } },
+        { key: "D", icon: "📚", name: { tr: "Eski Kitaplar", en: "Old Books" }, desc: { tr: "Tozlu raflar, kağıt, deri, odun", en: "Dusty shelves, paper, leather, wood" } }
+      ]}
+    ];
+
+
+    let currentQuestions = [];
+    const answers = {};
+    const totalQ = 10;
+    let currentStep = 0;
+
+    function initQuiz() {
+      const lang = getCurrentLanguage();
+      const firstQ = quizData[0];
+      const others = quizData.slice(1).sort(() => Math.random() - 0.5);
+      currentQuestions = [firstQ, ...others];
+      
+      const wrapper = document.getElementById('quiz-wrapper');
+      wrapper.innerHTML = currentQuestions.map((q, idx) => `
+        <div class="q-screen ${idx === 0 ? 'active' : ''}" id="q-step-${idx}">
+          <div class="q-number">${lang === 'en' ? 'Question' : 'Soru'} ${idx + 1} / ${totalQ}</div>
+          <div class="q-text">${q.text[lang]}</div>
+          <div class="q-sub">${q.sub[lang]}</div>
+          <div class="options-grid">
+            ${q.options.map(opt => `
+              <button class="opt-btn" onclick="answer(${idx}, '${opt.key}')">
+                <span class="opt-icon">${opt.icon}</span>
+                <span class="opt-name">${opt.name[lang]}</span>
+                <span class="opt-desc">${opt.desc[lang]}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function answer(stepIdx, choice) {
+      answers[stepIdx] = choice;
+      updateProgress(stepIdx + 1);
+
+      if (stepIdx < totalQ - 1) {
+        document.getElementById('q-step-' + stepIdx).classList.remove('active');
+        document.getElementById('q-step-' + (stepIdx + 1)).classList.add('active');
+      } else {
+        document.getElementById('q-step-' + stepIdx).classList.remove('active');
+        showResult();
+      }
+    }
+
+    function updateProgress(num) {
+      document.getElementById('progressFill').style.width = ((num / totalQ) * 100) + '%';
+    }
+
+    function showResult() {
+      updateProgress(10);
+      const counts = { A: 0, B: 0, C: 0, D: 0 };
+      Object.values(answers).forEach(v => counts[v]++);
+      const winner = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+
+      let resultId = 'result-aquatic';
+      if(winner === 'B') resultId = 'result-woody';
+      if(winner === 'C') resultId = 'result-sweet';
+      if(winner === 'D') resultId = 'result-oriental';
+
+      if (counts['A'] > 3 && counts['D'] > 2) resultId = 'result-spicy';
+
+      const familyMap = {
+        'result-aquatic': 'hafif',
+        'result-woody': 'orta',
+        'result-sweet': 'tatli',
+        'result-oriental': 'yogun',
+        'result-spicy': 'yogun'
+      };
+      
+      const targetFamily = familyMap[resultId];
+      const icons = { 'hafif': '🌊', 'orta': '🌿', 'yogun': '🔥', 'tatli': '🍯' };
+      
+      const filtered = perfumeDB.filter(p => p.family === (targetFamily === 'tatli' ? 'yogun' : targetFamily));
+      const shuffled = filtered.sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 5);
+
+      const pillsId = resultId.replace('result-', 'pills-');
+      const pillsContainer = document.getElementById(pillsId);
+      if(pillsContainer) {
+        pillsContainer.innerHTML = selected.map(p => `
+          <span class="result-pill">${icons[targetFamily] || '✨'} ${p.brand} ${p.name}</span>
+        `).join('');
+      }
+
+      document.getElementById(resultId).classList.add('active');
+      const dnaKey = resultMap[resultId];
+      if (dnaKey) localStorage.setItem('parfumDNA', dnaKey);
+      
+      const lang = getCurrentLanguage();
+      const rName = document.querySelector('#' + resultId + ' .result-family').getAttribute('data-' + lang);
+      if (rName) saveHistory(rName);
+    }
+
+    function shareResult(name) {
+      const lang = getCurrentLanguage();
+      const text = lang === 'en' ? `My Perfume DNA: ${name} - My Sillage Scent Test result! 🌿` : `Parfüm DNA'm: ${name} - My Sillage Koku Testi sonucum bu! 🌿`;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          const toast = document.createElement('div');
+          toast.textContent = lang === 'en' ? '✔ Copied to clipboard!' : '✔ Panoya kopyalandı!';
+          toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--gold-bright);color:var(--gold-bright);padding:.7rem 1.5rem;border-radius:6px;font-size:.7rem;letter-spacing:.15em;z-index:9999;animation:fadeUp .3s ease;';
+          document.body.appendChild(toast);
+          setTimeout(() => toast.remove(), 2500);
+        });
+      }
+    }
+
+    function loadHistory() {
+      const hist = JSON.parse(localStorage.getItem('testHistory') || '[]');
+      const sec  = document.getElementById('histSection');
+      const list = document.getElementById('histList');
+      if (!hist.length) { sec.style.display = 'none'; return; }
+      sec.style.display = 'block';
+      const icons = { 'Oryantal Ruh':'🏜️','Odunsu Karakter':'🌲','Aquatik Özgürlük':'🌊','Baharatlı Güç':'🌶️','Tatlı Büyü':'🍯', 'Oriental Spirit':'🏜️','Woody Character':'🌲','Aquatic Freedom':'🌊','Spicy Power':'🌶️','Sweet Magic':'🍯' };
+      list.innerHTML = hist.slice().reverse().map((h,i) => `
+        <div style="background:var(--bg-card);border:1px solid rgba(212,168,67,.12);border-radius:8px;padding:1rem 1.4rem;display:flex;align-items:center;gap:1rem;">
+          <span style="font-size:1.6rem;">${icons[h.result] || '✨'}</span>
+          <div style="flex:1;">
+            <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--gold-bright);">${h.result}</div>
+            <div style="font-size:.6rem;color:var(--text-muted);margin-top:.2rem;">${h.date}</div>
+          </div>
+          <span style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;padding:.25rem .7rem;border:1px solid rgba(212,168,67,.2);border-radius:2px;color:var(--text-muted);">#${hist.length - i}</span>
+        </div>
+      `).join('');
+    }
+
+    function saveHistory(resultName) {
+      const lang = getCurrentLanguage();
+      const hist = JSON.parse(localStorage.getItem('testHistory') || '[]');
+      hist.push({ result: resultName, date: new Date().toLocaleDateString(lang === 'en' ? 'en-US' : 'tr-TR', { day:'numeric', month:'long', year:'numeric' }) });
+      if (hist.length > 5) hist.shift(); 
+      localStorage.setItem('testHistory', JSON.stringify(hist));
+      loadHistory();
+    }
+
+    window.addEventListener('languageChanged', () => {
+      initQuiz();
+      loadHistory();
+    });
+
+
+    const resultMap = {
+      'result-oriental': 'oryantal',
+      'result-woody':    'odunsu',
+      'result-aquatic':  'aquatik',
+      'result-spicy':    'baharatli',
+      'result-sweet':    'tatli',
+    };
+    const resultNames = {
+      'result-oriental': 'Oryantal Ruh',
+      'result-woody':    'Odunsu Karakter',
+      'result-aquatic':  'Aquatik Özgürlük',
+      'result-spicy':    'Baharatlı Güç',
+      'result-sweet':    'Tatlı Büyü',
+    };
+
+    function restart() {
+      Object.keys(answers).forEach(k => delete answers[k]);
+      document.querySelectorAll('.q-screen, .result-screen').forEach(el => el.classList.remove('active'));
+      initQuiz();
+      document.getElementById('progressFill').style.width = '0%';
+    }
+
+    function clearHistory() {
+      const lang = getCurrentLanguage();
+      if (confirm(lang === 'en' ? 'Delete all test history?' : 'Tüm test geçmişini sil?')) {
+        localStorage.removeItem('testHistory');
+        loadHistory();
+      }
+    }
+
+
+    initQuiz();
+    loadHistory();
+  </script>
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+</body>
+</html>

@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Koleksiyon - My Sillage</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .parfum-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+
+    .parfum-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(212,168,67,0.12);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, opacity 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .parfum-card.hidden {
+      display: none;
+    }
+    .parfum-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+      opacity: 0; transition: opacity 0.35s ease;
+    }
+    .parfum-card:hover {
+      border-color: var(--gold-border);
+      transform: translateY(-8px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45), 0 0 30px rgba(212,168,67,0.07);
+    }
+    .parfum-card:hover::before { opacity: 1; }
+
+
+    #image-tooltip {
+      position: fixed;
+      z-index: 1000;
+      pointer-events: none;
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 8px;
+      padding: 5px;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.8);
+      width: 280px;
+      height: 350px;
+      overflow: hidden;
+      animation: tooltipFade 0.2s ease-out;
+    }
+    #image-tooltip img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    @keyframes tooltipFade {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .parfum-img-wrap { 
+      position: relative; 
+      height: 210px; 
+      background: var(--navy-mid); 
+      z-index: 1;
+      cursor: zoom-in;
+    }
+    .parfum-img-wrap img { 
+      width:100%; height:100%; 
+      object-fit:cover; 
+      transition: var(--transition); 
+      display:block;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .parfum-badge {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(7,11,20,0.88);
+      border: 1px solid var(--gold-border); border-radius: 2px;
+      padding: 4px 10px; font-size: .55rem; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--gold-bright); backdrop-filter: blur(6px);
+      z-index: 3; 
+    }
+
+    .parfum-card:hover {
+      z-index: 100;
+      border-color: var(--gold-border);
+      transform: translateY(-8px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45), 0 0 30px rgba(212,168,67,0.07);
+    }
+    .parfum-card:hover::before { opacity: 1; }
+    .parfum-body { padding: 1.6rem; flex: 1; display: flex; flex-direction: column; gap: .8rem; }
+    .parfum-header { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
+    .parfum-brand  { font-size: .52rem; letter-spacing: .35em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: .2rem; }
+    .parfum-name   { font-family: var(--font-display); font-size: 1.5rem; color: var(--text-primary); line-height: 1.15; }
+    .parfum-family { font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; color: var(--text-muted); }
+    .parfum-stars  { color: var(--gold-bright); font-size: .75rem; white-space: nowrap; padding-top: .2rem; }
+
+    .parfum-desc {
+      font-size: .76rem; color: var(--text-secondary); line-height: 1.75;
+      border-top: 1px solid rgba(212,168,67,0.08); padding-top: .8rem;
+    }
+
+    .notes-label { font-size: .52rem; letter-spacing: .22em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .45rem; }
+    .parfum-notes-row { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .nota-pill {
+      font-size: .55rem; letter-spacing: .1em; text-transform: uppercase;
+      padding: .3rem .8rem; border: 1px solid var(--gold-border);
+      border-radius: 20px; color: var(--gold-dim); white-space: nowrap;
+    }
+
+    .intensity-bar-label {
+      font-size: .52rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: .35rem;
+      display: flex; justify-content: space-between;
+    }
+    .bar-track { height: 2px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+    .bar-fill  { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold-bright)); border-radius: 2px; }
+
+    .parfum-meta-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: .6rem;
+      border-top: 1px solid rgba(212,168,67,0.08); padding-top: .8rem;
+    }
+    .meta-box { background: rgba(212,168,67,0.04); border-radius: 6px; padding: .8rem; }
+    .meta-label { font-size: .48rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: .3rem; }
+    .meta-value { font-size: .7rem; color: var(--text-secondary); line-height: 1.55; }
+
+
+    .filter-bar { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; margin-bottom: 3rem; }
+    .filter-btn {
+      font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+      padding: .55rem 1.3rem;
+      border: 1px solid rgba(212,168,67,0.22);
+      border-radius: 3px; color: var(--text-muted);
+      cursor: pointer; transition: all 0.25s ease;
+      background: none; font-family: var(--font-ui);
+    }
+    .filter-btn:hover { border-color: var(--gold-bright); color: var(--gold-bright); background: var(--gold-subtle); }
+    .filter-btn.active { border-color: var(--gold-bright); color: var(--gold-bright); background: var(--gold-subtle); }
+
+
+    .no-results {
+      display: none;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+      font-size: .8rem;
+      letter-spacing: .1em;
+      grid-column: 1 / -1;
+    }
+    .no-results.show { display: block; }
+
+
+    table th { text-align: left; }
+    table td { text-align: left; }
+
+    @media (max-width: 600px) {
+      .parfum-meta-grid { grid-template-columns: 1fr; }
+    }
+
+
+    .stats-band {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: .8rem;
+      max-width: 1200px;
+      margin: 0 auto 2.5rem;
+      padding: 1.2rem 1.6rem;
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 10px;
+    }
+    .stat-cell { text-align: center; }
+    .stat-cell-num   { font-family: var(--font-display); font-size: 2rem; color: var(--gold-bright); line-height: 1; }
+    .stat-cell-label { font-size: .52rem; letter-spacing: .25em; text-transform: uppercase; color: var(--text-muted); margin-top: .3rem; }
+
+
+    .compare-tool {
+      max-width: 1200px; margin: 0 auto 3rem;
+      background: var(--bg-card); border: 1px solid var(--gold-border);
+      border-radius: 10px; overflow: hidden;
+    }
+    .compare-header {
+      padding: 1rem 1.6rem; background: var(--bg-secondary);
+      border-bottom: 1px solid var(--gold-border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .8rem;
+    }
+    .compare-title { font-family: var(--font-display); font-size: 1.3rem; color: var(--gold-bright); }
+    .compare-selects { display: flex; gap: .8rem; flex-wrap: wrap; }
+    .compare-select {
+      background: var(--bg-primary); border: 1px solid var(--gold-border);
+      color: var(--text-primary); font-family: var(--font-ui); font-size: .65rem;
+      letter-spacing: .1em; padding: .5rem .9rem; border-radius: 4px;
+      cursor: pointer; outline: none;
+    }
+    .compare-select option { background: var(--bg-primary); }
+    .compare-body { padding: 1.4rem 1.6rem; }
+    .compare-bars { display: flex; flex-direction: column; gap: 1rem; }
+    .cbar-row { display: grid; grid-template-columns: 100px 1fr 40px 1fr 100px; align-items: center; gap: .8rem; }
+    .cbar-label { font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-muted); text-align: center; }
+    .cbar-name  { font-family: var(--font-display); font-size: .9rem; color: var(--gold-bright); }
+    .cbar-name.right { text-align: right; }
+    .cbar-track { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: visible; position: relative; }
+    .cbar-fill-l { position: absolute; right: 0; top: 0; height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold-bright)); border-radius: 3px; transition: width .8s ease; }
+    .cbar-fill-r { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, #4a8fd4, #6ab0f5); border-radius: 3px; transition: width .8s ease; }
+    .cbar-val { font-size: .7rem; font-weight: 600; color: var(--text-secondary); text-align: center; }
+    .compare-hint { font-size: .65rem; color: var(--text-muted); text-align: center; letter-spacing: .1em; padding: .5rem; }
+
+
+    .dna-badge {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .52rem; letter-spacing: .15em; text-transform: uppercase;
+      padding: .28rem .75rem; border-radius: 20px; margin-top: .4rem;
+    }
+    .dna-match    { background: rgba(80,180,100,.12); border: 1px solid rgba(80,180,100,.3); color: #6fcf97; }
+    .dna-partial  { background: rgba(212,168,67,.1);  border: 1px solid var(--gold-border);   color: var(--gold-dim); }
+    .dna-miss     { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);  color: var(--text-muted); }
+  </style>
+</head>
+
+  <div id="image-tooltip"><img src="" alt="Zoom" id="tooltip-img"></div>
+
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-main">My Sillage</span>
+      <span class="brand-sub">Curated by Obsession</span>
+      <span class="brand-author">Deniz Öztürk 20210504</span>
+    </a>
+    <div class="nav-right">
+      <div class="lang-toggle" onclick="toggleLanguage()" title="Dil Değiştir / Change Language" data-tr-title="Dil Değiştir / Change Language" data-en-title="Change Language / Dil Değiştir">
+        <span class="lang-btn lang-btn-tr">TR</span>
+        <span class="lang-btn lang-btn-en">EN</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a></li>
+        <li><a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a></li>
+        <li><a href="koleksiyon.html" class="active" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+        <li><a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a></li>
+        <li><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a></li>
+        <li><a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a></li>
+        <li><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a></li>
+        <li><a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a></li>
+        <li><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a></li>
+      </ul>
+      <div class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir" data-tr-title="Tema Değiştir" data-en-title="Toggle Theme">
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+        <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <div class="page-hero">
+      <div class="hero-eyebrow" style="justify-content:center;margin-bottom:1rem;" data-tr="Deniz Öztürk'ün Seçimi" data-en="Deniz Öztürk's Selection">Deniz Öztürk'ün Seçimi</div>
+      <h1 class="page-hero-title" data-tr="Seçkin <em>Koleksiyon</em>" data-en="Exquisite <em>Collection</em>">Seçkin <em>Koleksiyon</em></h1>
+      <p class="page-hero-sub" data-tr="Gerçek parfüm dünyasından eşsiz sışlar · Notalar · Ortam · His" data-en="Unique scents from the real world of perfume · Notes · Environment · Vibe">Gerçek parfüm dünyasından eşsiz sışlar · Notalar · Ortam · His</p>
+    </div>
+
+    <section class="section">
+
+
+      <div class="stats-band reveal" id="statsBand">
+        <div class="stat-cell"><div class="stat-cell-num" id="statTotal">14</div><div class="stat-cell-label" data-tr="Toplam Parfüm" data-en="Total Perfumes">Toplam Parfüm</div></div>
+        <div class="stat-cell"><div class="stat-cell-num" id="statNiche">6</div><div class="stat-cell-label" data-tr="Niche" data-en="Niche">Niche</div></div>
+        <div class="stat-cell"><div class="stat-cell-num" id="statDesigner">10</div><div class="stat-cell-label" data-tr="Designer" data-en="Designer">Designer</div></div>
+        <div class="stat-cell"><div class="stat-cell-num" id="statAvgInt">-</div><div class="stat-cell-label" data-tr="Ort. Yoğunluk" data-en="Avg. Intensity">Ort. Yoğunluk</div></div>
+        <div class="stat-cell"><div class="stat-cell-num" id="statTopSeason">-</div><div class="stat-cell-label" data-tr="Ağırlıklı Mevsim" data-en="Main Season">Ağırlıklı Mevsim</div></div>
+        <div class="stat-cell"><div class="stat-cell-num" id="statVisible">14</div><div class="stat-cell-label" data-tr="Görünen" data-en="Visible">Görünen</div></div>
+      </div>
+
+
+      <div class="compare-tool reveal">
+        <div class="compare-header">
+          <div class="compare-title" data-tr="⚖️ Parfüm Karşılaştırıcı" data-en="⚖️ Perfume Comparator">⚖️ Parfüm Karşılaştırıcı</div>
+          <div class="compare-selects">
+            <select class="compare-select" id="cmpA" onchange="updateCompare()">
+              <option value="" data-tr="- Sol Parfüm Seç -" data-en="- Select Left Perfume -">- Sol Parfüm Seç -</option>
+            </select>
+            <select class="compare-select" id="cmpB" onchange="updateCompare()">
+              <option value="" data-tr="- Sağ Parfüm Seç -" data-en="- Select Right Perfume -">- Sağ Parfüm Seç -</option>
+            </select>
+          </div>
+        </div>
+        <div class="compare-body" id="compareBody">
+          <p class="compare-hint" data-tr="Yukarıdan iki parfüm seç - yoğunluk, kalıcılık ve sillage karşılaştırması başlasın." data-en="Choose two perfumes from above - the comparison of intensity, longevity, and sillage begins.">Yukarıdan iki parfüm seç - yoğunluk, kalıcılık ve sillage karşılaştırması başlasın.</p>
+        </div>
+      </div>
+
+
+      <div class="filter-bar reveal">
+        <button class="filter-btn active" data-filter="tumü" data-tr="Tümü" data-en="All">Tümü</button>
+        <button class="filter-btn" data-filter="odunsu" data-tr="Odunsu" data-en="Woody">Odunsu</button>
+        <button class="filter-btn" data-filter="oryantal" data-tr="Oryantal" data-en="Oriental">Oryantal</button>
+        <button class="filter-btn" data-filter="narenciye" data-tr="Narenciye" data-en="Citrus">Narenciye</button>
+        <button class="filter-btn" data-filter="tatli" data-tr="Tatlı" data-en="Sweet">Tatlı</button>
+        <button class="filter-btn" data-filter="baharatlı" data-tr="Baharatlı" data-en="Spicy">Baharatlı</button>
+        <button class="filter-btn" data-filter="aquatik" data-tr="Aquatik" data-en="Aquatic">Aquatik</button>
+        <button class="filter-btn" data-filter="niche" data-tr="Niche" data-en="Niche">Niche</button>
+        <button class="filter-btn" data-filter="designer" data-tr="Designer" data-en="Designer">Designer</button>
+      </div>
+
+
+      <div class="parfum-grid" id="parfumGrid">
+
+
+        <div class="parfum-card reveal" data-intensity="8" data-longevity="7" data-season="ilkbahar yaz" data-dna="aquatik" data-categories="narenciye odunsu designer">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/bvlgari tygar.jpg"
+              alt="BVLGARi Tygar"
+              onerror="this.style.background='#0a1020';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Citrus · Odunsu" data-en="Citrus · Woody">Citrus · Odunsu</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">BVLGARi · Le Gemme</div>
+                <div class="parfum-name">Tygar</div>
+                <div class="parfum-family" data-tr="Hint Kaplan Gözü Taşı" data-en="Indian Tiger's Eye Stone">Hint Kaplan Gözü Taşı</div>
+              </div>
+              <div class="parfum-stars">★★★★★</div>
+            </div>
+            <p class="parfum-desc" data-tr="Hint'in &quot;bahçe&quot; eyaleti Kerala'dan gelen kaplan gözü taşından ilham alan bu kompozisyon, patlamaya hazır bir greyfurt açılışını saatler süren ambroxan ve vetiver derinliğiyle buluşturur. Hem güneş hem toprak - iki zıt enerjinin kristalize hali." data-en="Inspired by the tiger's eye stone from India's &quot;garden&quot; province Kerala, this composition brings together an explosive grapefruit opening with hours of ambroxan and vetiver depth. Both sun and earth - the crystallized form of two opposing energies.">Hint'in "bahçe" eyaleti Kerala'dan gelen kaplan gözü taşından ilham alan bu kompozisyon, patlamaya hazır bir greyfurt açılışını saatler süren ambroxan ve vetiver derinliğiyle buluşturur. Hem güneş hem toprak - iki zıt enerjinin kristalize hali.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🍋 Greyfurt" data-en="🍋 Grapefruit">🍋 Greyfurt</span><span class="nota-pill" data-tr="🫚 Zencefil" data-en="🫚 Ginger">🫚 Zencefil</span>
+                <span class="nota-pill">🌿 Ambrette</span><span class="nota-pill">💫 Ambroxan</span>
+                <span class="nota-pill" data-tr="🌾 Vetiver" data-en="🌾 Vetiver">🌾 Vetiver</span><span class="nota-pill" data-tr="🌑 Patchouli" data-en="🌑 Patchouli">🌑 Patchouli</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">8 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:80%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="Ofis, gündüz randevusu, dört mevsim. Yaz sıcağında özellikle ferahlatıcı." data-en="Office, daytime date, all seasons. Especially refreshing in summer heat.">Ofis, gündüz randevusu, dört mevsim. Yaz sıcağında özellikle ferahlatıcı.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Güçlü, bitkisel, güneşli. Sessiz ama fark ettiren - karizmatik özgüven." data-en="Powerful, herbal, sunny. Silent but noticeable - charismatic confidence.">Güçlü, bitkisel, güneşli. Sessiz ama fark ettiren - karizmatik özgüven.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal delay-1" data-intensity="9" data-longevity="8" data-season="ilkbahar yaz sonbahar" data-dna="odunsu" data-categories="narenciye odunsu niche">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/cedrat boise.jpg"
+              alt="Mancera Cedrat Boise"
+              onerror="this.style.background='#0a140a';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Narenciye · Odunsu" data-en="Citrus · Woody">Narenciye · Odunsu</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Mancera · Pierre Montale · 2011</div>
+                <div class="parfum-name">Cedrat Boise</div>
+                <div class="parfum-family" data-tr="Orman İçinde Turunçgil" data-en="Citrus in the Forest">Orman İçinde Turunçgil</div>
+              </div>
+              <div class="parfum-stars">★★★★★</div>
+            </div>
+            <p class="parfum-desc" data-tr="Niche parfüm dünyasının &quot;kapı parfümü&quot; - çoğu insanın niche'e geçişini başlatan efsane. Sicilyalı limon ve frenk üzümünün patlayıcı açılışı, jasmin ve patchouli ortasına, ardından deri ve vanilyalı bir koru tabanına evrilir." data-en="The &quot;gateway perfume&quot; of the niche world - the legend that started many people's transition to niche. Explosive opening of Sicilian lemon and blackcurrant evolves into a heart of jasmine and patchouli, then to a leather and vanilla forest base.">Niche parfüm dünyasının "kapı parfümü" - çoğu insanın niche'e geçişini başlatan efsane. Sicilyalı limon ve frenk üzümünün patlayıcı açılışı, jasmin ve patchouli ortasına, ardından deri ve vanilyalı bir koru tabanına evrilir.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🍋 Sicilyalı Limon" data-en="🍋 Sicilian Lemon">🍋 Sicilyalı Limon</span><span class="nota-pill" data-tr="🍇 Frenk Üzümü" data-en="🍇 Blackcurrant">🍇 Frenk Üzümü</span>
+                <span class="nota-pill" data-tr="🌸 Jasmin" data-en="🌸 Jasmine">🌸 Jasmin</span><span class="nota-pill" data-tr="🌑 Patchouli" data-en="🌑 Patchouli">🌑 Patchouli</span>
+                <span class="nota-pill" data-tr="🌳 Sedir" data-en="🌳 Cedar">🌳 Sedir</span><span class="nota-pill" data-tr="🍮 Vanilya" data-en="🍮 Vanilla">🍮 Vanilya</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">9 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:90%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="İlkbahar akşamları, iş toplantıları, gece etkinlikleri. Sonbahara da uzanır." data-en="Spring evenings, business meetings, night events. Extends into autumn.">İlkbahar akşamları, iş toplantıları, gece etkinlikleri. Sonbahara da uzanır.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Taze ama olgun. Zarif, kararlı. &quot;Ormanın efendisi&quot; sessiz özgüveni." data-en="Fresh but mature. Elegant, determined. &quot;Master of the forest&quot; silent confidence.">Taze ama olgun. Zarif, kararlı. "Ormanın efendisi" sessiz özgüveni.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal delay-2" data-intensity="9" data-longevity="9" data-season="sonbahar kis" data-dna="oryantal" data-categories="oryantal odunsu designer">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/boss bottled absolu.jpg"
+              alt="Hugo Boss Bottled Absolu"
+              onerror="this.style.background='#100810';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Reçineli · Baharatlı" data-en="Resinous · Spicy">Reçineli · Baharatlı</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Hugo Boss · 2024</div>
+                <div class="parfum-name">Bottled Absolu</div>
+                <div class="parfum-family" data-tr="Duman, Deri, Otorite" data-en="Smoke, Leather, Authority">Duman, Deri, Otorite</div>
+              </div>
+              <div class="parfum-stars">★★★★★</div>
+            </div>
+            <p class="parfum-desc" data-tr="Boss'un niche kalite çıtasına ulaştığı tartışmasız en iyi parfümü. Tütsü, deri ve patchouli üçgeninde dönen bu karanlık kompozisyon; kış gecelerinin, viski kadehinin ve kübik puroların parfümü. Frankincense ve mür birleşince geri dönmek istemezsiniz." data-en="Undoubtedly Boss's best perfume, reaching niche quality standards. This dark composition revolving around incense, leather, and patchouli; the perfume of winter nights, whiskey glasses, and cubic cigars. You won't want to go back once frankincense and myrrh combine.">Boss'un niche kalite çıtasına ulaştığı tartışmasız en iyi parfümü. Tütsü, deri ve patchouli üçgeninde dönen bu karanlık kompozisyon; kış gecelerinin, viski kadehinin ve kübik puroların parfümü. Frankincense ve mür birleşince geri dönmek istemezsiniz.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🔥 Frankincense" data-en="🔥 Frankincense">🔥 Frankincense</span><span class="nota-pill" data-tr="🖤 Deri" data-en="🖤 Leather">🖤 Deri</span>
+                <span class="nota-pill" data-tr="🌑 Patchouli" data-en="🌑 Patchouli">🌑 Patchouli</span><span class="nota-pill" data-tr="🌿 Mür" data-en="🌿 Myrrh">🌿 Mür</span>
+                <span class="nota-pill" data-tr="✨ Amber" data-en="✨ Amber">✨ Amber</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">9 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:90%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="Sonbahar-kış, resmi davetler, romantik akşam yemekleri. Kapalı mekân." data-en="Autumn-winter, formal invitations, romantic dinners. Indoors.">Sonbahar-kış, resmi davetler, romantik akşam yemekleri. Kapalı mekân.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Şömine başındaki otorite. Konuşmadan saygı duyduran duman-deri kombinasyonu." data-en="Authority by the fireplace. A smoke-leather combination that commands respect without speaking.">Şömine başındaki otorite. Konuşmadan saygı duyduran duman-deri kombinasyonu.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal" data-intensity="7" data-longevity="7" data-season="yaz sonbahar" data-dna="oryantal" data-categories="oryantal niche">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/god of fire.jpg"
+              alt="SHL God of Fire"
+              onerror="this.style.background='#140a0a';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Tropikal · Niche" data-en="Tropical · Niche">Tropikal · Niche</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Stéphane Humbert Lucas 777 · 2022</div>
+                <div class="parfum-name">God of Fire</div>
+                <div class="parfum-family" data-tr="Aztek Ateş Tanrısı" data-en="Aztec God of Fire">Aztek Ateş Tanrısı</div>
+              </div>
+              <div class="parfum-stars">★★★★★</div>
+            </div>
+            <p class="parfum-desc" data-tr="Aztek takviminin ateş tanrısı Xiuhtecuhtli'ye adanmış niche başyapıt. Mango ve zencefirin volkanik açılışı, mavi coumarin ve jasmin kalbine, ardından oud ve nagarmotha'nın kutsal dumanına dönüşür. Meyveli ama maskülen - bir çelişki değil, bir zafer." data-en="A niche masterpiece dedicated to Xiuhtecuhtli, the fire god of the Aztec calendar. Volcanic opening of mango and ginger turns into a heart of blue coumarin and jasmine, then to the sacred smoke of oud and nagarmotha. Fruity yet masculine - not a contradiction, but a victory.">Aztek takviminin ateş tanrısı Xiuhtecuhtli'ye adanmış niche başyapıt. Mango ve zencefirin volkanik açılışı, mavi coumarin ve jasmin kalbine, ardından oud ve nagarmotha'nın kutsal dumanına dönüşür. Meyveli ama maskülen - bir çelişki değil, bir zafer.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🥭 Mango" data-en="🥭 Mango">🥭 Mango</span><span class="nota-pill" data-tr="🍋 Limon" data-en="🍋 Lemon">🍋 Limon</span>
+                <span class="nota-pill" data-tr="🍒 Kırmızı Meyveler" data-en="🍒 Red Berries">🍒 Kırmızı Meyveler</span><span class="nota-pill" data-tr="🌼 Jasmin" data-en="🌼 Jasmine">🌼 Jasmin</span>
+                <span class="nota-pill" data-tr="🌲 Oud" data-en="🌲 Oud">🌲 Oud</span><span class="nota-pill" data-tr="🌿 Nagarmotha" data-en="🌿 Nagarmotha">🌿 Nagarmotha</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">7 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:70%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="Sıcak mevsimler, açık hava etkinlikleri, yaz geceleri, tropikal ortamlar." data-en="Warm seasons, outdoor events, summer nights, tropical settings.">Sıcak mevsimler, açık hava etkinlikleri, yaz geceleri, tropikal ortamlar.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Tanrısal güç ve tropikal özgürlük. Sizi hem yakınlaştıran hem büyüleyen bir çekim." data-en="Divine power and tropical freedom. A draw that both brings you closer and fascinates you.">Tanrısal güç ve tropikal özgürlük. Sizi hem yakınlaştıran hem büyüleyen bir çekim.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal delay-1" data-intensity="6" data-longevity="7" data-season="ilkbahar yaz sonbahar kis" data-dna="aquatik" data-categories="narenciye niche">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/LV imagination.avif"
+              alt="Louis Vuitton Imagination"
+              onerror="this.style.background='#071428';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Lüks · Narenciye · Çay" data-en="Luxury · Citrus · Tea">Lüks · Narenciye · Çay</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Louis Vuitton · Jacques Cavallier · 2021</div>
+                <div class="parfum-name">Imagination</div>
+                <div class="parfum-family" data-tr="Seyahat Özgürlüğü" data-en="Freedom of Travel">Seyahat Özgürlüğü</div>
+              </div>
+              <div class="parfum-stars">★★★★★</div>
+            </div>
+            <p class="parfum-desc" data-tr="Parfümerinin &quot;beyaz altını&quot; Ambrox'un cömert dozuyla yeniden icat edilmiş turunçgil. Sicilyalı portakal ve Kalabriyalı bergamot; Tunus neroli ve Sri Lanka tarçınıyla buluşur, Çin siyah çayının zarif kuyruğuyla biter. Lüks otel lobisi, birinci sınıf koltuk." data-en="Citrus reinvented with a generous dose of perfumery's &quot;white gold&quot; Ambrox. Sicilian orange and Calabrian bergamot meet Tunisian neroli and Sri Lankan cinnamon, ending with the elegant trail of Chinese black tea. Luxury hotel lobby, first-class seat.">Parfümerinin "beyaz altını" Ambrox'un cömert dozuyla yeniden icat edilmiş turunçgil. Sicilyalı portakal ve Kalabriyalı bergamot; Tunus neroli ve Sri Lanka tarçınıyla buluşur, Çin siyah çayının zarif kuyruğuyla biter. Lüks otel lobisi, birinci sınıf koltuk.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🍋 Citron" data-en="🍋 Citron">🍋 Citron</span><span class="nota-pill" data-tr="🍊 Sicilyalı Portakal" data-en="🍊 Sicilian Orange">🍊 Sicilyalı Portakal</span>
+                <span class="nota-pill" data-tr="🫚 Zencefil" data-en="🫚 Ginger">🫚 Zencefil</span><span class="nota-pill" data-tr="🌸 Neroli" data-en="🌸 Neroli">🌸 Neroli</span>
+                <span class="nota-pill" data-tr="🍵 Siyah Çay" data-en="🍵 Black Tea">🍵 Siyah Çay</span><span class="nota-pill" data-tr="💫 Ambroxan" data-en="💫 Ambroxan">💫 Ambroxan</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">6 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:60%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="Ofis, günlük, dört mevsim. Armatürü gizleyen toplantı parfümü." data-en="Office, daily, all seasons. The meeting perfume that hides the armature.">Ofis, günlük, dört mevsim. Armatürü gizleyen toplantı parfümü.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Lüks otel lobisi, birinci sınıf koltuk. Gösterişsiz zenginlik." data-en="Luxury hotel lobby, first-class seat. Unostentatious wealth.">Lüks otel lobisi, birinci sınıf koltuk. Gösterişsiz zenginlik.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal delay-2" data-intensity="10" data-longevity="10" data-season="sonbahar kis" data-dna="tatli" data-categories="tatli designer">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/jpg le male elixir.jpg"
+              alt="JPG Le Male Elixir"
+              onerror="this.style.background='#14100a';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Tatlı · Fougère" data-en="Sweet · Fougère">Tatlı · Fougère</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Jean Paul Gaultier · Quentin Bisch · 2023</div>
+                <div class="parfum-name">Le Mâle Elixir</div>
+                <div class="parfum-family" data-tr="Altın Denizci" data-en="Golden Sailor">Altın Denizci</div>
+              </div>
+              <div class="parfum-stars">★★★★☆</div>
+            </div>
+            <p class="parfum-desc" data-tr="2023'ün en tartışmalı ve en satan parfümü. Lavanta ve nane açılışı benzoin ve vanilyalı bir kalbe akar, tonka fasulyesi ve balla biter. Aşırı tatlı mı? Belki. Ama geceleri sizi bir mıknatısa çevirdiği kesin. Tek sprey yeter." data-en="The most controversial and best-selling perfume of 2023. Lavender and mint opening flows into a benzoin and vanilla heart, ending with tonka bean and honey. Too sweet? Maybe. But it's sure to turn you into a magnet at night. One spray is enough.">2023'ün en tartışmalı ve en satan parfümü. Lavanta ve nane açılışı benzoin ve vanilyalı bir kalbe akar, tonka fasulyesi ve balla biter. Aşırı tatlı mı? Belki. Ama geceleri sizi bir mıknatısa çevirdiği kesin. Tek sprey yeter.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="💜 Lavanta" data-en="💜 Lavender">💜 Lavanta</span><span class="nota-pill" data-tr="🌿 Nane" data-en="🌿 Mint">🌿 Nane</span>
+                <span class="nota-pill" data-tr="🍮 Vanilya" data-en="🍮 Vanilla">🍮 Vanilya</span><span class="nota-pill" data-tr="🌙 Benzoin" data-en="🌙 Benzoin">🌙 Benzoin</span>
+                <span class="nota-pill" data-tr="🍯 Bal" data-en="🍯 Honey">🍯 Bal</span><span class="nota-pill" data-tr="🚬 Tonka · Tütün" data-en="🚬 Tonka · Tobacco">🚬 Tonka · Tobacco</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">10 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:100%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="Gece kulübü, romantik buluşma, kış geceleri. 1 sprey - daha fazlası değil." data-en="Nightclub, romantic date, winter nights. 1 spray - no more.">Gece kulübü, romantik buluşma, kış geceleri. 1 sprey - daha fazlası değil.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Tatlı güç ve şehvetli çekim. Sizi bırakmayan, mıknatıs gibi çeken sıcak his." data-en="Sweet power and sensual attraction. A warm feeling that doesn't let go, drawing you in like a magnet.">Tatlı güç ve şehvetli çekim. Sizi bırakmayan, mıknatıs gibi çeken sıcak his.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal" data-intensity="8" data-longevity="7" data-season="ilkbahar yaz" data-dna="baharatli" data-categories="narenciye designer">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/MYSLF.jpg"
+              alt="YSL MYSLF"
+              onerror="this.style.background='#0a0a14';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Çiçeksi · Modern" data-en="Floral · Modern">Çiçeksi · Modern</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Yves Saint Laurent · 2023</div>
+                <div class="parfum-name">MYSLF</div>
+                <div class="parfum-family" data-tr="Modern Maskülenlik Manifestosu" data-en="Modern Masculinity Manifesto">Modern Maskülenlik Manifestosu</div>
+              </div>
+              <div class="parfum-stars">★★★★☆</div>
+            </div>
+            <p class="parfum-desc" data-tr="YSL'nin erkek için tasarladığı ilk odunsu-çiçekli parfüm. Kalabriyalı bergamot açılışı, Tunus portakal çiçeği kalbiyle buluşur; Ambrofix ve patchouli tabanı maskülen derinlik katar. Sauvage neslinin çiçekli evrimcisi - cesur, yumuşak, bağımlılık yapıcı." data-en="The first woody-floral perfume designed by YSL for men. Calabrian bergamot opening meets Tunisian orange blossom heart; Ambrofix and patchouli base adds masculine depth. The floral evolver of the Sauvage generation - bold, soft, addictive.">YSL'nin erkek için tasarladığı ilk odunsu-çiçekli parfüm. Kalabriyalı bergamot açılışı, Tunus portakal çiçeği kalbiyle buluşur; Ambrofix ve patchouli tabanı maskülen derinlik katar. Sauvage neslinin çiçekli evrimcisi - cesur, yumuşak, bağımlılık yapıcı.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🍊 Bergamot" data-en="🍊 Bergamot">🍊 Bergamot</span><span class="nota-pill" data-tr="🌸 Portakal Çiçeği" data-en="🌸 Orange Blossom">🌸 Portakal Çiçeği</span>
+                <span class="nota-pill" data-tr="💫 Ambrofix" data-en="💫 Ambrofix">💫 Ambrofix</span><span class="nota-pill" data-tr="🌑 Patchouli" data-en="🌑 Patchouli">🌑 Patchouli</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">8 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:80%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="İlkbahar ve yaz, gündüz-akşam geçişi. Açık mekânda şahane yayılır." data-en="Spring and summer, day-to-night transition. Spreads wonderfully in open spaces.">İlkbahar ve yaz, gündüz-akşam geçişi. Açık mekânda şahane yayılır.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Çiçek bahçesindeki güçlü adam. Duygusal, modern, sınır zorlayan özgüven." data-en="The strong man in the flower garden. Emotional, modern, boundary-pushing confidence.">Çiçek bahçesindeki güçlü adam. Duygusal, modern, sınır zorlayan özgüven.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal delay-1" data-intensity="7" data-longevity="8" data-season="ilkbahar yaz sonbahar" data-dna="odunsu" data-categories="odunsu designer">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/paradigme.avif"
+              alt="Prada Paradigme"
+              onerror="this.style.background='#070e07';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Odunsu · Amber · 2025" data-en="Woody · Amber · 2025">Odunsu · Amber · 2025</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Prada · Salamagne · Jovanovic · Bonneville</div>
+                <div class="parfum-name">Paradigme</div>
+                <div class="parfum-family" data-tr="Ters Piramit · Yeni Kural" data-en="Inverted Pyramid · New Rule">Ters Piramit · Yeni Kural</div>
+              </div>
+              <div class="parfum-stars">★★★★☆</div>
+            </div>
+            <p class="parfum-desc" data-tr="2025'ün en özgün konsepti: ters piramit yapısıyla alt notalardan başlayan kompozisyon. Peru balsamı ve benzoin tabanı önce açılır, ardından Bourbon geranium kalbi ve bergamot gelir. Prada'nın &quot;başka bir yol&quot; arayışının parfümü." data-en="The most original concept of 2025: a composition starting from the base notes with an inverted pyramid structure. Peru balsam and benzoin base open first, followed by the Bourbon geranium heart and bergamot. Prada's perfume of the search for &quot;another way&quot;.">2025'in en özgün konsepti: ters piramit yapısıyla alt notalardan başlayan kompozisyon. Peru balsamı ve benzoin tabanı önce açılır, ardından Bourbon geranium kalbi ve bergamot gelir. Prada'nın "başka bir yol" arayışının parfümü.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🍊 Bergamot" data-en="🍊 Bergamot">🍊 Bergamot</span><span class="nota-pill" data-tr="🌿 Geranium" data-en="🌿 Geranium">🌿 Geranium</span>
+                <span class="nota-pill" data-tr="🌿 Peru Balsamı" data-en="🌿 Peru Balsam">🌿 Peru Balsamı</span><span class="nota-pill" data-tr="🌙 Benzoin" data-en="🌙 Benzoin">🌙 Benzoin</span>
+                <span class="nota-pill" data-tr="🌴 Guaiac Ağacı" data-en="🌴 Guaiac Wood">🌴 Guaiac Ağacı</span><span class="nota-pill" data-tr="☁️ Misk" data-en="☁️ Musk">☁️ Misk</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">7 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:70%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="Ofis, günlük, sonbahar başı. Gündüz-akşam geçişine uygun, çok yönlü." data-en="Office, daily, early autumn. Versatile, suitable for day-to-night transition.">Ofis, günlük, sonbahar başı. Gündüz-akşam geçişine uygun, çok yönlü.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Sakin, güvenilir, düşünceli. Odaya giren değil, odada zaten olan adam." data-en="Calm, reliable, thoughtful. Not the man who enters the room, but the man who is already there.">Sakin, güvenilir, düşünceli. Odaya giren değil, odada zaten olan adam.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal" data-intensity="10" data-longevity="9" data-season="sonbahar kis" data-dna="baharatli" data-categories="baharatlı odunsu designer">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/sauvage elixir.jpg"
+              alt="Dior Sauvage Elixir"
+              onerror="this.style.background='#100814';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Baharatlı · Odunsu" data-en="Spicy · Woody">Baharatlı · Odunsu</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Christian Dior · François Demachy · 2021</div>
+                <div class="parfum-name">Sauvage Elixir</div>
+                <div class="parfum-family" data-tr="Vahşetin En Yoğun Hali" data-en="The Most Intense State of Wilderness">Vahşetin En Yoğun Hali</div>
+              </div>
+              <div class="parfum-stars">★★★★★</div>
+            </div>
+            <p class="parfum-desc" data-tr="Efsanevi Sauvage serisinin doruk noktası. Normal Sauvage'ın bergamot-ambroxan yapısını alıp sanki 10 katına sıkıştırmış gibi: lavanta, zencefil ve karabiber açılışı, ardından licorice ve sedir kalbi, son olarak iskambiyum ve ambroxan'ın çılgın bir iz bırakması. 1–2 sprey yeter, odayı doldurur." data-en="The pinnacle of the legendary Sauvage series. Taking the bergamot-ambroxan structure of the regular Sauvage and compressing it 10-fold: lavender, ginger, and black pepper opening, followed by a licorice and cedar heart, finally leaving a crazy trail of amberwood and ambroxan. 1-2 sprays are enough to fill the room.">Efsanevi Sauvage serisinin doruk noktası. Normal Sauvage'ın bergamot-ambroxan yapısını alıp sanki 10 katına sıkıştırmış gibi: lavanta, zencefil ve karabiber açılışı, ardından licorice ve sedir kalbi, son olarak iskambiyum ve ambroxan'ın çılgın bir iz bırakması. 1–2 sprey yeter, odayı doldurur.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="💜 Lavanta" data-en="💜 Lavender">💜 Lavanta</span><span class="nota-pill" data-tr="🫚 Zencefil" data-en="🫚 Ginger">🫚 Zencefil</span>
+                <span class="nota-pill" data-tr="🌶️ Karabiber" data-en="🌶️ Black Pepper">🌶️ Karabiber</span><span class="nota-pill" data-tr="🌿 Meyan Kökü" data-en="🌿 Licorice">🌿 Meyan Kökü</span>
+                <span class="nota-pill" data-tr="🌳 Sedir" data-en="🌳 Cedar">🌳 Sedir</span><span class="nota-pill" data-tr="💫 Ambroxan" data-en="💫 Ambroxan">💫 Ambroxan</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">10 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:100%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="Sonbahar-kış, gece etkinlikleri, özel günler. Sıcak ortamlarda dikkatli kullan." data-en="Autumn-winter, night events, special occasions. Use carefully in warm environments.">Sonbahar-kış, gece etkinlikleri, özel günler. Sıcak ortamlarda dikkatli kullan.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Doğanın en ham, en güçlü hali. Çevredekilerin &quot;ne bu koku?&quot; diye döndüğü cephane." data-en="Nature's rawest, most powerful state. The ammunition that makes everyone around turn and ask &quot;what's that smell?&quot;.">Doğanın en ham, en güçlü hali. Çevredekilerin "ne bu koku?" diye döndüğü cephane.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal delay-1" data-intensity="7" data-longevity="8" data-season="sonbahar kis" data-dna="oryantal" data-categories="oryantal tatli designer">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/the one edt.jpeg"
+              alt="D&G The One"
+              onerror="this.style.background='#14100a';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Oryantal · Tütünsü" data-en="Oriental · Tobacco">Oryantal · Tütünsü</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Dolce &amp; Gabbana · Olivier Polge · 2008</div>
+                <div class="parfum-name">The One</div>
+                <div class="parfum-family" data-tr="Klasik Zarafetin Kokusu" data-en="The Scent of Classic Elegance">Klasik Zarafetin Kokusu</div>
+              </div>
+              <div class="parfum-stars">★★★★★</div>
+            </div>
+            <p class="parfum-desc" data-tr="2008'den bu yana erkek parfüm listelerinden düşmeyen zamansız bir klasik. Bergamot ve greyfurt açılışı, zengin zencefil ve fesleğen kalbiyle ilerler; amber, tütün ve sandal ağacı tabanıyla kapanır. Olgunluğun, zerafetin ve &quot;iyi giyinmiş erkek&quot;in parfümü." data-en="A timeless classic that has never left the men's perfume lists since 2008. Bergamot and grapefruit opening progresses with a rich ginger and basil heart; ends with an amber, tobacco, and sandalwood base. The perfume of maturity, elegance, and the &quot;well-dressed man&quot;.">2008'den bu yana erkek parfüm listelerinden düşmeyen zamansız bir klasik. Bergamot ve greyfurt açılışı, zengin zencefil ve fesleğen kalbiyle ilerler; amber, tütün ve sandal ağacı tabanıyla kapanır. Olgunluğun, zerafetin ve "iyi giyinmiş erkek"in parfümü.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🍋 Greyfurt" data-en="🍋 Grapefruit">🍋 Greyfurt</span><span class="nota-pill" data-tr="🌿 Fesleğen" data-en="🌿 Basil">🌿 Fesleğen</span>
+                <span class="nota-pill" data-tr="🍠 Zencefil" data-en="🍠 Ginger">🍠 Zencefil</span><span class="nota-pill" data-tr="🚬 Tütün" data-en="🚬 Tobacco">🚬 Tütün</span>
+                <span class="nota-pill" data-tr="🌲 Sandal Ağacı" data-en="🌲 Sandalwood">🌲 Sandal Ağacı</span><span class="nota-pill" data-tr="✨ Amber" data-en="✨ Amber">✨ Amber</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">7 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:70%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="Akşam yemekleri, resmi toplantılar, sonbahar-kış. Kapalı mekânda muhteşem." data-en="Dinners, formal meetings, autumn-winter. Magnificent indoors.">Akşam yemekleri, resmi toplantılar, sonbahar-kış. Kapalı mekânda muhteşem.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="30'lu yaşların olgunluğu. Güçlü değil, cazip. Sizi tahmin edilemez kılan bir sıcaklık." data-en="The maturity of the 30s. Not powerful, but attractive. A warmth that makes you unpredictable.">30'lu yaşların olgunluğu. Güçlü değil, cazip. Sizi tahmin edilemez kılan bir sıcaklık.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal delay-2" data-intensity="9" data-longevity="9" data-season="sonbahar kis" data-dna="oryantal" data-categories="oryantal niche">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/black orchid edp.jpg"
+              alt="Tom Ford Black Orchid"
+              onerror="this.style.background='#0a0514';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Floral · Karanlık Oryantal" data-en="Floral · Dark Oriental">Floral · Karanlık Oryantal</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Tom Ford · 2006 · Unisex</div>
+                <div class="parfum-name">Black Orchid</div>
+                <div class="parfum-family" data-tr="Karanlık Çiçeğin Gücü" data-en="Power of the Dark Flower">Karanlık Çiçeğin Gücü</div>
+              </div>
+              <div class="parfum-stars">★★★★★</div>
+            </div>
+            <p class="parfum-desc" data-tr="Tom Ford'un imzasını dünyaya duyurduğu karanlık başyapıt. Siyah trüf ve ylang-ylang açılışı, siyah orkide ve lotus kalbiyle buluşur; patchouli, vetiver ve köknar reçinesiyle kapanır. Cinsiyetsiz, zamansız, tartışmasız ikona. Gizemli bir gece partisinin parfümü." data-en="The dark masterpiece with which Tom Ford announced his signature to the world. Black truffle and ylang-ylang opening meets black orchid and lotus heart; ends with patchouli, vetiver, and fir resin. Genderless, timeless, undisputed icon. The perfume of a mysterious night party.">Tom Ford'un imzasını dünyaya duyurduğu karanlık başyapıt. Siyah trüf ve ylang-ylang açılışı, siyah orkide ve lotus kalbiyle buluşur; patchouli, vetiver ve köknar reçinesiyle kapanır. Cinsiyetsiz, zamansız, tartışmasız ikona. Gizemli bir gece partisinin parfümü.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🖤 Siyah Trüf" data-en="🖤 Black Truffle">🖤 Siyah Trüf</span><span class="nota-pill" data-tr="🌸 Ylang-Ylang" data-en="🌸 Ylang-Ylang">🌸 Ylang-Ylang</span>
+                <span class="nota-pill" data-tr="🌺 Siyah Orkide" data-en="🌺 Black Orchid">🌺 Siyah Orkide</span><span class="nota-pill" data-tr="🪷 Lotus" data-en="🪷 Lotus">🪷 Lotus</span>
+                <span class="nota-pill" data-tr="🌑 Patchouli" data-en="🌑 Patchouli">🌑 Patchouli</span><span class="nota-pill" data-tr="🌾 Vetiver" data-en="🌾 Vetiver">🌾 Vetiver</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">9 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:90%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="Gece etkinlikleri, sanat galerileri, kış geceleri. Gündüz dikkatli kullanın." data-en="Night events, art galleries, winter nights. Use carefully during the day.">Gece etkinlikleri, sanat galerileri, kış geceleri. Gündüz dikkatli kullanın.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Gizemli, baştan çıkarıcı, ikili. Hem sert hem kadifemsi - sizi tanımlanamaz kılar." data-en="Mysterious, seductive, binary. Both hard and velvety - makes you indefinable.">Gizemli, baştan çıkarıcı, ikili. Hem sert hem kadifemsi - sizi tanımlanamaz kılar.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal" data-intensity="8" data-longevity="7" data-season="sonbahar kis" data-dna="baharatli" data-categories="baharatlı designer">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/spicebomb edt.jpg"
+              alt="Viktor & Rolf Spicebomb EDT"
+              onerror="this.style.background='#140808';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Baharatlı · Fougère" data-en="Spicy · Fougère">Baharatlı · Fougère</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Viktor &amp; Rolf · Olivier Polge · 2012</div>
+                <div class="parfum-name">Spicebomb EDT</div>
+                <div class="parfum-family" data-tr="Koku Bombası" data-en="Scent Bomb">Koku Bombası</div>
+              </div>
+              <div class="parfum-stars">★★★★☆</div>
+            </div>
+            <p class="parfum-desc" data-tr="El bombası şeklindeki ikonik şişesiyle masanızda durmak için bile yeterli bir sebep. Bergamot ve greyfurt açılışı, kırmızı biber ve safran kalbiyle alevlenir; vetiver, tütün ve deri tabanıyla saatlerce sürer. Soğuk havada ciltle birleşince bambaşka bir boyut kazanır." data-en="With its iconic hand grenade-shaped bottle, it's reason enough just to stand on your desk. Bergamot and grapefruit opening flares up with red pepper and saffron heart; lasts for hours with vetiver, tobacco, and leather base. Gains a whole other dimension when combined with the skin in cold weather.">El bombası şeklindeki ikonik şişesiyle masanızda durmak için bile yeterli bir sebep. Bergamot ve greyfurt açılışı, kırmızı biber ve safran kalbiyle alevlenir; vetiver, tütün ve deri tabanıyla saatlerce sürer. Soğuk havada ciltle birleşince bambaşka bir boyut kazanır.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🍋 Bergamot" data-en="🍋 Bergamot">🍋 Bergamot</span><span class="nota-pill" data-tr="🌶️ Kırmızı Biber" data-en="🌶️ Red Pepper">🌶️ Kırmızı Biber</span>
+                <span class="nota-pill" data-tr="🟡 Safran" data-en="🟡 Saffron">🟡 Safran</span><span class="nota-pill" data-tr="🌿 Vetiver" data-en="🌿 Vetiver">🌿 Vetiver</span>
+                <span class="nota-pill" data-tr="🚬 Tütün" data-en="🚬 Tobacco">🚬 Tütün</span><span class="nota-pill" data-tr="🖤 Deri" data-en="🖤 Leather">🖤 Deri</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">8 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:80%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="Sonbahar-kış, ofis sonrası, akşam buluşmaları. Soğuk havada en iyi hali." data-en="Autumn-winter, after-office, evening meetings. Best in cold weather.">Sonbahar-kış, ofis sonrası, akşam buluşmaları. Soğuk havada en iyi hali.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Tehlikeli ama kontrollü. Çevresini fark ettiren, baharatlı ve deri kokan güç." data-en="Dangerous but controlled. A spicy and leather-smelling power that makes its presence felt.">Tehlikeli ama kontrollü. Çevresini fark ettiren, baharatlı ve deri kokan güç.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal delay-1" data-intensity="6" data-longevity="6" data-season="ilkbahar yaz" data-dna="aquatik" data-categories="narenciye tatli designer">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/jpg paradise garden.jpg"
+              alt="JPG Paradise Garden"
+              onerror="this.style.background='#0a140a';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge" data-tr="Tropikal · Taze" data-en="Tropical · Fresh">Tropikal · Taze</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Jean Paul Gaultier · 2023</div>
+                <div class="parfum-name">Paradise Garden</div>
+                <div class="parfum-family" data-tr="Yaz Bahçesinin Cenneti" data-en="Paradise of the Summer Garden">Yaz Bahçesinin Cenneti</div>
+              </div>
+              <div class="parfum-stars">★★★★☆</div>
+            </div>
+            <p class="parfum-desc" data-tr="JPG'nin Le Male ailesinin tropikal ve neşeli kardeşi. Bergamot ve limon açılışı, ylang-ylang ve portakal çiçeği kalbiyle tropikal bir bahçeye taşır; beyaz misk ve sandal ağacı tabanıyla sıcak ve temiz kapanır. Yaz partileri ve plaj için biçilmiş kaftan." data-en="The tropical and cheerful sibling of JPG's Le Male family. Bergamot and lemon opening transports you to a tropical garden with ylang-ylang and orange blossom heart; closes warm and clean with white musk and sandalwood base. Perfect for summer parties and the beach.">JPG'nin Le Male ailesinin tropikal ve neşeli kardeşi. Bergamot ve limon açılışı, ylang-ylang ve portakal çiçeği kalbiyle tropikal bir bahçeye taşır; beyaz misk ve sandal ağacı tabanıyla sıcak ve temiz kapanır. Yaz partileri ve plaj için biçilmiş kaftan.</p>
+            <div>
+              <div class="notes-label" data-tr="Notalar" data-en="Notes">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill" data-tr="🍋 Bergamot" data-en="🍋 Bergamot">🍋 Bergamot</span><span class="nota-pill" data-tr="🍊 Limon" data-en="🍊 Lemon">🍊 Limon</span>
+                <span class="nota-pill" data-tr="🌸 Ylang-Ylang" data-en="🌸 Ylang-Ylang">🌸 Ylang-Ylang</span><span class="nota-pill" data-tr="🌼 Portakal Çiçeği" data-en="🌼 Orange Blossom">🌼 Portakal Çiçeği</span>
+                <span class="nota-pill" data-tr="☁️ Beyaz Misk" data-en="☁️ White Musk">☁️ Beyaz Misk</span><span class="nota-pill" data-tr="🌲 Sandal Ağacı" data-en="🌲 Sandalwood">🌲 Sandal Ağacı</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</span><span style="color:var(--gold-bright);">6 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:60%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label" data-tr="📍 Nerede Kullanılır" data-en="📍 Where to Use">📍 Nerede Kullanılır</div>
+                <div class="meta-value" data-tr="İlkbahar-yaz, açık hava, plaj, günlük. Sıcak havalarda ferahlatıcı ve enerjik." data-en="Spring-summer, outdoors, beach, daily. Refreshing and energetic in hot weather.">İlkbahar-yaz, açık hava, plaj, günlük. Sıcak havalarda ferahlatıcı ve enerjik.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label" data-tr="💭 Ne Hissettirir" data-en="💭 How it Feels">💭 Ne Hissettirir</div>
+                <div class="meta-value" data-tr="Neşeli, hafif, özgür. Gündüz güneşinin altında yüksek enerji ve iyi ruh hali." data-en="Cheerful, light, free. High energy and good mood under the daytime sun.">Neşeli, hafif, özgür. Gündüz güneşinin altında yüksek enerji ve iyi ruh hali.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="parfum-card reveal delay-2" data-intensity="7" data-longevity="7" data-season="ilkbahar yaz sonbahar kis" data-dna="aquatik" data-categories="narenciye aquatik designer">
+          <div class="parfum-img-wrap">
+            <img
+              src="assets/images/invictus EDT(1).avif"
+              alt="Paco Rabanne Invictus EDT"
+              onerror="this.style.background='#0a1420';this.style.minHeight='210px';this.removeAttribute('src');"
+            />
+            <span class="parfum-badge">Aquatik · Odunsu</span>
+          </div>
+          <div class="parfum-body">
+            <div class="parfum-header">
+              <div>
+                <div class="parfum-brand">Paco Rabanne · Spre Delville · 2013</div>
+                <div class="parfum-name">Invictus EDT</div>
+                <div class="parfum-family">Zafer Kupası</div>
+              </div>
+              <div class="parfum-stars">★★★★☆</div>
+            </div>
+            <p class="parfum-desc">Kupa şeklindeki ikonik şişesiyle parfüm koleksiyoncularının vitrininin baş tacı. Greyfurt ve deniz notaları açılışı, defne yaprağı ve jasmin kalbiyle hem sportif hem çekici bir profile kavuşur; ambergris ve meşe yosunu tabanı kalıcı ve sıcak bir iz bırakır.</p>
+            <div>
+              <div class="notes-label">Notalar</div>
+              <div class="parfum-notes-row">
+                <span class="nota-pill">🍋 Greyfurt</span><span class="nota-pill">🌊 Deniz Notası</span>
+                <span class="nota-pill">🌿 Defne Yaprağı</span><span class="nota-pill">🌸 Jasmin</span>
+                <span class="nota-pill">🪨 Ambergris</span><span class="nota-pill">🌿 Meşe Yosunu</span>
+              </div>
+            </div>
+            <div>
+              <div class="intensity-bar-label"><span>Yoğunluk</span><span style="color:var(--gold-bright);">7 / 10</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:70%;"></div></div>
+            </div>
+            <div class="parfum-meta-grid">
+              <div class="meta-box">
+                <div class="meta-label">📍 Nerede Kullanılır</div>
+                <div class="meta-value">İlkbahar-yaz, spor sonrası, günlük, ofis. Dört mevsim uygundur.</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label">💭 Ne Hissettirir</div>
+                <div class="meta-value">Şampiyon enerjisi. Dinamik, sportif, kazanmaya hazır. Zafer kupasının kokusu.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="no-results" id="noResults">Bu kategoride parfüm bulunamadı.</div>
+
+      </div>
+    </section>
+
+
+    <section class="section" style="background:var(--bg-secondary);padding-top:60px;">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Hızlı Rehber" data-en="Quick Guide">Hızlı Rehber</div>
+        <h2 class="section-title" data-tr="Hangi Ortam, <em>Hangi Koku?</em>" data-en="Which Occasion, <em>Which Scent?</em>">Hangi Ortam, <em>Hangi Koku?</em></h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div style="max-width:960px;margin:0 auto;overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:.72rem;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--gold-border);">
+              <th style="padding:.8rem 1rem;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Parfüm" data-en="Perfume">Parfüm</th>
+              <th style="padding:.8rem 1rem;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Mevsim" data-en="Season">Mevsim</th>
+              <th style="padding:.8rem 1rem;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Ortam" data-en="Occasion">Ortam</th>
+              <th style="padding:.8rem 1rem;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-dim);" data-tr="Kalıcılık" data-en="Longevity">Kalıcılık</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">BVLGARi Tygar</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🌸 İlkbahar · 🌞 Yaz" data-en="🌸 Spring · ☀️ Summer">🌸 İlkbahar · 🌞 Yaz</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Ofis · Gündüz" data-en="Office · Daytime">Ofis · Gündüz</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★☆☆</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">Mancera Cedrat Boise</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🌸 · 🌞 · 🍂" data-en="🌸 · ☀️ · 🍂">🌸 · 🌞 · 🍂</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Her Ortam" data-en="Any Occasion">Her Ortam</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★☆</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">Boss Bottled Absolu</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🍂 Sonbahar · ❄️ Kış" data-en="🍂 Autumn · ❄️ Winter">🍂 Sonbahar · ❄️ Kış</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Akşam · Resmi" data-en="Evening · Formal">Akşam · Resmi</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★★</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">SHL God of Fire</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🌞 Yaz · 🍂 Sonbahar" data-en="☀️ Summer · 🍂 Autumn">🌞 Yaz · 🍂 Sonbahar</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Açık Hava · Gece" data-en="Outdoors · Night">Açık Hava · Gece</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★☆</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">LV Imagination</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🌸 · 🌞 · 🍂 · ❄️" data-en="🌸 · ☀️ · 🍂 · ❄️">🌸 · 🌞 · 🍂 · ❄️</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Her Ortam" data-en="Any Occasion">Her Ortam</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★☆</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">JPG Le Male Elixir</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🍂 Sonbahar · ❄️ Kış" data-en="🍂 Autumn · ❄️ Winter">🍂 Sonbahar · ❄️ Kış</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Gece · Date" data-en="Night · Date">Gece · Date</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★★</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">YSL MYSLF</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🌸 İlkbahar · 🌞 Yaz" data-en="🌸 Spring · ☀️ Summer">🌸 İlkbahar · 🌞 Yaz</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Her Ortam" data-en="Any Occasion">Her Ortam</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★☆</span></td>
+            </tr>
+            <tr class="reveal">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">Prada Paradigme</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🌸 · 🌞 · 🍂" data-en="🌸 · ☀️ · 🍂">🌸 · 🌞 · 🍂</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Ofis · Günlük" data-en="Office · Daily">Ofis · Günlük</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★☆</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">Dior Sauvage Elixir</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🍂 Sonbahar · ❄️ Kış" data-en="🍂 Autumn · ❄️ Winter">🍂 Sonbahar · ❄️ Kış</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Gece · Özel Gün" data-en="Night · Special Occasion">Gece · Özel Gün</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★★</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">D&amp;G The One</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🍂 Sonbahar · ❄️ Kış" data-en="🍂 Autumn · ❄️ Winter">🍂 Sonbahar · ❄️ Kış</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Akşam · Resmi" data-en="Evening · Formal">Akşam · Resmi</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★☆</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">Tom Ford Black Orchid</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🍂 · ❄️" data-en="🍂 · ❄️">🍂 · ❄️</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Gece · Sanat Etkinliği" data-en="Night · Art Event">Gece · Sanat Etkinliği</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★★</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">V&amp;R Spicebomb EDT</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🍂 Sonbahar · ❄️ Kış" data-en="🍂 Autumn · ❄️ Winter">🍂 Sonbahar · ❄️ Kış</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Ofis Sonrası · Akşam" data-en="After Office · Evening">Ofis Sonrası · Akşam</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★☆</span></td>
+            </tr>
+            <tr class="reveal" style="border-bottom:1px solid rgba(212,168,67,0.06);">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">JPG Paradise Garden</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🌸 İlkbahar · 🌞 Yaz" data-en="🌸 Spring · ☀️ Summer">🌸 İlkbahar · 🌞 Yaz</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Plaj · Açık Hava" data-en="Beach · Outdoors">Plaj · Açık Hava</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★☆</span></td>
+            </tr>
+            <tr class="reveal">
+              <td style="padding:.9rem 1rem;color:var(--text-primary);font-family:var(--font-display);font-size:.95rem;">Paco Rabanne Invictus</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="🌸 · 🌞 · 🍂 · ❄️" data-en="🌸 · ☀️ · 🍂 · ❄️">🌸 · 🌞 · 🍂 · ❄️</td>
+              <td style="padding:.9rem 1rem;color:var(--text-secondary);" data-tr="Her Ortam · Spor" data-en="Any Occasion · Sports">Her Ortam · Spor</td>
+              <td style="padding:.9rem 1rem;"><span style="color:var(--gold-bright);">★★★★☆</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="footer-brand">My Sillage</div>
+    <div class="footer-tagline" data-tr="Curated by Obsession · Est. 2024" data-en="Curated by Obsession · Est. 2024">Curated by Obsession · Est. 2024</div>
+    <div class="footer-author" data-tr="Deniz Öztürk 20210504 tarafından yapıldı" data-en="by Deniz Öztürk 20210504">Deniz Öztürk 20210504 tarafından yapıldı</div>
+    <nav class="footer-links">
+      <a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a>
+      <a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+      <a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a><a href="iletisim.html" data-tr="İletişim" data-en="Contact">İletişim</a>
+    </nav>
+    <p class="footer-copy" data-tr="© 2024 My Sillage - Tüm hakları saklıdır." data-en="© 2024 My Sillage - All rights reserved.">© 2024 My Sillage - Tüm hakları saklıdır.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+  <script>
+    const parfumData = [
+      { name:'BVLGARi Tygar',       intensity:8,  longevity:7,  sillage:7,  season:'ilkbahar yaz',              dna:'aquatik',   cats:'narenciye odunsu designer' },
+      { name:'Mancera Cedrat Boise', intensity:9,  longevity:8,  sillage:9,  season:'ilkbahar yaz sonbahar',    dna:'odunsu',    cats:'narenciye odunsu niche' },
+      { name:'Boss Bottled Absolu',  intensity:9,  longevity:9,  sillage:8,  season:'sonbahar kis',              dna:'oryantal',  cats:'oryantal odunsu designer' },
+      { name:'SHL God of Fire',      intensity:7,  longevity:7,  sillage:7,  season:'yaz sonbahar',              dna:'oryantal',  cats:'oryantal niche' },
+      { name:'LV Imagination',       intensity:6,  longevity:7,  sillage:6,  season:'ilkbahar yaz sonbahar kis', dna:'aquatik',   cats:'narenciye niche' },
+      { name:'JPG Le Male Elixir',   intensity:10, longevity:10, sillage:10, season:'sonbahar kis',              dna:'tatli',     cats:'tatli designer' },
+      { name:'YSL MYSLF',            intensity:8,  longevity:7,  sillage:7,  season:'ilkbahar yaz',              dna:'baharatli', cats:'narenciye designer' },
+      { name:'Prada Paradigme',      intensity:7,  longevity:8,  sillage:6,  season:'ilkbahar yaz sonbahar',     dna:'odunsu',    cats:'odunsu designer' },
+      { name:'Dior Sauvage Elixir',  intensity:10, longevity:9,  sillage:10, season:'sonbahar kis',              dna:'baharatli', cats:'baharatlı odunsu designer' },
+      { name:'D&G The One',          intensity:7,  longevity:8,  sillage:7,  season:'sonbahar kis',              dna:'oryantal',  cats:'oryantal tatli designer' },
+      { name:'Tom Ford Black Orchid',intensity:9,  longevity:9,  sillage:8,  season:'sonbahar kis',              dna:'oryantal',  cats:'oryantal niche' },
+      { name:'V&R Spicebomb EDT',    intensity:8,  longevity:7,  sillage:8,  season:'sonbahar kis',              dna:'baharatli', cats:'baharatlı designer' },
+      { name:'JPG Paradise Garden',  intensity:6,  longevity:6,  sillage:6,  season:'ilkbahar yaz',              dna:'aquatik',   cats:'narenciye tatli designer' },
+      { name:'Paco Rabanne Invictus',intensity:7,  longevity:7,  sillage:7,  season:'ilkbahar yaz sonbahar kis', dna:'aquatik',   cats:'narenciye aquatik designer' },
+    ];
+
+
+    const userDNA = localStorage.getItem('parfumDNA') || null;
+    function getDNABadge(cardDNA) {
+      if (!userDNA) return '';
+      const lang = getCurrentLanguage();
+      const labels = {
+        match: { tr: '✔ DNA Eşleşme', en: '✔ DNA Match' },
+        partial: { tr: '≈ Yakın Profil', en: '≈ Similar Profile' },
+        miss: { tr: 'Farklı Profil', en: 'Different Profile' }
+      };
+
+      if (cardDNA === userDNA) return `<span class="dna-badge dna-match">${labels.match[lang]}</span>`;
+      const partials = { odunsu:['oryantal','baharatli'], oryantal:['odunsu','tatli'], aquatik:['odunsu'], baharatli:['oryantal','odunsu'], tatli:['oryantal'] };
+      if ((partials[userDNA]||[]).includes(cardDNA)) return `<span class="dna-badge dna-partial">${labels.partial[lang]}</span>`;
+      return `<span class="dna-badge dna-miss">${labels.miss[lang]}</span>`;
+    }
+
+    function applyDNABadges() {
+      document.querySelectorAll('.dna-badge').forEach(el => el.remove());
+      document.querySelectorAll('.parfum-card').forEach(card => {
+        const dna = card.getAttribute('data-dna');
+        if (!dna) return;
+        const badgeHTML = getDNABadge(dna);
+        if (!badgeHTML) return;
+        const metaGrid = card.querySelector('.parfum-meta-grid');
+        if (metaGrid) { 
+          const d = document.createElement('div'); 
+          d.innerHTML = badgeHTML; 
+          metaGrid.after(d.firstChild); 
+        }
+      });
+    }
+
+
+    function updateStats() {
+      const vis = document.querySelectorAll('.parfum-card:not(.hidden)');
+      const totalVisEl = document.getElementById('statVisible');
+      if (totalVisEl) totalVisEl.textContent = vis.length;
+      
+      const names = Array.from(vis).map(c => c.querySelector('.parfum-name')?.textContent?.trim() || '');
+      const data = parfumData.filter(p => names.some(n => n.includes(p.name.split(' ').slice(0,2).join(' ')) || p.name.includes(n.split(' ')[0])));
+      
+      if (data.length) {
+        const avgInt = (data.reduce((s,p)=>s+p.intensity,0)/data.length).toFixed(1);
+        const avgIntEl = document.getElementById('statAvgInt');
+        if (avgIntEl) avgIntEl.textContent = avgInt;
+        
+        const sc = {}; 
+        data.forEach(p=>p.season.split(' ').forEach(s=>{sc[s]=(sc[s]||0)+1;}));
+        const top = Object.entries(sc).sort((a,b)=>b[1]-a[1])[0];
+        const sm = {ilkbahar:'🌸',yaz:'☀️',sonbahar:'🍂',kis:'❄️'};
+        const topSeasonEl = document.getElementById('statTopSeason');
+        if (topSeasonEl) topSeasonEl.textContent = top ? (sm[top[0]]||top[0]) : '-';
+      }
+    }
+
+
+    const selA = document.getElementById('cmpA'), selB = document.getElementById('cmpB');
+    if (selA && selB) {
+      parfumData.forEach(p => {
+        [selA,selB].forEach(sel => { const o = document.createElement('option'); o.value=p.name; o.textContent=p.name; sel.appendChild(o); });
+      });
+    }
+
+    window.updateCompare = function() {
+      const nameA = selA.value, nameB = selB.value;
+      const body = document.getElementById('compareBody');
+      const lang = getCurrentLanguage();
+      
+      if (!nameA||!nameB||nameA===nameB) { 
+        body.innerHTML = lang === 'en' 
+          ? '<p class="compare-hint">Select two different perfumes.</p>' 
+          : '<p class="compare-hint">İki farklı parfüm seç.</p>'; 
+        return; 
+      }
+      
+      const A = parfumData.find(p=>p.name===nameA), B = parfumData.find(p=>p.name===nameB);
+      if (!A||!B) return;
+      
+      const labels = {
+        intensity: { tr: 'Yoğunluk', en: 'Intensity' },
+        longevity: { tr: 'Kalıcılık', en: 'Longevity' },
+        sillage: { tr: 'Sillage', en: 'Sillage' },
+        vs: { tr: 'vs', en: 'vs' }
+      };
+
+      const metrics = [
+        {label: labels.intensity[lang], valA:A.intensity, valB:B.intensity},
+        {label: labels.longevity[lang], valA:A.longevity, valB:B.longevity},
+        {label: labels.sillage[lang], valA:A.sillage, valB:B.sillage}
+      ];
+
+      const rows = metrics.map(m => {
+        const pA=(m.valA/10)*100, pB=(m.valB/10)*100;
+        const col = m.valA>m.valB?'var(--gold-bright)':m.valB>m.valA?'#6ab0f5':'var(--text-muted)';
+        return `<div class="cbar-row">
+          <div class="cbar-label" style="text-align:right;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);">${m.label}</div>
+          <div style="background:rgba(255,255,255,.06);height:6px;border-radius:3px;overflow:hidden;direction:rtl;">
+            <div style="width:${pA}%;height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold-bright));border-radius:3px;"></div>
+          </div>
+          <div style="text-align:center;font-size:.72rem;font-weight:600;color:${col};">${m.valA}–${m.valB}</div>
+          <div style="background:rgba(255,255,255,.06);height:6px;border-radius:3px;overflow:hidden;">
+            <div style="width:${pB}%;height:100%;background:linear-gradient(90deg,#4a8fd4,#6ab0f5);border-radius:3px;"></div>
+          </div>
+          <div class="cbar-label" style="font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);">${m.label}</div>
+        </div>`;
+      }).join('');
+      
+      const sA=A.intensity+A.longevity+A.sillage, sB=B.intensity+B.longevity+B.sillage;
+      const verdicts = {
+        left: { tr: `🏆 <strong style="color:var(--gold-bright);">${A.name}</strong> genel puanda öne çıkıyor`, en: `🏆 <strong style="color:var(--gold-bright);">${A.name}</strong> leads in overall score` },
+        right: { tr: `🏆 <strong style="color:#6ab0f5;">${B.name}</strong> genel puanda öne çıkıyor`, en: `🏆 <strong style="color:#6ab0f5;">${B.name}</strong> leads in overall score` },
+        equal: { tr: '🤝 İkisi eşit güçte - fark ortam tercihinde', en: '🤝 Both are equally strong - difference is in occasion preference' }
+      };
+      const verdict = sA>sB ? verdicts.left[lang] : sB>sA ? verdicts.right[lang] : verdicts.equal[lang];
+      
+      body.innerHTML = `
+        <div style="display:flex;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:.5rem;">
+          <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--gold-bright);">${A.name}</div>
+          <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);align-self:center;">${labels.vs[lang]}</div>
+          <div style="font-family:var(--font-display);font-size:1.1rem;color:#6ab0f5;">${B.name}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.9rem;">${rows}</div>
+        <div style="margin-top:1rem;padding:.8rem 1rem;background:rgba(212,168,67,.06);border-radius:6px;font-size:.72rem;color:var(--text-secondary);text-align:center;">${verdict}</div>`;
+    };
+
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.parfum-card');
+    const noResults = document.getElementById('noResults');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(b=>b.classList.remove('active'));
+        this.classList.add('active');
+        const filter = this.getAttribute('data-filter');
+        let visible = 0;
+        cards.forEach(card => {
+          if (filter==='tumü') { card.classList.remove('hidden'); visible++; }
+          else { const cats=card.getAttribute('data-categories')||''; if(cats.includes(filter)){card.classList.remove('hidden');visible++;}else card.classList.add('hidden'); }
+        });
+        if (noResults) {
+          const lang = getCurrentLanguage();
+          noResults.textContent = lang === 'en' ? 'No perfumes found in this category.' : 'Bu kategoride parfüm bulunamadı.';
+          noResults.classList.toggle('show', visible===0);
+        }
+        updateStats();
+      });
+    });
+
+    window.addEventListener('languageChanged', () => {
+      applyDNABadges();
+      updateCompare();
+      updateStats();
+      const activeFilter = document.querySelector('.filter-btn.active');
+      if (activeFilter) activeFilter.click();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyDNABadges();
+      updateStats();
+    });
+
+    const tooltip = document.getElementById('image-tooltip');
+    const tooltipImg = document.getElementById('tooltip-img');
+    const imgWraps = document.querySelectorAll('.parfum-img-wrap');
+
+    imgWraps.forEach(wrap => {
+      const originalImg = wrap.querySelector('img');
+      wrap.addEventListener('mouseenter', (e) => {
+        const src = originalImg.getAttribute('src');
+        if (tooltipImg) {
+          tooltipImg.src = src; 
+          tooltip.style.display = 'block';
+        }
+      });
+      wrap.addEventListener('mousemove', (e) => {
+        let x = e.clientX + 20;
+        let y = e.clientY + 20;
+        if (x + 280 > window.innerWidth) x = e.clientX - 300;
+        if (y + 350 > window.innerHeight) y = e.clientY - 370;
+        if (tooltip) {
+          tooltip.style.left = x + 'px';
+          tooltip.style.top = y + 'px';
+        }
+      });
+      wrap.addEventListener('mouseleave', () => {
+        if (tooltip) tooltip.style.display = 'none';
+        if (tooltipImg) tooltipImg.src = '';
+      });
+    });
+  </script>
+</body>
+</html>

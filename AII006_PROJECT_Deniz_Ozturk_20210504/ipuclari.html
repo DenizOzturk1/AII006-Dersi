@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İpuçları - My Sillage</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .do-dont-grid { display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:900px;margin:0 auto; }
+    @media(max-width:600px){.do-dont-grid{grid-template-columns:1fr;}}
+    .do-box,.dont-box{border-radius:8px;padding:2rem;border:1px solid;}
+    .do-box{background:rgba(20,50,30,.25);border-color:rgba(80,180,100,.25);}
+    .dont-box{background:rgba(50,20,20,.25);border-color:rgba(180,80,80,.2);}
+    .do-box h3{color:#6fcf97;font-family:var(--font-display);font-size:1.3rem;margin-bottom:1rem;}
+    .dont-box h3{color:#eb5757;font-family:var(--font-display);font-size:1.3rem;margin-bottom:1rem;}
+    .box-list{list-style:none;display:flex;flex-direction:column;gap:.7rem;}
+    .box-list li{font-size:.76rem;color:var(--text-secondary);line-height:1.6;display:flex;gap:.7rem;align-items:flex-start;}
+    .box-list li span:first-child{min-width:16px;}
+    .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;max-width:900px;margin:0 auto 4rem;}
+    .stat-box{background:var(--bg-card);border:1px solid var(--gold-border);border-radius:8px;padding:1.5rem;text-align:center;}
+    .stat-num{font-family:var(--font-display);font-size:2.8rem;color:var(--gold-bright);line-height:1;}
+    .stat-label{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);margin-top:.4rem;}
+    
+    /* Light mode support for human silhouette */
+    body.light-mode .silhouette-shape {
+      fill: #e8e4dc !important;
+      stroke: rgba(212,168,67,.4) !important;
+    }
+    body.light-mode .silhouette-dark {
+      fill: #d4c8b8 !important;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-main">My Sillage</span>
+      <span class="brand-sub">Curated by Obsession</span>
+      <span class="brand-author">Deniz Öztürk 20210504</span>
+    </a>
+    <div class="nav-right">
+      <div class="lang-toggle" onclick="toggleLanguage()" title="Dil Değiştir / Change Language" data-tr-title="Dil Değiştir / Change Language" data-en-title="Change Language / Dil Değiştir">
+        <span class="lang-btn lang-btn-tr">TR</span>
+        <span class="lang-btn lang-btn-en">EN</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a></li>
+        <li><a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a></li>
+        <li><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+        <li><a href="ipuclari.html" class="active" data-tr="İpuçları" data-en="Tips">İpuçları</a></li>
+        <li><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a></li>
+        <li><a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a></li>
+        <li><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a></li>
+        <li><a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a></li>
+        <li><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a></li>
+      </ul>
+      <div class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir" data-tr-title="Tema Değiştir" data-en-title="Toggle Theme">
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+        <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-hero">
+      <div class="hero-eyebrow" style="justify-content:center;margin-bottom:1rem;" data-tr="Uzman Rehberi" data-en="Expert Guide">Uzman Rehberi</div>
+      <h1 class="page-hero-title" data-tr="Parfüm <em>İpuçları</em>" data-en="Perfume <em>Tips</em>">Parfüm <em>İpuçları</em></h1>
+      <p class="page-hero-sub" data-tr="Her adıma tıkla · Odaklan · Ustalaş" data-en="Click each step · Focus · Master">Her adıma tıkla · Odaklan · Ustalaş</p>
+    </div>
+
+
+    <section class="section" style="padding-bottom:0;">
+      <div class="stat-row">
+        <div class="stat-box reveal"><div class="stat-num">3</div><div class="stat-label" data-tr="Nota Katmanı" data-en="Note Layers">Nota Katmanı</div></div>
+        <div class="stat-box reveal delay-1"><div class="stat-num">12h</div><div class="stat-label" data-tr="Ortalama Kalıcılık" data-en="Average Longevity">Ortalama Kalıcılık</div></div>
+        <div class="stat-box reveal delay-2"><div class="stat-num">20cm</div><div class="stat-label" data-tr="Uygulama Mesafesi" data-en="Application Distance">Uygulama Mesafesi</div></div>
+        <div class="stat-box reveal delay-3"><div class="stat-num">15°C</div><div class="stat-label" data-tr="İdeal Saklama" data-en="Ideal Storage">İdeal Saklama</div></div>
+      </div>
+    </section>
+
+
+    <section class="section">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Adım Adım" data-en="Step by Step">Adım Adım</div>
+        <h2 class="section-title" data-tr="Doğru <em>Uygulama</em>" data-en="Proper <em>Application</em>">Doğru <em>Uygulama</em></h2>
+        <div class="section-divider"></div>
+        <p style="font-size:.75rem;color:var(--text-secondary);margin-top:1.2rem;" data-tr="Bir adıma tıkla - altın ile vurgulanır ve sayfada o adıma odaklanır." data-en="Click a step - it highlights in gold and focuses on that step.">Bir adıma tıkla - altın ile vurgulanır ve sayfada o adıma odaklanır.</p>
+      </div>
+
+      <div class="steps-wrap">
+
+        <div class="step-item" id="step1">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title" data-tr="Nabız Noktalarını Hedefle" data-en="Target Pulse Points">Nabız Noktalarını Hedefle</div>
+            <p class="step-desc" data-tr="Bilek, boyun ve kulak arkası - vücudun ısı yayan noktaları parfümü sürekli aktive eder. Bu noktalar kanın yüzeye yakın aktığı ve en fazla ısı ürettiği alanlardır. Parfüm molekülleri bu ısıyla buharlaşarak çevreye yayılır." data-en="Wrists, neck, and behind the ears - the heat-emitting points of the body constantly activate the perfume. These points are areas where blood flows close to the surface and produces the most heat. Perfume molecules evaporate with this heat and spread to the surroundings.">Bilek, boyun ve kulak arkası - vücudun ısı yayan noktaları parfümü sürekli aktive eder. Bu noktalar kanın yüzeye yakın aktığı ve en fazla ısı ürettiği alanlardır. Parfüm molekülleri bu ısıyla buharlaşarak çevreye yayılır.</p>
+            <div class="step-tip" data-tr="💡 Kıyafete değil doğrudan cilde uygula - kumaş kokuyu değiştirir." data-en="💡 Apply directly to skin, not clothes - fabric alters the scent.">💡 Kıyafete değil doğrudan cilde uygula - kumaş kokuyu değiştirir.</div>
+            <a class="step-anchor" href="#step1" data-tr="↑ Bu adıma odaklan" data-en="↑ Focus on this step">↑ Bu adıma odaklan</a>
+          </div>
+        </div>
+
+        <div class="step-item" id="step2">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title" data-tr="Ovma - Asla!" data-en="Rubbing - Never!">Ovma - Asla!</div>
+            <p class="step-desc" data-tr="Uyguladıktan sonra bileği birbirine sürtmek en klasik hatadır. Bu hareket parfümün üst moleküllerini mekanik olarak kırar; hassas üst nota kompozisyonu bozulur ve koku yanlış bir profil sergiler. Sadece uygula, kurumaya bırak." data-en="Rubbing wrists together after application is the most classic mistake. This motion mechanically breaks the top molecules of the perfume; the delicate top note composition is ruined, and the scent exhibits the wrong profile. Just apply and let it dry.">Uyguladıktan sonra bileği birbirine sürtmek en klasik hatadır. Bu hareket parfümün üst moleküllerini mekanik olarak kırar; hassas üst nota kompozisyonu bozulur ve koku yanlış bir profil sergiler. Sadece uygula, kurumaya bırak.</p>
+            <div class="step-tip" data-tr="💡 Ovarsan üst notalar uçar, sadece ağır bazlar kalır - koku 'düz' gelir." data-en="💡 If you rub, top notes vanish, only heavy bases remain - the scent feels 'flat'.">💡 Ovarsan üst notalar uçar, sadece ağır bazlar kalır - koku "düz" gelir.</div>
+            <a class="step-anchor" href="#step2" data-tr="↑ Bu adıma odaklan" data-en="↑ Focus on this step">↑ Bu adıma odaklan</a>
+          </div>
+        </div>
+
+        <div class="step-item" id="step3">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title" data-tr="Nemli Cilde Uygula" data-en="Apply to Damp Skin">Nemli Cilde Uygula</div>
+            <p class="step-desc" data-tr="Duştan hemen sonra, gözenekler açıkken ve cilt hafif nemli iken parfüm sürmek kalıcılığı %30-40 artırır. Gözenekler parfüm moleküllerini çeker ve daha uzun süre içinde tutar. Kokusuz bir vücut losyonu da aynı etkiyi yaratır." data-en="Applying perfume immediately after a shower, when pores are open and skin is slightly damp, increases longevity by 30-40%. Pores draw in perfume molecules and hold them longer. An unscented body lotion creates the same effect.">Duştan hemen sonra, gözenekler açıkken ve cilt hafif nemli iken parfüm sürmek kalıcılığı %30-40 artırır. Gözenekler parfüm moleküllerini çeker ve daha uzun süre içinde tutar. Kokusuz bir vücut losyonu da aynı etkiyi yaratır.</p>
+            <div class="step-tip" data-tr="💡 Kuru cilt kokuyu çabuk emer ve dışarı çıkaramaz; nemli cilt tutar." data-en="💡 Dry skin absorbs scent quickly and can't release it; damp skin holds it.">💡 Kuru cilt kokuyu çabuk emer ve dışarı çıkaramaz; nemli cilt tutar.</div>
+            <a class="step-anchor" href="#step3" data-tr="↑ Bu adıma odaklan" data-en="↑ Focus on this step">↑ Bu adıma odaklan</a>
+          </div>
+        </div>
+
+        <div class="step-item" id="step4">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title" data-tr="Mesafeyi Koru" data-en="Maintain Distance">Mesafeyi Koru</div>
+            <p class="step-desc" data-tr="Şişeyi 15-25 cm uzakta tut. Çok yakın tutarsan alkol birikimi oluşur, koku ilk 30 dakika 'yakıcı' gelir. Uzaktan püskürtme ince bir sis yaratır ve kokuyu geniş alana dengeli dağıtır." data-en="Keep the bottle 15-25 cm away. Holding it too close causes alcohol buildup, making the scent feel 'harsh' for the first 30 minutes. Spraying from a distance creates a fine mist and distributes the scent evenly over a wide area.">Şişeyi 15-25 cm uzakta tut. Çok yakın tutarsan alkol birikimi oluşur, koku ilk 30 dakika "yakıcı" gelir. Uzaktan püskürtme ince bir sis yaratır ve kokuyu geniş alana dengeli dağıtır.</p>
+            <div class="step-tip" data-tr="💡 Güçlü parfümlerde (Sauvage Elixir, Le Male Elixir) 1-2 sprey yeter." data-en="💡 For strong perfumes (Sauvage Elixir, Le Male Elixir), 1-2 sprays are enough.">💡 Güçlü parfümlerde (Sauvage Elixir, Le Male Elixir) 1-2 sprey yeter.</div>
+            <a class="step-anchor" href="#step4" data-tr="↑ Bu adıma odaklan" data-en="↑ Focus on this step">↑ Bu adıma odaklan</a>
+          </div>
+        </div>
+
+        <div class="step-item" id="step5">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <div class="step-title" data-tr="Saça Akıllıca Uygula" data-en="Apply Smartly to Hair">Saça Akıllıca Uygula</div>
+            <p class="step-desc" data-tr="Saç parfümü uzun süre taşır çünkü yüzeyi büyük ve lifleri tutucudur. Ancak alkolü direkt uygulamak saçı kurutur. Doğru yöntem: şişeyi birkaç cm önde tut ve saçı hafifçe dalgala. Hair mist kullanmak daha güvenlidir." data-en="Hair carries perfume for a long time because of its large surface area and absorbent fibers. However, applying alcohol directly dries out the hair. The correct method: hold the bottle a few cm away and lightly mist the hair. Using a hair mist is safer.">Saç parfümü uzun süre taşır çünkü yüzeyi büyük ve lifleri tutucudur. Ancak alkolü direkt uygulamak saçı kurutur. Doğru yöntem: şişeyi birkaç cm önde tut ve saçı hafifçe dalgala. Hair mist kullanmak daha güvenlidir.</p>
+            <div class="step-tip" data-tr="💡 Atkı veya şapka giyen günlerde saça 1 hafif sprey - gün boyu iz bırakır." data-en="💡 On days wearing a scarf or hat, one light spray to the hair - leaves a trail all day.">💡 Atkı veya şapka giyen günlerde saça 1 hafif sprey - gün boyu iz bırakır.</div>
+            <a class="step-anchor" href="#step5" data-tr="↑ Bu adıma odaklan" data-en="↑ Focus on this step">↑ Bu adıma odaklan</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section" style="background:var(--bg-secondary);">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Altın Kurallar" data-en="Golden Rules">Altın Kurallar</div>
+        <h2 class="section-title" data-tr="Yap &amp; <em>Yapma</em>" data-en="Do &amp; <em>Don't</em>">Yap &amp; <em>Yapma</em></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="do-dont-grid">
+        <div class="do-box reveal">
+          <h3 data-tr="✅ Yapılacaklar" data-en="✅ Dos">✅ Yapılacaklar</h3>
+          <ul class="box-list">
+            <li data-tr="<span>◆</span><span>Parfümü serin, karanlık yerde orijinal kutusunda sakla</span>" data-en="<span>◆</span><span>Store perfume in a cool, dark place in its original box</span>"><span>◆</span><span>Parfümü serin, karanlık yerde orijinal kutusunda sakla</span></li>
+            <li data-tr="<span>◆</span><span>Farklı kokuları değerlendirirken kahve çekirdeği kokla</span>" data-en="<span>◆</span><span>Smell coffee beans when evaluating different scents</span>"><span>◆</span><span>Farklı kokuları değerlendirirken kahve çekirdeği kokla</span></li>
+            <li data-tr="<span>◆</span><span>Mevsim ve ortama uygun koku seç</span>" data-en="<span>◆</span><span>Choose scent appropriate for the season and environment</span>"><span>◆</span><span>Mevsim ve ortama uygun koku seç</span></li>
+            <li data-tr="<span>◆</span><span>Uygulamadan önce 15 dk bekle, parfüm oturur</span>" data-en="<span>◆</span><span>Wait 15 mins after application, perfume settles</span>"><span>◆</span><span>Uygulamadan önce 15 dk bekle, parfüm oturur</span></li>
+            <li data-tr="<span>◆</span><span>Tam şişe almadan önce decant/sample test et</span>" data-en="<span>◆</span><span>Test decant/sample before buying a full bottle</span>"><span>◆</span><span>Tam şişe almadan önce decant/sample test et</span></li>
+          </ul>
+        </div>
+        <div class="dont-box reveal delay-1">
+          <h3 data-tr="❌ Yapılmayacaklar" data-en="❌ Don'ts">❌ Yapılmayacaklar</h3>
+          <ul class="box-list">
+            <li data-tr="<span>◆</span><span>Güneş ışığına veya ısıya maruz bırakma</span>" data-en="<span>◆</span><span>Don't expose to sunlight or heat</span>"><span>◆</span><span>Güneş ışığına veya ısıya maruz bırakma</span></li>
+            <li data-tr="<span>◆</span><span>Uygulamadan sonra bileğini birbirine sürme</span>" data-en="<span>◆</span><span>Don't rub wrists together after application</span>"><span>◆</span><span>Uygulamadan sonra bileğini birbirine sürme</span></li>
+            <li data-tr="<span>◆</span><span>Aynı anda birden fazla güçlü koku kullanma</span>" data-en="<span>◆</span><span>Don't use multiple strong scents at once</span>"><span>◆</span><span>Aynı anda birden fazla güçlü koku kullanma</span></li>
+            <li data-tr="<span>◆</span><span>İpek veya yün kıyafete doğrudan sıkma</span>" data-en="<span>◆</span><span>Don't spray directly on silk or wool clothes</span>"><span>◆</span><span>İpek veya yün kıyafete doğrudan sıkma</span></li>
+            <li data-tr="<span>◆</span><span>Banyoda saklamaktan kaçın - buhar yapıyı bozar</span>" data-en="<span>◆</span><span>Avoid storing in bathroom - steam ruins the structure</span>"><span>◆</span><span>Banyoda saklamaktan kaçın - buhar yapıyı bozar</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Koruma" data-en="Protection">Koruma</div>
+        <h2 class="section-title" data-tr="Şişeni <em>Koru</em>" data-en="Protect Your <em>Bottle</em>">Şişeni <em>Koru</em></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="card-grid" style="max-width:900px;">
+        <div class="card reveal" style="padding:1.5rem;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">🌡️</div>
+          <div class="card-title" style="font-size:1.2rem;" data-tr="Sıcaklık" data-en="Temperature">Sıcaklık</div>
+          <p class="card-text" style="margin-top:.5rem;" data-tr="10–15°C arası sabit sıcaklık. Ani değişimler molekülleri bozar. Dolap içi ideal." data-en="Constant temperature between 10–15°C. Sudden changes ruin molecules. Inside a closet is ideal.">10–15°C arası sabit sıcaklık. Ani değişimler molekülleri bozar. Dolap içi ideal.</p>
+        </div>
+        <div class="card reveal delay-1" style="padding:1.5rem;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">☀️</div>
+          <div class="card-title" style="font-size:1.2rem;" data-tr="Işık" data-en="Light">Işık</div>
+          <p class="card-text" style="margin-top:.5rem;" data-tr="UV ışınları parfümü oksitler, rengi bozar. Opak kutu veya çekmece içi şart." data-en="UV rays oxidize perfume, ruining the color. Opaque box or inside a drawer is a must.">UV ışınları parfümü oksitler, rengi bozar. Opak kutu veya çekmece içi şart.</p>
+        </div>
+        <div class="card reveal delay-2" style="padding:1.5rem;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">💧</div>
+          <div class="card-title" style="font-size:1.2rem;" data-tr="Nem" data-en="Humidity">Nem</div>
+          <p class="card-text" style="margin-top:.5rem;" data-tr="Banyo gibi yüksek nem ortamlarından uzak tut. Kapak korozyonu ve sızdırma riskini artırır." data-en="Keep away from high humidity environments like bathrooms. Increases risk of cap corrosion and leakage.">Banyo gibi yüksek nem ortamlarından uzak tut. Kapak korozyonu ve sızdırma riskini artırır.</p>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section class="section" style="background:var(--bg-secondary);">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Uygulama Anatomisi" data-en="Application Anatomy">Uygulama Anatomisi</div>
+        <h2 class="section-title" data-tr="Nabız <em>Haritası</em>" data-en="Pulse <em>Map</em>">Nabız <em>Haritası</em></h2>
+        <div class="section-divider"></div>
+        <p style="font-size:.78rem;color:var(--text-secondary);margin-top:1.2rem;" data-tr="Bir noktaya tıkla - o bölgeye özel uygulama ipucunu gör." data-en="Click a point - see the specific application tip for that area.">Bir noktaya tıkla - o bölgeye özel uygulama ipucunu gör.</p>
+      </div>
+      <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;">
+
+        <div style="position:relative;max-width:320px;margin:0 auto;">
+          <svg viewBox="0 0 200 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;opacity:.9;">
+
+            <ellipse class="silhouette-shape" cx="100" cy="38" rx="28" ry="32" fill="#1a2540" stroke="rgba(212,168,67,.3)" stroke-width="1"/>
+
+            <rect class="silhouette-shape" x="88" y="68" width="24" height="22" rx="4" fill="#1a2540" stroke="rgba(212,168,67,.25)" stroke-width="1"/>
+
+            <path class="silhouette-shape" d="M55 90 Q45 130 48 200 L152 200 Q155 130 145 90 Z" fill="#1a2540" stroke="rgba(212,168,67,.25)" stroke-width="1"/>
+
+            <path class="silhouette-shape" d="M55 95 Q30 110 25 170 Q30 172 35 170 Q38 120 60 108 Z" fill="#1a2540" stroke="rgba(212,168,67,.25)" stroke-width="1"/>
+            <path class="silhouette-shape" d="M145 95 Q170 110 175 170 Q170 172 165 170 Q162 120 140 108 Z" fill="#1a2540" stroke="rgba(212,168,67,.25)" stroke-width="1"/>
+
+            <ellipse class="silhouette-dark" cx="30" cy="178" rx="10" ry="14" fill="#243050" stroke="rgba(212,168,67,.3)" stroke-width="1"/>
+            <ellipse class="silhouette-dark" cx="170" cy="178" rx="10" ry="14" fill="#243050" stroke="rgba(212,168,67,.3)" stroke-width="1"/>
+
+            <path class="silhouette-shape" d="M72 198 Q65 280 68 360 L92 360 Q96 280 100 210 Q104 280 108 360 L132 360 Q135 280 128 198 Z" fill="#1a2540" stroke="rgba(212,168,67,.25)" stroke-width="1"/>
+
+
+            <g transform="translate(0,0)" onclick="showPulse('boyun')" style="cursor:pointer;" onmouseover="document.getElementById('hs-boyun').setAttribute('fill','rgba(212,168,67,.5)')" onmouseout="document.getElementById('hs-boyun').setAttribute('fill','rgba(212,168,67,.25)')">
+              <circle class="hotspot" id="hs-boyun" cx="100" cy="75" r="14" fill="rgba(212,168,67,.25)" stroke="var(--gold-bright)" stroke-width="1.5" style="transition:all .3s;"/>
+              <text x="100" y="79" text-anchor="middle" style="font-size:8px;fill:#d4a843;pointer-events:none;font-family:sans-serif;">1</text>
+            </g>
+
+            <g transform="translate(0,0)" onclick="showPulse('kulak')" style="cursor:pointer;" onmouseover="document.getElementById('hs-kulak').setAttribute('fill','rgba(212,168,67,.5)')" onmouseout="document.getElementById('hs-kulak').setAttribute('fill','rgba(212,168,67,.2)')">
+              <circle class="hotspot" id="hs-kulak" cx="72" cy="42" r="14" fill="rgba(212,168,67,.2)" stroke="var(--gold-bright)" stroke-width="1.5" style="transition:all .3s;"/>
+              <text x="72" y="46" text-anchor="middle" style="font-size:8px;fill:#d4a843;pointer-events:none;font-family:sans-serif;">2</text>
+            </g>
+
+            <g transform="translate(0,0)" onclick="showPulse('gogus')" style="cursor:pointer;" onmouseover="document.getElementById('hs-gogus').setAttribute('fill','rgba(212,168,67,.5)')" onmouseout="document.getElementById('hs-gogus').setAttribute('fill','rgba(212,168,67,.2)')">
+              <circle class="hotspot" id="hs-gogus" cx="100" cy="130" r="14" fill="rgba(212,168,67,.2)" stroke="var(--gold-bright)" stroke-width="1.5" style="transition:all .3s;"/>
+              <text x="100" y="134" text-anchor="middle" style="font-size:8px;fill:#d4a843;pointer-events:none;font-family:sans-serif;">3</text>
+            </g>
+
+            <g transform="translate(0,0)" onclick="showPulse('bilek')" style="cursor:pointer;" onmouseover="document.getElementById('hs-bilek').setAttribute('fill','rgba(212,168,67,.5)')" onmouseout="document.getElementById('hs-bilek').setAttribute('fill','rgba(212,168,67,.2)')">
+              <circle class="hotspot" id="hs-bilek" cx="30" cy="175" r="14" fill="rgba(212,168,67,.2)" stroke="var(--gold-bright)" stroke-width="1.5" style="transition:all .3s;"/>
+              <text x="30" y="179" text-anchor="middle" style="font-size:8px;fill:#d4a843;pointer-events:none;font-family:sans-serif;">4</text>
+            </g>
+
+            <g transform="translate(0,0)" onclick="showPulse('diz')" style="cursor:pointer;" onmouseover="document.getElementById('hs-diz').setAttribute('fill','rgba(212,168,67,.5)')" onmouseout="document.getElementById('hs-diz').setAttribute('fill','rgba(212,168,67,.2)')">
+              <circle class="hotspot" id="hs-diz" cx="80" cy="305" r="14" fill="rgba(212,168,67,.2)" stroke="var(--gold-bright)" stroke-width="1.5" style="transition:all .3s;"/>
+              <text x="80" y="309" text-anchor="middle" style="font-size:8px;fill:#d4a843;pointer-events:none;font-family:sans-serif;">5</text>
+            </g>
+
+
+            <text x="100" y="405" text-anchor="middle" style="font-size:7px;fill:rgba(212,168,67,.5);font-family:sans-serif;letter-spacing:1px;" data-tr="TIKLAYARAK KEŞFEDİN" data-en="CLICK TO DISCOVER">TIKLAYARAK KEŞFEDİN</text>
+          </svg>
+        </div>
+
+
+        <div>
+          <div id="pulseDefault" style="padding:1.5rem;background:var(--bg-card);border:1px dashed rgba(212,168,67,.2);border-radius:8px;text-align:center;color:var(--text-muted);font-size:.7rem;letter-spacing:.15em;" data-tr="☝️ Soldaki vücut haritasından bir nokta seç" data-en="☝️ Select a point from the body map on the left">
+            ☝️ Soldaki vücut haritasından bir nokta seç
+          </div>
+          <div id="pulsePanel" style="display:none;flex-direction:column;gap:1rem;">
+            <div style="background:var(--bg-card);border:1px solid var(--gold-border);border-radius:8px;overflow:hidden;">
+              <div id="pulsePanelHeader" style="padding:1rem 1.4rem;background:var(--bg-primary);border-bottom:1px solid var(--gold-border);display:flex;align-items:center;gap:.8rem;">
+                <span id="pulsePanelIcon" style="font-size:1.6rem;"></span>
+                <div>
+                  <div id="pulsePanelTitle" style="font-family:var(--font-display);font-size:1.3rem;color:var(--gold-bright);"></div>
+                  <div id="pulsePanelNum" style="font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-muted);"></div>
+                </div>
+              </div>
+              <div id="pulsePanelBody" style="padding:1.2rem 1.4rem;font-size:.75rem;color:var(--text-secondary);line-height:1.8;"></div>
+              <div id="pulsePanelTip" style="padding:.7rem 1.4rem;background:rgba(212,168,67,.05);border-top:1px solid rgba(212,168,67,.08);font-size:.68rem;color:var(--text-muted);font-style:italic;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Akıllı Dozaj" data-en="Smart Dosage">Akıllı Dozaj</div>
+        <h2 class="section-title" data-tr="Kaç <em>Sprey?</em>" data-en="How Many <em>Sprays?</em>">Kaç <em>Sprey?</em></h2>
+        <div class="section-divider"></div>
+        <p style="font-size:.78rem;color:var(--text-secondary);margin-top:1.2rem;" data-tr="Parfümünü seç veya yoğunluğu kendin belirle - ideal sprey sayısını hesapla." data-en="Choose your perfume or determine the intensity yourself - calculate the ideal number of sprays.">Parfümünü seç veya yoğunluğu kendin belirle - ideal sprey sayısını hesapla.</p>
+      </div>
+
+      <div style="max-width:700px;margin:0 auto;background:var(--bg-card);border:1px solid var(--gold-border);border-radius:10px;overflow:hidden;">
+        <div style="padding:1.6rem;display:flex;flex-direction:column;gap:1.4rem;">
+
+
+          <div style="position:relative;">
+            <div style="font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.7rem;" data-tr="Hızlı Parfüm Seçimi" data-en="Quick Perfume Selection">Hızlı Parfüm Seçimi</div>
+            <input 
+              type="text" id="perfumeSearch" 
+              placeholder="Örn: Sauvage, Black Orchid, Bleu de Chanel..."
+              data-tr="Örn: Sauvage, Black Orchid, Bleu de Chanel..."
+              data-en="E.g.: Sauvage, Black Orchid, Bleu de Chanel..."
+              autocomplete="off"
+              style="
+                width:100%; background:var(--bg-primary); border:1px solid var(--gold-border);
+                border-radius:6px; color:var(--text-primary); font-family:var(--font-ui);
+                font-size:.8rem; padding:.8rem 1rem; outline:none;
+              "
+              oninput="searchPerfume(this.value)"
+            />
+            <div id="perfumeResults" style="
+              position:absolute; top:100%; left:0; right:0; z-index:100;
+              background:var(--bg-card); border:1px solid var(--gold-border);
+              border-top:none; border-radius:0 0 6px 6px; display:none;
+              max-height:200px; overflow-y:auto; box-shadow:var(--shadow-hover);
+            "></div>
+          </div>
+
+          <div>
+            <div style="font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.7rem;" data-tr="Parfüm Ailesi / Yoğunluğu" data-en="Perfume Family / Intensity">Parfüm Ailesi / Yoğunluğu</div>
+            <div style="display:flex;flex-wrap:wrap;gap:.5rem;" id="calcFamily">
+              <button class="calc-btn active" data-family="hafif" onclick="calcSelect(this,'family')" data-tr="💧 Hafif (EDT)" data-en="💧 Light (EDT)">💧 Hafif (EDT)</button>
+              <button class="calc-btn" data-family="orta" onclick="calcSelect(this,'family')" data-tr="🌿 Orta (EDP)" data-en="🌿 Medium (EDP)">🌿 Orta (EDP)</button>
+              <button class="calc-btn" data-family="yogun" onclick="calcSelect(this,'family')" data-tr="🔥 Yoğun (Elixir/Extrait)" data-en="🔥 Intense (Elixir/Extrait)">🔥 Yoğun (Elixir/Extrait)</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.7rem;" data-tr="Ortam" data-en="Environment">Ortam</div>
+            <div style="display:flex;flex-wrap:wrap;gap:.5rem;" id="calcOrtam">
+              <button class="calc-btn active" data-ortam="acik" onclick="calcSelect(this,'ortam')" data-tr="🌿 Açık Hava" data-en="🌿 Outdoors">🌿 Açık Hava</button>
+              <button class="calc-btn" data-ortam="ofis" onclick="calcSelect(this,'ortam')" data-tr="🏢 Ofis" data-en="🏢 Office">🏢 Ofis</button>
+              <button class="calc-btn" data-ortam="kapali" onclick="calcSelect(this,'ortam')" data-tr="🏠 Kapalı Mekân" data-en="🏠 Indoors">🏠 Kapalı Mekân</button>
+              <button class="calc-btn" data-ortam="gece" onclick="calcSelect(this,'ortam')" data-tr="🌙 Gece / Özel" data-en="🌙 Night / Special">🌙 Gece / Özel</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.7rem;" data-tr="Mevsim" data-en="Season">Mevsim</div>
+            <div style="display:flex;flex-wrap:wrap;gap:.5rem;" id="calcMevsim">
+              <button class="calc-btn active" data-mevsim="yaz" onclick="calcSelect(this,'mevsim')" data-tr="☀️ Yaz" data-en="☀️ Summer">☀️ Yaz</button>
+              <button class="calc-btn" data-mevsim="ilkbahar" onclick="calcSelect(this,'mevsim')" data-tr="🌸 İlkbahar" data-en="🌸 Spring">🌸 İlkbahar</button>
+              <button class="calc-btn" data-mevsim="sonbahar" onclick="calcSelect(this,'mevsim')" data-tr="🍂 Sonbahar" data-en="🍂 Autumn">🍂 Sonbahar</button>
+              <button class="calc-btn" data-mevsim="kis" onclick="calcSelect(this,'mevsim')" data-tr="❄️ Kış" data-en="❄️ Winter">❄️ Kış</button>
+            </div>
+          </div>
+
+
+          <div id="calcResult" style="background:var(--bg-secondary);border:1px solid var(--gold-border);border-radius:8px;padding:1.4rem;text-align:center;transition:all .4s;">
+            <div style="font-family:var(--font-display);font-size:3.5rem;color:var(--gold-bright);line-height:1;" id="calcSpreyNum">2</div>
+            <div style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-muted);margin-top:.3rem;" data-tr="Önerilen Sprey" data-en="Recommended Spray">Önerilen Sprey</div>
+            <div style="font-size:.74rem;color:var(--text-secondary);margin-top:.8rem;line-height:1.7;" id="calcMessage">
+              Açık havada, yaz sıcağında hafif bir EDT için 2 sprey ideal başlangıç.
+            </div>
+            <div style="margin-top:.8rem;font-size:.65rem;color:var(--text-muted);font-style:italic;" id="calcExtra"></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="footer-brand">My Sillage</div>
+    <div class="footer-tagline" data-tr="Curated by Obsession · Est. 2026" data-en="Curated by Obsession · Est. 2026">Curated by Obsession · Est. 2026</div>
+    <div class="footer-author" data-tr="Deniz Öztürk 20210504 tarafından yapıldı" data-en="by Deniz Öztürk 20210504">Deniz Öztürk 20210504 tarafından yapıldı</div>
+    <nav class="footer-links">
+      <a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a>
+      <a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+      <a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a>
+      <a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a>
+      <a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a>
+    </nav>
+    <p class="footer-copy" data-tr="© 2026 My Sillage - Tüm hakları saklıdır." data-en="© 2026 My Sillage - All rights reserved.">© 2026 My Sillage - Tüm hakları saklıdır.</p>
+  </footer>
+
+
+  <script src="js/perfumes.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+
+  <script>
+    (function() {
+      "use strict";
+
+      let currentPulseKey = null;
+
+      const pulseInfo = {
+        boyun: { 
+          icon: "🧑", 
+          num: { tr: "Nokta 1", en: "Point 1" }, 
+          title: { tr: "Boyun · Ön & Yan", en: "Neck · Front & Side" }, 
+          body: { tr: "Boyun, en güçlü nabız noktalarından biridir. Karotis arteri yüzeye yakın aktığından ısı üretimi yüksektir. Parfüm buraya uygulandığında saatlerce çevreye yayılır.", en: "The neck is one of the strongest pulse points. Heat production is high because the carotid artery flows close to the surface. When perfume is applied here, it spreads for hours." }, 
+          tip: { tr: "💡 Tek nokta seçmek zorundaysan - burası.", en: "💡 If you have to choose only one point - this is it." } 
+        },
+        kulak: { 
+          icon: "👂", 
+          num: { tr: "Nokta 2", en: "Point 2" }, 
+          title: { tr: "Kulak Arkası", en: "Behind the Ear" }, 
+          body: { tr: "Kulak arkası ısı yayan küçük bir alan olmasına rağmen parfümü son derece uzun süre tutar. Saçın temas ettiği bu bölge koku moleküllerini hapseder.", en: "Behind the ear is a small heat-emitting area that holds perfume for a very long time. This area, where hair makes contact, traps scent molecules." }, 
+          tip: { tr: "💡 Özellikle sıcak ve tatlı parfümler için mükemmel.", en: "💡 Especially perfect for warm and sweet perfumes." } 
+        },
+        gogus: { 
+          icon: "💪", 
+          num: { tr: "Nokta 3", en: "Point 3" }, 
+          title: { tr: "Göğüs · Sternal Bölge", en: "Chest · Sternal Area" }, 
+          body: { tr: "Göğüs kemiği çevresindeki deri geniş bir yüzey sunar ve vücudun doğal ısı kaynağına yakındır. Özellikle ağır ve oryantal parfümler için idealdir.", en: "The skin around the breastbone offers a large surface area and is close to the body's natural heat source. Ideal for heavy and oriental perfumes." }, 
+          tip: { tr: "💡 Odunsu ve oryantal parfümler için ideal.", en: "💡 Ideal for woody and oriental perfumes." } 
+        },
+        bilek: { 
+          icon: "⌚", 
+          num: { tr: "Nokta 4", en: "Point 4" }, 
+          title: { tr: "Bilek · İç Yüzey", en: "Wrist · Inner Surface" }, 
+          body: { tr: "En klasik ve en sık tercih edilen nokta. Bileğin iç yüzeyindeki nabız, parfümü sürekli aktive eder. Asla bileği birbirine sürtme!", en: "The most classic and frequently preferred point. The pulse on the inner surface of the wrist constantly activates the perfume. Never rub wrists together!" }, 
+          tip: { tr: "💡 Özellikle narenciye ve taze parfümler için.", en: "💡 Especially for citrus and fresh perfumes." } 
+        },
+        diz:  { 
+          icon: "🦵", 
+          num: { tr: "Nokta 5", en: "Point 5" }, 
+          title: { tr: "Diz Arkası", en: "Behind the Knee" }, 
+          body: { tr: "Genellikle göz ardı edilen bu nokta, aslında güçlü bir nabız noktasıdır. Yürürken vücut hareketi parfümün yukarı doğru taşınmasını sağlar.", en: "Often overlooked, this is actually a strong pulse point. Body movement while walking carries the perfume upwards." }, 
+          tip: { tr: "💡 Aktif günlerde ve uzun etkinliklerde ekstra kalıcılık için.", en: "💡 For extra longevity on active days and long events." } 
+        }
+      };
+
+      window.showPulse = function(key) {
+        currentPulseKey = key;
+        const info = pulseInfo[key];
+        if (!info) return;
+        
+        const lang = getCurrentLanguage();
+        
+        document.querySelectorAll(".hotspot").forEach(hs => hs.classList.remove("active"));
+        const activeHs = document.getElementById("hs-" + key);
+        if (activeHs) activeHs.classList.add("active");
+        
+        const def = document.getElementById("pulseDefault");
+        const panel = document.getElementById("pulsePanel");
+        if (def) def.style.display = "none";
+        if (panel) {
+          panel.style.display = "flex";
+          document.getElementById("pulsePanelIcon").textContent = info.icon;
+          document.getElementById("pulsePanelTitle").textContent = info.title[lang];
+          document.getElementById("pulsePanelNum").textContent = info.num[lang];
+          document.getElementById("pulsePanelBody").textContent = info.body[lang];
+          document.getElementById("pulsePanelTip").textContent = info.tip[lang];
+        }
+      };
+
+      window.addEventListener('languageChanged', () => {
+        if (currentPulseKey) showPulse(currentPulseKey);
+        updateCalc();
+      });
+
+      const calcMessages = {
+        hafif: {
+          acik: { yaz: [2, { tr: "Açık havada EDT hafif kalır. 2 sprey ile başla.", en: "EDT stays light outdoors. Start with 2 sprays." }], ilkbahar: [2, { tr: "İlkbahar serinliği EDT için mükemmeldir.", en: "Spring coolness is perfect for EDT." }], sonbahar: [3, { tr: "Sonbaharda EDT 3 sprey daha iyi iz bırakır.", en: "EDT leaves a better trail with 3 sprays in autumn." }], kis: [3, { tr: "Soğuk hava buharlaşmayı yavaşlatır.", en: "Cold air slows down evaporation." }] },
+          ofis: { yaz: [1, { tr: "Ofiste EDT dahi tek sprey yeterlidir.", en: "Even for EDT, a single spray is enough in the office." }], ilkbahar: [2, { tr: "İlkbaharda ofis için 2 sprey makul.", en: "2 sprays are reasonable for the office in spring." }], sonbahar: [2, { tr: "Sonbahar ofisi için 2 sprey.", en: "2 sprays for the autumn office." }], kis: [2, { tr: "Kış ofisinde 2 sprey yeterli.", en: "2 sprays are enough in the winter office." }] },
+          kapali: { yaz: [1, { tr: "Kapalı mekânda yazın tek sprey yeterli.", en: "A single spray is enough indoors in summer." }], ilkbahar: [1, { tr: "Kapalı alan + EDT = 1 sprey.", en: "Indoor area + EDT = 1 spray." }], sonbahar: [2, { tr: "Sonbaharda kapalı mekân için 2 sprey.", en: "2 sprays for indoors in autumn." }], kis: [2, { tr: "Kışın kapalı mekânda 2 sprey.", en: "2 sprays indoors in winter." }] },
+          gece: { yaz: [2, { tr: "Yaz gecesi için 2-3 sprey.", en: "2-3 sprays for a summer night." }], ilkbahar: [2, { tr: "İlkbahar gecesi 2 sprey yeterli.", en: "2 sprays are enough for a spring night." }], sonbahar: [3, { tr: "Sonbahar gecesi 3 spreyden aşağı kullanma.", en: "Don't use less than 3 sprays for an autumn night." }], kis: [3, { tr: "Kış gecesi 3 sprey idealdir.", en: "3 sprays are ideal for a winter night." }] }
+        },
+        orta: {
+          acik: { yaz: [2, { tr: "Yazın açık havada EDP: 2 sprey.", en: "EDP outdoors in summer: 2 sprays." }], ilkbahar: [2, { tr: "İlkbaharda EDP: 2 sprey.", en: "EDP in spring: 2 sprays." }], sonbahar: [2, { tr: "Sonbaharda 2 sprey mükemmel denge sağlar.", en: "2 sprays provide a perfect balance in autumn." }], kis: [3, { tr: "Kışın açık havada 3 sprey derinlik katar.", en: "3 sprays add depth outdoors in winter." }] },
+          ofis: { yaz: [1, { tr: "EDP ofiste dikkatli! 1 sprey yeterli.", en: "Careful with EDP in the office! 1 spray is enough." }], ilkbahar: [1, { tr: "Ofiste EDP: 1 sprey.", en: "EDP in the office: 1 spray." }], sonbahar: [2, { tr: "Ofiste EDP: 2 sprey sabah yeterlidir.", en: "2 sprays of EDP in the morning is enough for the office." }], kis: [2, { tr: "Kış ofisi + EDP = 2 sprey.", en: "Winter office + EDP = 2 sprays." }] },
+          kapali: { yaz: [1, { tr: "Kapalı mekânda yazın 1 sprey.", en: "1 spray indoors in summer." }], ilkbahar: [1, { tr: "EDP + kapalı alan: 1 sprey.", en: "EDP + indoor area: 1 spray." }], sonbahar: [2, { tr: "Sonbaharda EDP kapalı mekân: 2 sprey.", en: "EDP indoors in autumn: 2 sprays." }], kis: [2, { tr: "Kış + EDP + kapalı = 2 sprey.", en: "Winter + EDP + indoor = 2 sprays." }] },
+          gece: { yaz: [2, { tr: "Yaz gecesi EDP: 2 sprey ideal.", en: "EDP for a summer night: 2 sprays are ideal." }], ilkbahar: [2, { tr: "İlkbahar gecesi EDP: 2 sprey.", en: "Spring night EDP: 2 sprays." }], sonbahar: [3, { tr: "Sonbahar gecesi EDP: 3 sprey.", en: "Autumn night EDP: 3 sprays." }], kis: [3, { tr: "Kış gecesi EDP: 3 sprey.", en: "Winter night EDP: 3 sprays." }] }
+        },
+        yogun: {
+          acik: { yaz: [1, { tr: "Elixir yazın açık havada: 1 sprey yeter.", en: "Elixir outdoors in summer: 1 spray is enough." }], ilkbahar: [1, { tr: "Güçlü formül + açık hava: 1 sprey.", en: "Strong formula + outdoors: 1 spray." }], sonbahar: [2, { tr: "Sonbaharda Extrait: 2 sprey.", en: "Extrait in autumn: 2 sprays." }], kis: [2, { tr: "Kış + Extrait: 2 sprey.", en: "Winter + Extrait: 2 sprays." }] },
+          ofis: { yaz: [1, { tr: "OFİSTE SADECE 1 SPREY!", en: "ONLY 1 SPRAY IN THE OFFICE!" }], ilkbahar: [1, { tr: "Elixir ofis: 1 sprey yeterli.", en: "Elixir in office: 1 spray is enough." }], sonbahar: [1, { tr: "Elixir ofis sonbahar: 1 sprey.", en: "Elixir in office autumn: 1 spray." }], kis: [1, { tr: "Kış ofis + Elixir: 1 sprey.", en: "Winter office + Elixir: 1 spray." }] },
+          kapali: { yaz: [1, { tr: "Kapalı + yaz + Elixir: 1 sprey.", en: "Indoor + summer + Elixir: 1 spray." }], ilkbahar: [1, { tr: "Elixir + kapalı: 1 sprey.", en: "Elixir + indoor: 1 spray." }], sonbahar: [1, { tr: "Elixir + kapalı + sonbahar: 1 sprey.", en: "Elixir + indoor + autumn: 1 spray." }], kis: [2, { tr: "Kış + kapalı + Extrait: 2 sprey.", en: "Winter + indoor + Extrait: 2 sprays." }] },
+          gece: { yaz: [1, { tr: "Yaz gecesi Elixir: 1 sprey.", en: "Summer night Elixir: 1 spray." }], ilkbahar: [1, { tr: "İlkbahar gecesi Elixir: 1 sprey.", en: "Spring night Elixir: 1 spray." }], sonbahar: [2, { tr: "Sonbahar gecesi Elixir: 2 sprey.", en: "Autumn night Elixir: 2 sprays." }], kis: [2, { tr: "Kış gecesi Elixir: 2 sprey.", en: "Winter night Elixir: 2 sprays." }] }
+        }
+      };
+
+      const calcState = { family: "hafif", ortam: "acik", mevsim: "yaz" };
+
+      window.calcSelect = function(btn, group) {
+        const container = btn.parentElement;
+        if (container) {
+          container.querySelectorAll(".calc-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          calcState[group] = btn.getAttribute("data-" + group);
+          updateCalc();
+        }
+      };
+
+      function updateCalc() {
+        const res = calcMessages[calcState.family]?.[calcState.ortam]?.[calcState.mevsim];
+        if (!res) return;
+        
+        const lang = getCurrentLanguage();
+        const [num, msgObj] = res;
+        const msg = msgObj[lang];
+        
+        const numEl = document.getElementById("calcSpreyNum");
+        const msgEl = document.getElementById("calcMessage");
+        const extraEl = document.getElementById("calcExtra");
+        if (numEl) numEl.textContent = num;
+        if (msgEl) msgEl.textContent = msg;
+        
+        const extras = { 
+          1: { tr: "⚠️ Tek sprey - boyun veya bilek.", en: "⚠️ Single spray - neck or wrist." }, 
+          2: { tr: "✅ Klasik doz - boyun + bilek.", en: "✅ Classic dose - neck + wrist." }, 
+          3: { tr: "💪 Maksimum etki - boyun + iki bilek.", en: "💪 Maximum impact - neck + both wrists." } 
+        };
+        if (extraEl) extraEl.textContent = extras[num]?.[lang] || "";
+      }
+
+      window.searchPerfume = function(val) {
+        const results = document.getElementById("perfumeResults");
+        if (!val || val.length < 2) {
+          results.style.display = "none";
+          return;
+        }
+
+        const filtered = perfumeDB.filter(p => 
+          p.name.toLowerCase().includes(val.toLowerCase()) || 
+          p.brand.toLowerCase().includes(val.toLowerCase())
+        );
+
+        if (filtered.length > 0) {
+          results.innerHTML = filtered.map(p => {
+            const escapedName = p.name.replace(/'/g, "\\'");
+            const escapedFamily = p.family.replace(/'/g, "\\'");
+            
+            return `
+              <div 
+                style="padding: .8rem 1rem; cursor: pointer; border-bottom: 1px solid rgba(212,168,67,0.1); font-size: .75rem; transition: background .2s;"
+                onmouseover="this.style.background='var(--gold-subtle)'"
+                onmouseout="this.style.background='transparent'"
+                onclick="selectPerfume('${escapedName}', '${escapedFamily}')"
+              >
+                <div style="color: var(--gold-bright); font-weight: 600;">${p.name}</div>
+                <div style="color: var(--text-muted); font-size: .65rem;">${p.brand}</div>
+              </div>
+            `;
+          }).join("");
+          results.style.display = "block";
+        } else {
+          results.style.display = "none";
+        }
+      };
+
+      window.selectPerfume = function(name, family) {
+        document.getElementById("perfumeSearch").value = name;
+        document.getElementById("perfumeResults").style.display = "none";
+        
+        const buttons = document.querySelectorAll("#calcFamily .calc-btn");
+        buttons.forEach(btn => {
+          if (btn.getAttribute("data-family") === family) {
+            calcSelect(btn, "family");
+          }
+        });
+      };
+
+      const styleEl = document.createElement("style");
+      styleEl.textContent = ".calc-btn { font-family: var(--font-ui); font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; padding: .5rem 1rem; border: 1px solid rgba(212,168,67,.2); border-radius: 3px; color: var(--text-muted); cursor: pointer; background: none; transition: all .25s; } .calc-btn:hover, .calc-btn.active { border-color: var(--gold-bright); color: var(--gold-bright); background: var(--gold-subtle); }";
+      document.head.appendChild(styleEl);
+
+      updateCalc();
+    })();
+  </script>
+</body>
+</html>

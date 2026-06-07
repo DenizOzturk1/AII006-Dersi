@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parfüm Sözlüğü - My Sillage</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .fav-btn {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      font-size: 1.2rem; cursor: pointer; background: none; border: none;
+      color: var(--text-muted); padding: 0.5rem; transition: all 0.3s;
+      z-index: 10; line-height: 1;
+    }
+    .fav-btn:hover { color: #f5c518; transform: scale(1.2) rotate(15deg); }
+    .fav-btn.active { color: #f5c518; }
+    .glossary-entry { cursor:default; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-main">My Sillage</span>
+      <span class="brand-sub">Curated by Obsession</span>
+      <span class="brand-author">Deniz Öztürk 20210504</span>
+    </a>
+    <div class="nav-right">
+      <div class="lang-toggle" onclick="toggleLanguage()" title="Dil Değiştir / Change Language" data-tr-title="Dil Değiştir / Change Language" data-en-title="Change Language / Dil Değiştir">
+        <span class="lang-btn lang-btn-tr">TR</span>
+        <span class="lang-btn lang-btn-en">EN</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a></li>
+        <li><a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a></li>
+        <li><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+        <li><a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a></li>
+        <li><a href="sozluk.html" class="active" data-tr="Sözlük" data-en="Glossary">Sözlük</a></li>
+        <li><a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a></li>
+        <li><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a></li>
+        <li><a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a></li>
+        <li><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a></li>
+      </ul>
+      <div class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir" data-tr-title="Tema Değiştir" data-en-title="Toggle Theme">
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+        <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-hero">
+      <div class="hero-eyebrow" style="justify-content:center;margin-bottom:1rem;" data-tr="Parfüm Ansiklopedisi" data-en="Perfume Encyclopedia">Parfüm Ansiklopedisi</div>
+      <h1 class="page-hero-title" data-tr="Parfüm <em>Sözlüğü</em>" data-en="Perfume <em>Glossary</em>">Parfüm <em>Sözlüğü</em></h1>
+      <p class="page-hero-sub" data-tr="A'dan Z'ye - koku dünyasının terimleri" data-en="A to Z - terms of the fragrance world">A'dan Z'ye - koku dünyasının terimleri</p>
+    </div>
+
+    <section class="section">
+      <div class="glossary-layout">
+
+
+        <div class="glossary-sidebar">
+          <a class="sidebar-alpha-btn" href="#harf-a">A</a>
+          <a class="sidebar-alpha-btn" href="#harf-b">B</a>
+          <a class="sidebar-alpha-btn" href="#harf-c">C</a>
+          <a class="sidebar-alpha-btn" href="#harf-d">D</a>
+          <a class="sidebar-alpha-btn" href="#harf-e">E</a>
+          <a class="sidebar-alpha-btn" href="#harf-f">F</a>
+          <a class="sidebar-alpha-btn" href="#harf-g">G</a>
+          <a class="sidebar-alpha-btn" href="#harf-k">K</a>
+          <a class="sidebar-alpha-btn" href="#harf-l">L</a>
+          <a class="sidebar-alpha-btn" href="#harf-m">M</a>
+          <a class="sidebar-alpha-btn" href="#harf-n">N</a>
+          <a class="sidebar-alpha-btn" href="#harf-o">O</a>
+          <a class="sidebar-alpha-btn" href="#harf-p">P</a>
+          <a class="sidebar-alpha-btn" href="#harf-s">S</a>
+          <a class="sidebar-alpha-btn" href="#harf-t">T</a>
+          <a class="sidebar-alpha-btn" href="#harf-v">V</a>
+        </div>
+
+        <div class="glossary-content-main">
+
+          <div style="max-width:900px;margin:0 auto 2.5rem;position:relative;">
+            <input
+              type="text" id="sozlukSearch"
+              placeholder="Terim veya açıklama ara... (örn: oud, sillage, niche)"
+              data-tr="Terim veya açıklama ara... (örn: oud, sillage, niche)"
+              data-en="Search term or description... (e.g.: oud, sillage, niche)"
+              oninput="filterGlossary()"
+              style="
+                width:100%; background:var(--bg-card); border:1px solid var(--gold-border);
+                border-radius:8px; color:var(--text-primary); font-family:var(--font-ui);
+                font-size:.85rem; padding:1.1rem 1.2rem 1.1rem 3rem; outline:none;
+                letter-spacing:.05em; transition:box-shadow .3s;
+              "
+            />
+            <span style="position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);font-size:1.1rem;color:var(--gold-dim);">🔍</span>
+            <span id="searchCount" style="position:absolute;right:1.1rem;top:50%;transform:translateY(-50%);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);"></span>
+          </div>
+
+
+          <div id="favSection" style="max-width:900px;margin:0 auto 2.5rem;display:none;">
+            <div style="display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem;">
+              <span style="font-family:var(--font-display);font-size:1.6rem;color:var(--gold-bright);" data-tr="⭐ Favorilerim" data-en="⭐ My Favorites">⭐ Favorilerim</span>
+              <button onclick="clearFavs()" style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;padding:.4rem .8rem;border:1px solid rgba(212,168,67,.2);border-radius:4px;color:var(--text-muted);cursor:pointer;background:none;transition:all .2s;" onmouseover="this.style.color='var(--gold-bright)';this.style.borderColor='var(--gold-bright)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='rgba(212,168,67,.2)'" data-tr="Temizle" data-en="Clear">Temizle</button>
+            </div>
+            <div id="favList" style="display:flex;flex-direction:column;gap:.8rem;"></div>
+          </div>
+
+
+          <div id="noSearchResult" style="display:none;text-align:center;padding:4rem;color:var(--text-muted);font-size:.8rem;letter-spacing:.2em;" data-tr="Bu aramaya uygun terim bulunamadı." data-en="No terms found matching this search.">
+            Bu aramaya uygun terim bulunamadı.
+          </div>
+
+
+          <div class="glossary-list">
+
+          <div class="glossary-section reveal" id="harf-a">
+            <div class="glossary-letter">A</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Accord</div><div class="glossary-type" data-tr="Temel Kavram" data-en="Basic Concept">Temel Kavram</div></div>
+                <div><p class="glossary-def" data-tr="Birden fazla koku maddesinin bir araya gelerek oluşturduğu uyumlu bütün. Tek başlarına farklı kokan malzemeler bir akkord oluşturduğunda yeni ve özgün bir koku kimliği ortaya çıkar." data-en="A harmonious whole created by multiple fragrance ingredients coming together. When materials that smell different on their own form an accord, a new and unique fragrance identity emerges.">Birden fazla koku maddesinin bir araya gelerek oluşturduğu uyumlu bütün. Tek başlarına farklı kokan malzemeler bir akkord oluşturduğunda yeni ve özgün bir koku kimliği ortaya çıkar.</p><p class="glossary-example" data-tr="Örnek: Lavanta + Bergamot + Meşe Yosunu = Fougère akkordu" data-en="Example: Lavender + Bergamot + Oakmoss = Fougère accord">Örnek: Lavanta + Bergamot + Meşe Yosunu = Fougère akkordu</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Aldehit</div><div class="glossary-type" data-tr="Kimyasal Bileşen" data-en="Chemical Component">Kimyasal Bileşen</div></div>
+                <div><p class="glossary-def" data-tr="Doğal veya sentetik kökenli organik bileşikler. Parfümde parlak, sabunsu, metalik veya yağlı notalar üretir. Chanel No.5'i ikonikleştiren ana bileşendir." data-en="Organic compounds of natural or synthetic origin. Produces bright, soapy, metallic, or oily notes in perfume. The main component that made Chanel No.5 iconic.">Doğal veya sentetik kökenli organik bileşikler. Parfümde parlak, sabunsu, metalik veya yağlı notalar üretir. Chanel No.5'i ikonikleştiren ana bileşendir.</p><p class="glossary-example" data-tr="Örnek: C-11 aldehi yağlı-balıksı, C-12 sabunsu-pudralı bir his verir." data-en="Example: C-11 aldehyde gives an oily-fishy feel, C-12 gives a soapy-powdery feel.">Örnek: C-11 aldehi yağlı-balıksı, C-12 sabunsu-pudralı bir his verir.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Ambergris</div><div class="glossary-type" data-tr="Ham Madde" data-en="Raw Material">Ham Madde</div></div>
+                <div><p class="glossary-def" data-tr="Sperm balinasının sindirim sisteminden çıkan, okyanus kıyılarında bulunan nadir bir madde. Tatlı, odunsu, denizsel bir koku verir ve parfümlerin sabitleyicisi olarak kullanılır. Günümüzde sentetik ambroxan ile ikame edilir." data-en="A rare substance found on ocean shores, originating from the digestive system of the sperm whale. Gives a sweet, woody, marine scent and is used as a fixative in perfumes. Today, it is substituted with synthetic ambroxan.">Sperm balinasının sindirim sisteminden çıkan, okyanus kıyılarında bulunan nadir bir madde. Tatlı, odunsu, denizsel bir koku verir ve parfümlerin sabitleyicisi olarak kullanılır. Günümüzde sentetik ambroxan ile ikame edilir.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Ambroxan</div><div class="glossary-type" data-tr="Sentetik Bileşen" data-en="Synthetic Component">Sentetik Bileşen</div></div>
+                <div><p class="glossary-def" data-tr="Ambergris'ten ilham alan sentetik molekül. Modern parfümerinin 'gizli silahı' - cilt kokusu gibi ciltle bütünleşir, kalıcılığı artırır ve okyanus nüansı taşır. Sauvage, Imagination, Tygar'ın temel izi." data-en="A synthetic molecule inspired by ambergris. Modern perfumery's 'secret weapon' - integrates with the skin like a skin scent, increases longevity, and carries oceanic nuances. The basic trail of Sauvage, Imagination, Tygar.">Ambergris'ten ilham alan sentetik molekül. Modern parfümerinin "gizli silahı" - cilt kokusu gibi ciltle bütünleşir, kalıcılığı artırır ve okyanus nüansı taşır. Sauvage, Imagination, Tygar'ın temel izi.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-b">
+            <div class="glossary-letter">B</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Base Notes</div><div class="glossary-type" data-tr="Nota Katmanı" data-en="Note Layer">Nota Katmanı</div></div>
+                <div><p class="glossary-def" data-tr="Alt notalar. Parfümün en son hissedilen ve en uzun süre kalan katmanı. Genellikle ağır moleküller içerir; oud, amber, misk, sandal ağacı ve patchouli bu grubun yaygın üyeleridir." data-en="Base notes. The last felt and longest-lasting layer of the perfume. Usually contains heavy molecules; oud, amber, musk, sandalwood, and patchouli are common members of this group.">Alt notalar. Parfümün en son hissedilen ve en uzun süre kalan katmanı. Genellikle ağır moleküller içerir; oud, amber, misk, sandal ağacı ve patchouli bu grubun yaygın üyeleridir.</p><p class="glossary-example" data-tr="Örnek: Bottled Absolu'nun frankincense ve deri tabanı 8+ saat sürer." data-en="Example: Bottled Absolu's frankincense and leather base lasts 8+ hours.">Örnek: Bottled Absolu'nun frankincense ve deri tabanı 8+ saat sürer.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Benzoin</div><div class="glossary-type" data-tr="Ham Madde" data-en="Raw Material">Ham Madde</div></div>
+                <div><p class="glossary-def" data-tr="Güneydoğu Asya'dan gelen Styrax ağacının reçinesi. Vanilyamsı, tatlı, hafif tütünsü bir koku profili sunar. Tatlı parfümlerin ve oryantal akkorların temel yapı taşlarından biri." data-en="Resin from the Styrax tree originating from Southeast Asia. Offers a vanillic, sweet, slightly tobacco-like scent profile. One of the basic building blocks of sweet perfumes and oriental accords.">Güneydoğu Asya'dan gelen Styrax ağacının reçinesi. Vanilyamsı, tatlı, hafif tütünsü bir koku profili sunar. Tatlı parfümlerin ve oryantal akkorların temel yapı taşlarından biri.</p><p class="glossary-example" data-tr="Örnek: Le Male Elixir ve Paradigme'de temel aldehitik baz." data-en="Example: Basic aldehydic base in Le Male Elixir and Paradigme.">Örnek: Le Male Elixir ve Paradigme'de temel aldehitik baz.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Bergamot</div><div class="glossary-type" data-tr="Ham Madde · Narenciye" data-en="Raw Material · Citrus">Ham Madde · Narenciye</div></div>
+                <div><p class="glossary-def" data-tr="İtalya Kalabriya bölgesine özgü armut-portakal melezi narenciye. Parfümcülüğün en yaygın açılış notası. Hem taze hem çiçeksi nüanslar taşır, diğer malzemeleri birbirine bağlar." data-en="Pear-orange hybrid citrus unique to the Calabria region of Italy. The most common opening note in perfumery. Carries both fresh and floral nuances, binding other materials together.">İtalya Kalabriya bölgesine özgü armut-portakal melezi narenciye. Parfümcülüğün en yaygın açılış notası. Hem taze hem çiçeksi nüanslar taşır, diğer malzemeleri birbirine bağlar.</p><p class="glossary-example" data-tr="Örnek: Neredeyse her erkek parfümünde üst nota olarak yer alır." data-en="Example: Present as a top note in almost every men's perfume.">Örnek: Neredeyse her erkek parfümünde üst nota olarak yer alır.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-c">
+            <div class="glossary-letter">C</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Chypre</div><div class="glossary-type" data-tr="Akkord / Aile" data-en="Accord / Family">Akkord / Aile</div></div>
+                <div><p class="glossary-def" data-tr="Bergamot, labdanum ve meşe yosununun oluşturduğu klasik parfüm yapısı. Adını Kıbrıs adasından alır. Hem taze hem derin, hem maskülen hem feminen olabilen bu yapı modern parfümerinin temel direklerinden biridir." data-en="Classic perfume structure formed by bergamot, labdanum, and oakmoss. Named after the island of Cyprus. This structure, which can be both fresh and deep, masculine and feminine, is one of the main pillars of modern perfumery.">Bergamot, labdanum ve meşe yosununun oluşturduğu klasik parfüm yapısı. Adını Kıbrıs adasından alır. Hem taze hem derin, hem maskülen hem feminen olabilen bu yapı modern parfümerinin temel direklerinden biridir.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Coumarin</div><div class="glossary-type" data-tr="Sentetik Bileşen" data-en="Synthetic Component">Sentetik Bileşen</div></div>
+                <div><p class="glossary-def" data-tr="Taze kesilmiş saman, vanilya ve badem arası tatlı-aromatik koku. Fougère ailesinin olmazsa olmazı. God of Fire'ın 'mavi coumarin' varyantı, tatlılığa metalik bir boyut katar." data-en="Sweet-aromatic scent between freshly cut hay, vanilla, and almond. Indispensable for the Fougère family. The 'blue coumarin' variant of God of Fire adds a metallic dimension to sweetness.">Taze kesilmiş saman, vanilya ve badem arası tatlı-aromatik koku. Fougère ailesinin olmazsa olmazı. God of Fire'ın "mavi coumarin" varyantı, tatlılığa metalik bir boyut katar.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-d">
+            <div class="glossary-letter">D</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Decant</div><div class="glossary-type" data-tr="Koleksiyonculuk" data-en="Collecting">Koleksiyonculuk</div></div>
+                <div><p class="glossary-def" data-tr="Tam şişeden daha küçük miktarda (1–10ml) aktarılmış parfüm örneği. Pahalı ya da niche parfümleri tam şişe satın almadan önce test etmenin en akıllı yolu. Parfüm topluluklarında takas ve satış için yaygın format." data-en="A perfume sample transferred from a full bottle in a smaller amount (1–10ml). The smartest way to test expensive or niche perfumes before buying a full bottle. A common format for trading and selling in perfume communities.">Tam şişeden daha küçük miktarda (1–10ml) aktarılmış parfüm örneği. Pahalı ya da niche parfümleri tam şişe satın almadan önce test etmenin en akıllı yolu. Parfüm topluluklarında takas ve satış için yaygın format.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Drydown</div><div class="glossary-type" data-tr="Temel Kavram" data-en="Basic Concept">Temel Kavram</div></div>
+                <div><p class="glossary-def" data-tr="Parfümün cilde uygulandıktan sonra alkolün buharlaşmasıyla birlikte gelişen koku evrimi. İlk püskürtmeden 20-30 dakika sonraki hal, parfümün 'gerçek yüzü'dür ve satın alma kararı verilmeden önce mutlaka beklenmesi gerekir." data-en="The fragrance evolution that develops as the alcohol evaporates after the perfume is applied to the skin. The state 20-30 minutes after the first spray is the 'true face' of the perfume and must be waited for before making a purchase decision.">Parfümün cilde uygulandıktan sonra alkolün buharlaşmasıyla birlikte gelişen koku evrimi. İlk püskürtmeden 20-30 dakika sonraki hal, parfümün "gerçek yüzü"dür ve satın alma kararı verilmeden önce mutlaka beklenmesi gerekir.</p><p class="glossary-example" data-tr="İpucu: Tester'da koklamak yetmez - drydown'ı ciltte hisset." data-en="Tip: Smelling on a tester is not enough - feel the drydown on the skin.">İpucu: Tester'da koklamak yetmez - drydown'ı ciltte hisset.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-e">
+            <div class="glossary-letter">E</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">EDP (Eau de Parfum)</div><div class="glossary-type" data-tr="Konsantrasyon" data-en="Concentration">Konsantrasyon</div></div>
+                <div><p class="glossary-def" data-tr="%15–20 arası parfüm özü içeren konsantrasyon. EDT'den daha kalıcı ve yoğun; Extrait'ten daha hafif. Çoğu günlük parfüm bu formatta sunulur. Genellikle 6–8 saat kalıcılık sunar." data-en="Concentration containing between 15-20% perfume extract. More lasting and intense than EDT; lighter than Extrait. Most daily perfumes are offered in this format. Usually offers 6-8 hours of longevity.">%15–20 arası parfüm özü içeren konsantrasyon. EDT'den daha kalıcı ve yoğun; Extrait'ten daha hafif. Çoğu günlük parfüm bu formatta sunulur. Genellikle 6–8 saat kalıcılık sunar.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">EDT (Eau de Toilette)</div><div class="glossary-type" data-tr="Konsantrasyon" data-en="Concentration">Konsantrasyon</div></div>
+                <div><p class="glossary-def" data-tr="%5–15 arası parfüm özü. Daha hafif, daha ferah, daha kısa ömürlü. Gündüz kullanımı ve sıcak mevsimler için ideal. Spicebomb EDT ve Invictus EDT bu kategorinin popüler temsilcileri." data-en="5-15% perfume extract. Lighter, fresher, shorter-lived. Ideal for daytime use and warm seasons. Spicebomb EDT and Invictus EDT are popular representatives of this category.">%5–15 arası parfüm özü. Daha hafif, daha ferah, daha kısa ömürlü. Gündüz kullanımı ve sıcak mevsimler için ideal. Spicebomb EDT ve Invictus EDT bu kategorinin popüler temsilcileri.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Extrait de Parfum</div><div class="glossary-type" data-tr="Konsantrasyon" data-en="Concentration">Konsantrasyon</div></div>
+                <div><p class="glossary-def" data-tr="%20–40 arası, en yüksek konsantrasyon. Az miktarda uygulanır, saatlerce hatta günlerce kalabilir. Genellikle en pahalı format. Niche parfüm evlerinin tercih ettiği lüks sunum." data-en="20-40%, the highest concentration. Applied in small amounts, can last for hours or even days. Usually the most expensive format. A luxury presentation preferred by niche perfume houses.">%20–40 arası, en yüksek konsantrasyon. Az miktarda uygulanır, saatlerce hatta günlerce kalabilir. Genellikle en pahalı format. Niche parfüm evlerinin tercih ettiği lüks sunum.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-f">
+            <div class="glossary-letter">F</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Fixatif</div><div class="glossary-type" data-tr="Temel Kavram" data-en="Basic Concept">Temel Kavram</div></div>
+                <div><p class="glossary-def" data-tr="Parfümün diğer bileşenlerinin buharlaşma hızını yavaşlatan ve kalıcılığı artıran maddeler. Misk, ambergris, benzoin ve labdanum en bilinen doğal fixatiflerdir. Ambroxan ve Iso E Super ise modern sentetik alternatifleri." data-en="Substances that slow down the evaporation rate of other components of the perfume and increase longevity. Musk, ambergris, benzoin, and labdanum are the best-known natural fixatives. Ambroxan and Iso E Super are modern synthetic alternatives.">Parfümün diğer bileşenlerinin buharlaşma hızını yavaşlatan ve kalıcılığı artıran maddeler. Misk, ambergris, benzoin ve labdanum en bilinen doğal fixatiflerdir. Ambroxan ve Iso E Super ise modern sentetik alternatifleri.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Fougère</div><div class="glossary-type" data-tr="Akkord / Aile" data-en="Accord / Family">Akkord / Aile</div></div>
+                <div><p class="glossary-def" data-tr="Fransızcada 'eğreltiotu' anlamına gelir. Lavanta, bergamot, meşe yosunu ve coumarin üzerine kurulu klasik maskülen akkord. 1882'de Houbigant'ın Fougère Royale'i ile doğan bu aile, bugün hala erkek parfümlerin omurgasını oluşturur." data-en="Means 'fern' in French. A classic masculine accord based on lavender, bergamot, oakmoss, and coumarin. Born in 1882 with Houbigant's Fougère Royale, this family still forms the backbone of men's perfumes today.">Fransızcada "eğreltiotu" anlamına gelir. Lavanta, bergamot, meşe yosunu ve coumarin üzerine kurulu klasik maskülen akkord. 1882'de Houbigant'ın Fougère Royale'i ile doğan bu aile, bugün hala erkek parfümlerin omurgasını oluşturur.</p><p class="glossary-example" data-tr="Örnek: Le Male Elixir'in lavanta-coumarin-tütün üçgeni modern fougère'dir." data-en="Example: Le Male Elixir's lavender-coumarin-tobacco triangle is a modern fougère.">Örnek: Le Male Elixir'in lavanta-coumarin-tütün üçgeni modern fougère'dir.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Fragrantica</div><div class="glossary-type" data-tr="Kaynak" data-en="Source">Kaynak</div></div>
+                <div><p class="glossary-def" data-tr="Parfüm dünyasının en kapsamlı çevrimiçi veritabanı ve topluluğu. Nota bilgileri, parfümör detayları, kullanıcı yorumları ve benzer parfüm önerileriyle bir ansiklopedi niteliğinde. fragrantica.com" data-en="The most comprehensive online database and community of the perfume world. An encyclopedia with note information, perfumer details, user reviews, and similar perfume suggestions. fragrantica.com">Parfüm dünyasının en kapsamlı çevrimiçi veritabanı ve topluluğu. Nota bilgileri, parfümör detayları, kullanıcı yorumları ve benzer parfüm önerileriyle bir ansiklopedi niteliğinde. fragrantica.com</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-g">
+            <div class="glossary-letter">G</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Gourmand</div><div class="glossary-type" data-tr="Alt Aile" data-en="Sub-Family">Alt Aile</div></div>
+                <div><p class="glossary-def" data-tr="Yenilecekmiş gibi tatlı, gıda benzeri kokular içeren parfüm alt ailesi. Vanilya, kakao, karamel, fındık ve meyve notaları hakimdir. 1990'larda Angel (Thierry Mugler) ile başlayan trend, Le Male Elixir ile zirveye ulaşmıştır." data-en="A perfume sub-family containing sweet, food-like scents that seem edible. Vanilla, cocoa, caramel, hazelnut, and fruit notes dominate. The trend that started with Angel (Thierry Mugler) in the 1990s reached its peak with Le Male Elixir.">Yenilecekmiş gibi tatlı, gıda benzeri kokular içeren parfüm alt ailesi. Vanilya, kakao, karamel, fındık ve meyve notaları hakimdir. 1990'larda Angel (Thierry Mugler) ile başlayan trend, Le Male Elixir ile zirveye ulaşmıştır.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Green Notes</div><div class="glossary-type" data-tr="Nota Tipi" data-en="Note Type">Nota Tipi</div></div>
+                <div><p class="glossary-def" data-tr="Yeni kesilmiş çimen, yeşil yaprak, domates yaprağı gibi bitkisel, taze ve keskin kokular. Aquatik ve fougère parfümlerde sıkça karşılaşılan bu notalar yaz aylarında özellikle ferahlatıcıdır." data-en="Herbal, fresh, and sharp scents like freshly cut grass, green leaves, and tomato leaves. Frequently encountered in aquatic and fougère perfumes, these notes are especially refreshing in the summer months.">Yeni kesilmiş çimen, yeşil yaprak, domates yaprağı gibi bitkisel, taze ve keskin kokular. Aquatik ve fougère parfümlerde sıkça karşılaşılan bu notalar yaz aylarında özellikle ferahlatıcıdır.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-k">
+            <div class="glossary-letter">K</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Kalıcılık (Longevity)</div><div class="glossary-type" data-tr="Performans" data-en="Performance">Performans</div></div>
+                <div><p class="glossary-def" data-tr="Parfümün ciltte hissedilir kaldığı süre. Konsantrasyon, cilt tipi, nem ve sıcaklık kalıcılığı etkiler. Ortalama EDT 4-6 saat, EDP 6-8 saat, Extrait 8-12+ saat sürer." data-en="The time a perfume remains detectable on the skin. Concentration, skin type, humidity, and temperature affect longevity. Average EDT lasts 4-6 hours, EDP 6-8 hours, Extrait 8-12+ hours.">Parfümün ciltte hissedilir kaldığı süre. Konsantrasyon, cilt tipi, nem ve sıcaklık kalıcılığı etkiler. Ortalama EDT 4-6 saat, EDP 6-8 saat, Extrait 8-12+ saat sürer.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-l">
+            <div class="glossary-letter">L</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Labdanum</div><div class="glossary-type" data-tr="Ham Madde" data-en="Raw Material">Ham Madde</div></div>
+                <div><p class="glossary-def" data-tr="Akdeniz ladengülü bitkisinden elde edilen reçineli özüt. Amber akkordu oluşturmak için vazgeçilmez - tatlı, tütünsü, hayvansal nüanslar taşır. Chypre ve oryantal ailelerin temeli." data-en="Resinous extract obtained from the Mediterranean rockrose plant. Indispensable for creating an amber accord - carries sweet, tobacco-like, animalic nuances. The foundation of Chypre and oriental families.">Akdeniz ladengülü bitkisinden elde edilen reçineli özüt. Amber akkordu oluşturmak için vazgeçilmez - tatlı, tütünsü, hayvansal nüanslar taşır. Chypre ve oryantal ailelerin temeli.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Layering</div><div class="glossary-type" data-tr="Kullanım Tekniği" data-en="Usage Technique">Kullanım Tekniği</div></div>
+                <div><p class="glossary-def" data-tr="İki veya daha fazla parfümü üst üste kullanarak kendi özgün kokunu yaratma sanatı. Önce ağır bazlı parfümü, üzerine daha hafif olanı uygulamak önerilir. Toplulukların en sevdiği yaratıcı deney." data-en="The art of creating your own unique scent by using two or more perfumes on top of each other. It is recommended to apply the heavy-based perfume first, then the lighter one. The most favorite creative experiment of the communities.">İki veya daha fazla parfümü üst üste kullanarak kendi özgün kokunu yaratma sanatı. Önce ağır bazlı parfümü, üzerine daha hafif olanı uygulamak önerilir. Toplulukların en sevdiği yaratıcı deney.</p><p class="glossary-example" data-tr="Örnek: Invictus + Cedrat Boise = taze aquatik üstüne odunsu derin iz." data-en="Example: Invictus + Cedrat Boise = woody deep trail on top of fresh aquatic.">Örnek: Invictus + Cedrat Boise = taze aquatik üstüne odunsu derin iz.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-m">
+            <div class="glossary-letter">M</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Misk (Musk)</div><div class="glossary-type" data-tr="Ham Madde / Akkord" data-en="Raw Material / Accord">Ham Madde / Akkord</div></div>
+                <div><p class="glossary-def" data-tr="Hayvansal kökenli (geyik bezi) ya da modern sentetik formülasyonlu yumuşak, sıcak, cilt gibi kokan bileşen grubu. Parfümlerin en önemli sabitleyicisi ve taşıyıcısı. Günümüzde tüm miskler sentetik üretilmektedir." data-en="A group of soft, warm, skin-like components of animal origin (deer gland) or modern synthetic formulations. The most important fixative and carrier of perfumes. Today, all musks are produced synthetically.">Hayvansal kökenli (geyik bezi) ya da modern sentetik formülasyonlu yumuşak, sıcak, cilt gibi kokan bileşen grubu. Parfümlerin en önemli sabitleyicisi ve taşıyıcısı. Günümüzde tüm miskler sentetik üretilmektedir.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Mür (Myrrh)</div><div class="glossary-type" data-tr="Ham Madde" data-en="Raw Material">Ham Madde</div></div>
+                <div><p class="glossary-def" data-tr="Afrika ve Orta Doğu'dan gelen Commiphora ağacının reçinesi. Tütsümsü, tıbbi, hafif acımsı ve sıcak bir profil sunar. Kutsal mekanların kokusu. Bottled Absolu'nun en karanlık notu." data-en="Resin from the Commiphora tree originating from Africa and the Middle East. Offers an incense-like, medicinal, slightly bitter, and warm profile. The scent of sacred places. The darkest note of Bottled Absolu.">Afrika ve Orta Doğu'dan gelen Commiphora ağacının reçinesi. Tütsümsü, tıbbi, hafif acımsı ve sıcak bir profil sunar. Kutsal mekanların kokusu. Bottled Absolu'nun en karanlık notu.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-n">
+            <div class="glossary-letter">N</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Niche Parfüm</div><div class="glossary-type" data-tr="Endüstri Kavramı" data-en="Industry Concept">Endüstri Kavramı</div></div>
+                <div><p class="glossary-def" data-tr="Büyük kozmetik gruplarından bağımsız, bütçe kısıtlaması gözetmeksizin ham madde kalitesini ön planda tutan küçük parfüm evleri. Mancera, SHL 777, Kerosene, M.A. Barrois bu kategorinin örnekleri. Genellikle daha yüksek fiyatlı ama özgün formüller sunar." data-en="Small perfume houses that are independent of large cosmetic groups and prioritize ingredient quality regardless of budget constraints. Examples of this category include Mancera, SHL 777, Kerosene, and M.A. Barrois. Usually offers more expensive but unique formulas.">Büyük kozmetik gruplarından bağımsız, bütçe kısıtlaması gözetmeksizin ham madde kalitesini ön planda tutan küçük parfüm evleri. Mancera, SHL 777, Kerosene, M.A. Barrois bu kategorinin örnekleri. Genellikle daha yüksek fiyatlı ama özgün formüller sunar.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Nota Piramidi</div><div class="glossary-type" data-tr="Temel Kavram" data-en="Basic Concept">Temel Kavram</div></div>
+                <div><p class="glossary-def" data-tr="Parfümün zaman içinde gelişen üç katmanını tanımlar: Üst notalar (ilk 30 dk), orta/kalp notalar (30 dk – 4 saat), alt/baz notalar (4+ saat). Her katman farklı molekül ağırlığındaki bileşenlerden oluşur." data-en="Defines the three layers of the perfume that evolve over time: Top notes (first 30 mins), heart notes (30 mins – 4 hours), and base notes (4+ hours). Each layer consists of components of different molecular weights.">Parfümün zaman içinde gelişen üç katmanını tanımlar: Üst notalar (ilk 30 dk), orta/kalp notalar (30 dk – 4 saat), alt/baz notalar (4+ saat). Her katman farklı molekül ağırlığındaki bileşenlerden oluşur.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-o">
+            <div class="glossary-letter">O</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Olfaktif Aile</div><div class="glossary-type" data-tr="Sınıflandırma" data-en="Classification">Sınıflandırma</div></div>
+                <div><p class="glossary-def" data-tr="Koku profillerine göre parfümleri gruplayan sistematik sınıflandırma. Ana aileler: Çiçeksi, Odunsu, Oryantal, Fougère, Chypre, Aquatik, Narenciye. Her aile alt kategorilere ayrılır." data-en="Systematic classification grouping perfumes according to their scent profiles. Main families: Floral, Woody, Oriental, Fougère, Chypre, Aquatic, Citrus. Each family is divided into subcategories.">Koku profillerine göre parfümleri gruplayan sistematik sınıflandırma. Ana aileler: Çiçeksi, Odunsu, Oryantal, Fougère, Chypre, Aquatik, Narenciye. Her aile alt kategorilere ayrılır.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Oud (Agarwood)</div><div class="glossary-type" data-tr="Ham Madde" data-en="Raw Material">Ham Madde</div></div>
+                <div><p class="glossary-def" data-tr="Aquilaria ağacının enfeksiyon sonucu ürettiği reçine. Parfümerinin en pahalı ve en prestijli ham maddesi. Duman, toprak, deri ve tatlılığın benzersiz harmanı. Arabians Tonka, God of Fire ve Noir Absolu'nun kalbi." data-en="Resin produced by the Aquilaria tree as a result of infection. The most expensive and prestigious raw material in perfumery. A unique blend of smoke, earth, leather, and sweetness. The heart of Arabians Tonka, God of Fire, and Noir Absolu.">Aquilaria ağacının enfeksiyon sonucu ürettiği reçine. Parfümerinin en pahalı ve en prestijli ham maddesi. Duman, toprak, deri ve tatlılığın benzersiz harmanı. Arabians Tonka, God of Fire ve Noir Absolu'nun kalbi.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-p">
+            <div class="glossary-letter">P</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Patchouli</div><div class="glossary-type" data-tr="Ham Madde" data-en="Raw Material">Ham Madde</div></div>
+                <div><p class="glossary-def" data-tr="Güneydoğu Asya kökenli bitkinin yapraklarından elde edilen koyu, toprak, meşe ve tatlımsı nota. Parfümlerin omurgası ve hem sabitleyici hem karakter verici olarak kullanılır. Yaşlandıkça güzelleşir." data-en="Dark, earthy, oak, and sweetish note obtained from the leaves of the plant originating from Southeast Asia. Used as the backbone of perfumes and as both a fixative and character giver. Gets better with age.">Güneydoğu Asya kökenli bitkinin yapraklarından elde edilen koyu, toprak, meşe ve tatlımsı nota. Parfümlerin omurgası ve hem sabitleyici hem karakter verici olarak kullanılır. Yaşlandıkça güzelleşir.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Parfümör (Nez)</div><div class="glossary-type" data-tr="Meslek" data-en="Profession">Meslek</div></div>
+                <div><p class="glossary-def" data-tr="Fransızcada 'burun' anlamına gelir. Parfüm yaratan sanatçı/uzman. Dünyada yalnızca birkaç yüz kişi bu unvanı taşır ve bir kokuyu 3000'den fazla malzeme arasından tasarlayabilir. Quentin Bisch, Alberto Morillas, Jacques Cavallier en tanınanlar arasındadır." data-en="Means 'nose' in French. The artist/expert who creates perfume. Only a few hundred people in the world hold this title and can design a scent from more than 3000 materials. Quentin Bisch, Alberto Morillas, and Jacques Cavallier are among the most recognized.">Fransızcada "burun" anlamına gelir. Parfüm yaratan sanatçı/uzman. Dünyada yalnızca birkaç yüz kişi bu unvanı taşır ve bir kokuyu 3000'den fazla malzeme arasından tasarlayabilir. Quentin Bisch, Alberto Morillas, Jacques Cavallier en tanınanlar arasındadır.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-s">
+            <div class="glossary-letter">S</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Safran</div><div class="glossary-type" data-tr="Ham Madde" data-en="Raw Material">Ham Madde</div></div>
+                <div><p class="glossary-def" data-tr="Dünyanın en pahalı baharatı, parfümeriye özgün egzotik bir boyut katar. Metalik, deri, tütünsü ve hafif ilaçsı nüansları oryantal parfümlerin vazgeçilmezi yapar. Arabians Tonka ve Ganymede'nin karakteristik izi." data-en="The world's most expensive spice, adding a unique exotic dimension to perfumery. Metallic, leather, tobacco, and slightly medicinal nuances make it indispensable for oriental perfumes. The characteristic trail of Arabians Tonka and Ganymede.">Dünyanın en pahalı baharatı, parfümeriye özgün egzotik bir boyut katar. Metalik, deri, tütünsü ve hafif ilaçsı nüansları oryantal parfümlerin vazgeçilmezi yapar. Arabians Tonka ve Ganymede'nin karakteristik izi.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Sillage</div><div class="glossary-type" data-tr="Performans" data-en="Performance">Performans</div></div>
+                <div><p class="glossary-def" data-tr="Fransızcada 'iz' anlamına gelir. Kişi geçtikten sonra arkasında bıraktığı koku izi. Güçlü sillage'e sahip parfümler (Sauvage Elixir, Le Male Elixir) odaya girdiğinizde fark edilir; zayıf sillage'e sahipler daha kişisel bir koku deneyimi sunar." data-en="Means 'trail' in French. The scent trail left behind after a person passes. Perfumes with strong sillage (Sauvage Elixir, Le Male Elixir) are noticed when you enter a room; those with weak sillage offer a more personal scent experience.">Fransızcada "iz" anlamına gelir. Kişi geçtikten sonra arkasında bıraktığı koku izi. Güçlü sillage'e sahip parfümler (Sauvage Elixir, Le Male Elixir) odaya girdiğinizde fark edilir; zayıf sillage'e sahipler daha kişisel bir koku deneyimi sunar.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">SOTD</div><div class="glossary-type" data-tr="Topluluk Kültürü" data-en="Community Culture">Topluluk Kültürü</div></div>
+                <div><p class="glossary-def" data-tr="'Scent of the Day' - Günün Kokusu. Parfüm topluluklarında (Reddit, Instagram, Discord) paylaşılan günlük parfüm seçimi geleneği. Koleksiyoncuların birbirini tanıdığı ve önerilerde bulunduğu en yaygın sosyal ritüel." data-en="'Scent of the Day' - Daily scent. The tradition of daily perfume selection shared in perfume communities (Reddit, Instagram, Discord). The most common social ritual where collectors get to know each other and offer suggestions.">"Scent of the Day" - Günün Kokusu. Parfüm topluluklarında (Reddit, Instagram, Discord) paylaşılan günlük parfüm seçimi geleneği. Koleksiyoncuların birbirini tanıdığı ve önerilerde bulunduğu en yaygın sosyal ritüel.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-t">
+            <div class="glossary-letter">T</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Tonka Fasulyesi</div><div class="glossary-type" data-tr="Ham Madde" data-en="Raw Material">Ham Madde</div></div>
+                <div><p class="glossary-def" data-tr="Güney Amerika kökenli Dipteryx odorata ağacının tohumu. Vanilyamsı, badem, taze ot ve coumarin karışımı tatlı profil verir. Hem oryantal hem fougère parfümlerde temel alt nota. Le Male Elixir'in tatlı gücünün kaynağı." data-en="The seed of the Dipteryx odorata tree originating from South America. Gives a sweet profile with a blend of vanillic, almond, fresh grass, and coumarin. A basic base note in both oriental and fougère perfumes. The source of Le Male Elixir's sweet power.">Güney Amerika kökenli Dipteryx odorata ağacının tohumu. Vanilyamsı, badem, taze ot ve coumarin karışımı tatlı profil verir. Hem oryantal hem fougère parfümlerde temel alt nota. Le Male Elixir'in tatlı gücünün kaynağı.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Tütsü (Frankincense)</div><div class="glossary-type" data-tr="Ham Madde" data-en="Raw Material">Ham Madde</div></div>
+                <div><p class="glossary-def" data-tr="Boswellia ağacının reçinesinden üretilen kutsal tütsü. Limon-odunsu-dumanlı bir profile sahip. Dini mekanları anımsatır; derin, meditatif bir atmosfer yaratır. Boss Bottled Absolu'nun ruhu." data-en="Sacred incense produced from the resin of the Boswellia tree. Has a lemon-woody-smoky profile. Reminiscent of religious places; creates a deep, meditative atmosphere. The soul of Boss Bottled Absolu.">Boswellia ağacının reçinesinden üretilen kutsal tütsü. Limon-odunsu-dumanlı bir profile sahip. Dini mekanları anımsatır; derin, meditatif bir atmosfer yaratır. Boss Bottled Absolu'nun ruhu.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glossary-section reveal" id="harf-v">
+            <div class="glossary-letter">V</div>
+            <div class="glossary-entries">
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Vetiver</div><div class="glossary-type" data-tr="Ham Madde" data-en="Raw Material">Ham Madde</div></div>
+                <div><p class="glossary-def" data-tr="Tropikal bir çimenden elde edilen köklerin damıtılmasıyla üretilen toprak, duman, ahşap ve hafif dumanlı nota. Java ve Haiti vetiveri farklı profiller verir. Maskülen parfümlerin en güvenilir temel notası." data-en="Earthy, smoky, woody, and slightly smoky note produced by distilling roots obtained from a tropical grass. Java and Haiti vetiver give different profiles. The most reliable base note of masculine perfumes.">Tropikal bir çimenden elde edilen köklerin damıtılmasıyla üretilen toprak, duman, ahşap ve hafif dumanlı nota. Java ve Haiti vetiveri farklı profiller verir. Maskülen parfümlerin en güvenilir temel notası.</p><p class="glossary-example" data-tr="Örnek: Tygar'daki vetiver, greyfurtun enerjiyi topraklar." data-en="Example: The vetiver in Tygar grounds the energy of the grapefruit.">Örnek: Tygar'daki vetiver, greyfurtun enerjiyi topraklar.</p></div>
+              </div>
+              <div class="glossary-entry">
+                <div><div class="glossary-term">Vintage Parfüm</div><div class="glossary-type" data-tr="Koleksiyonculuk" data-en="Collecting">Koleksiyonculuk</div></div>
+                <div><p class="glossary-def" data-tr="Üretimden kalkmış ya da orijinal formülü değiştirilmiş eski parfüm şişeleri. Parfüm koleksiyoncuları için nostaljik ve değerli. IFRA kısıtlamaları nedeniyle birçok eski formül artık üretilemiyor; bu da vintage örnekleri nadide kılıyor." data-en="Old perfume bottles that are discontinued or have had their original formula changed. Nostalgic and valuable for perfume collectors. Many old formulas can no longer be produced due to IFRA restrictions; this makes vintage samples rare.">Üretimden kalkmış ya da orijinal formülü değiştirilmiş eski parfüm şişeleri. Parfüm koleksiyoncuları için nostaljik ve değerli. IFRA kısıtlamaları nedeniyle birçok eski formül artık üretilemiyor; bu da vintage örnekleri nadide kılıyor.</p></div>
+              </div>
+            </div>
+          </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="footer-brand">My Sillage</div>
+    <div class="footer-tagline" data-tr="Curated by Obsession · Est. 2024" data-en="Curated by Obsession · Est. 2024">Curated by Obsession · Est. 2024</div>
+    <div class="footer-author" data-tr="Deniz Öztürk 20210504 tarafından yapıldı" data-en="by Deniz Öztürk 20210504">Deniz Öztürk 20210504 tarafından yapıldı</div>
+    <nav class="footer-links">
+      <a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a>
+      <a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+      <a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a>
+      <a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a>
+      <a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a>
+    </nav>
+    <p class="footer-copy" data-tr="© 2024 My Sillage - Tüm hakları saklıdır." data-en="© 2024 My Sillage - All rights reserved.">© 2024 My Sillage - Tüm hakları saklıdır.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+  <script>
+            if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); const icon = document.getElementById('themeIcon'); if(icon) icon.textContent = '🌙'; }
+
+
+    const favs = JSON.parse(localStorage.getItem('sozlukFavs') || '[]');
+
+    function initFavBtns() {
+      document.querySelectorAll('.glossary-entry').forEach(entry => {
+        if (entry.querySelector('.fav-btn')) return;
+        const termEl = entry.querySelector('.glossary-term');
+        if (!termEl) return;
+        const term = termEl.textContent.trim();
+
+        const btn = document.createElement('button');
+        btn.className = 'fav-btn' + (favs.includes(term) ? ' active' : '');
+        btn.setAttribute('data-tr-title', 'Favorilere ekle');
+        btn.setAttribute('data-en-title', 'Add to favorites');
+        btn.title = getCurrentLanguage() === 'en' ? 'Add to favorites' : 'Favorilere ekle';
+        btn.textContent = favs.includes(term) ? '⭐' : '☆';
+        btn.onclick = (e) => { e.stopPropagation(); toggleFav(term, btn); };
+
+        entry.appendChild(btn);
+      });
+    }
+
+    function toggleFav(term, btn) {
+      const idx = favs.indexOf(term);
+      if (idx === -1) {
+        favs.push(term);
+        btn.textContent = '⭐'; btn.classList.add('active');
+      } else {
+        favs.splice(idx, 1);
+        btn.textContent = '☆'; btn.classList.remove('active');
+      }
+      localStorage.setItem('sozlukFavs', JSON.stringify(favs));
+      renderFavs();
+    }
+
+    function renderFavs() {
+      const sec = document.getElementById('favSection');
+      const list = document.getElementById('favList');
+      if (!favs.length) { sec.style.display = 'none'; return; }
+      sec.style.display = 'block';
+
+      const lang = getCurrentLanguage();
+
+      list.innerHTML = favs.map(term => {
+        const termEl = Array.from(document.querySelectorAll('.glossary-term'))
+          .find(el => el.textContent.trim() === term);
+        const entry = termEl?.closest('.glossary-entry');
+        const defEl = entry?.querySelector('.glossary-def');
+        
+        let def = "";
+        if (defEl) {
+          def = lang === 'en' ? defEl.getAttribute('data-en') : defEl.getAttribute('data-tr');
+          if (def.length > 100) def = def.slice(0, 100) + '...';
+        }
+        
+        return `<div style="background:var(--bg-card);border:1px solid var(--gold-border);border-radius:6px;padding:.9rem 1.2rem;display:flex;gap:.8rem;align-items:flex-start;">
+          <span style="color:#f5c518;font-size:.9rem;">⭐</span>
+          <div>
+            <div style="font-family:var(--font-display);font-size:1rem;color:var(--gold-bright);">${term}</div>
+            <div style="font-size:.68rem;color:var(--text-secondary);line-height:1.5;margin-top:.2rem;">${def}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function clearFavs() {
+      favs.length = 0;
+      localStorage.setItem('sozlukFavs', '[]');
+      document.querySelectorAll('.fav-btn').forEach(b => { b.textContent='☆'; b.classList.remove('active'); });
+      renderFavs();
+    }
+
+
+    function filterGlossary() {
+      const q = document.getElementById('sozlukSearch').value.toLowerCase().trim();
+      const entries = document.querySelectorAll('.glossary-entry');
+      const sections = document.querySelectorAll('.glossary-section');
+      const lang = getCurrentLanguage();
+      let total = 0;
+
+      sections.forEach(sec => {
+        let secVisible = 0;
+        sec.querySelectorAll('.glossary-entry').forEach(entry => {
+          const text = entry.textContent.toLowerCase();
+          const match = !q || text.includes(q);
+          entry.style.display = match ? '' : 'none';
+          if (match) { secVisible++; total++; }
+        });
+
+        sec.style.display = secVisible > 0 ? '' : 'none';
+      });
+
+      const countEl = document.getElementById('searchCount');
+      const noRes = document.getElementById('noSearchResult');
+      if (q) {
+        countEl.textContent = total + (lang === 'en' ? ' results' : ' sonuç');
+        noRes.style.display = total === 0 ? 'block' : 'none';
+      } else {
+        countEl.textContent = '';
+        noRes.style.display = 'none';
+        sections.forEach(s => s.style.display = '');
+        entries.forEach(e => e.style.display = '');
+      }
+    }
+
+    window.addEventListener('languageChanged', () => {
+      filterGlossary();
+      renderFavs();
+    });
+
+    initFavBtns();
+    renderFavs();
+
+      </script>
+</body>
+</html>

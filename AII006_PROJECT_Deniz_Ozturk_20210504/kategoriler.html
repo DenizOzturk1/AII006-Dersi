@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kategoriler - My Sillage</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .kat-filter {
+      font-family: var(--font-ui); font-size: .58rem; letter-spacing: .15em;
+      text-transform: uppercase; padding: .4rem .9rem;
+      border: 1px solid rgba(212,168,67,.2); border-radius: 3px;
+      color: var(--text-muted); cursor: pointer; background: none; transition: all .25s;
+    }
+    .kat-filter:hover, .kat-filter.active {
+      border-color: var(--gold-bright); color: var(--gold-bright); background: var(--gold-subtle);
+    }
+    .flip-card.kat-hidden {
+      display: none;
+    }
+    .flip-card:not(.kat-hidden) {
+      opacity: 1; pointer-events: auto;
+      transition: opacity .3s, transform .3s;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-main">My Sillage</span>
+      <span class="brand-sub">Curated by Obsession</span>
+      <span class="brand-author">Deniz Öztürk 20210504</span>
+    </a>
+    <div class="nav-right">
+      <div class="lang-toggle" onclick="toggleLanguage()" title="Dil Değiştir / Change Language" data-tr-title="Dil Değiştir / Change Language" data-en-title="Change Language / Dil Değiştir">
+        <span class="lang-btn lang-btn-tr">TR</span>
+        <span class="lang-btn lang-btn-en">EN</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a></li>
+        <li><a href="kategoriler.html" class="active" data-tr="Kategoriler" data-en="Categories">Kategoriler</a></li>
+        <li><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+        <li><a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a></li>
+        <li><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a></li>
+        <li><a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a></li>
+        <li><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a></li>
+        <li><a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a></li>
+        <li><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a></li>
+      </ul>
+      <div class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir" data-tr-title="Tema Değiştir" data-en-title="Toggle Theme">
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+        <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-hero">
+      <div class="hero-eyebrow" style="justify-content:center;margin-bottom:1rem;" data-tr="Koku Aileleri" data-en="Fragrance Families">Koku Aileleri</div>
+      <h1 class="page-hero-title" data-tr="Parfüm <em>Kategorileri</em>" data-en="Perfume <em>Categories</em>">Parfüm <em>Kategorileri</em></h1>
+      <p class="page-hero-sub" data-tr="Kartların üzerine gel - arka yüzde parfüm önerileri seni bekliyor" data-en="Hover over the cards - perfume suggestions await on the back">Kartların üzerine gel - arka yüzde parfüm önerileri seni bekliyor</p>
+    </div>
+
+
+    <section class="section">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Dört Evren" data-en="Four Universes">Dört Evren</div>
+        <h2 class="section-title" data-tr="Koku <em>Aileleri</em>" data-en="Scent <em>Families</em>">Koku <em>Aileleri</em></h2>
+        <div class="section-divider"></div>
+      </div>
+
+
+
+      <div class="reveal" style="max-width:1200px;margin:0 auto 2.5rem;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;background:var(--bg-card);border:1px solid var(--gold-border);border-radius:10px;padding:1.2rem 1.6rem;">
+        <div>
+          <div style="font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.5rem;" data-tr="Mevsim" data-en="Season">Mevsim</div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;" id="katMevsim">
+            <button class="kat-filter active" data-mevsim="tumu" onclick="katFilter(this,'mevsim')" data-tr="Tümü" data-en="All">Tümü</button>
+            <button class="kat-filter" data-mevsim="ilkbahar" onclick="katFilter(this,'mevsim')" data-tr="🌸 İlkbahar" data-en="🌸 Spring">🌸 İlkbahar</button>
+            <button class="kat-filter" data-mevsim="yaz" onclick="katFilter(this,'mevsim')" data-tr="☀️ Yaz" data-en="☀️ Summer">☀️ Yaz</button>
+            <button class="kat-filter" data-mevsim="sonbahar" onclick="katFilter(this,'mevsim')" data-tr="🍂 Sonbahar" data-en="🍂 Autumn">🍂 Sonbahar</button>
+            <button class="kat-filter" data-mevsim="kis" onclick="katFilter(this,'mevsim')" data-tr="❄️ Kış" data-en="❄️ Winter">❄️ Kış</button>
+          </div>
+        </div>
+        <div style="width:1px;height:40px;background:var(--gold-border);flex-shrink:0;"></div>
+        <div>
+          <div style="font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.5rem;" data-tr="Yoğunluk" data-en="Intensity">Yoğunluk</div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;" id="katYogunluk">
+            <button class="kat-filter active" data-yogun="tumu" onclick="katFilter(this,'yogun')" data-tr="Tümü" data-en="All">Tümü</button>
+            <button class="kat-filter" data-yogun="hafif" onclick="katFilter(this,'yogun')" data-tr="💧 Hafif" data-en="💧 Light">💧 Hafif</button>
+            <button class="kat-filter" data-yogun="orta" onclick="katFilter(this,'yogun')" data-tr="⚖️ Orta" data-en="⚖️ Medium">⚖️ Orta</button>
+            <button class="kat-filter" data-yogun="yogun" onclick="katFilter(this,'yogun')" data-tr="🔥 Yoğun" data-en="🔥 Intense">🔥 Yoğun</button>
+          </div>
+        </div>
+        <div style="margin-left:auto;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);" id="katCount" data-tr="6 kategori" data-en="6 categories">6 kategori</div>
+      </div>
+
+      <div class="flip-grid" id="flipGrid">
+
+
+        <div class="flip-card reveal" data-mevsim="ilkbahar yaz sonbahar kis" data-yogun="orta">
+          <div class="flip-card-inner">
+            <div class="flip-front">
+              <img src="assets/images/odunsu-koku.jpg" alt="Odunsu" />
+              <div class="flip-front-body">
+                <div class="flip-front-tag" data-tr="Woody · Odunsu" data-en="Woody · Odunsu">Woody · Odunsu</div>
+                <div class="flip-front-name" data-tr="Odunsu Ailesi" data-en="Woody Family">Odunsu Ailesi</div>
+                <div class="flip-front-sub" data-tr="Sedir · Sandal · Vetiver · Patchouli" data-en="Cedar · Sandal · Vetiver · Patchouli">Sedir · Sandal · Vetiver · Patchouli</div>
+              </div>
+            </div>
+            <div class="flip-back">
+              <div class="flip-back-title" data-tr="🌲 Odunsu Ailesi" data-en="🌲 Woody Family">🌲 Odunsu Ailesi</div>
+              <div class="flip-back-notes">
+                <span class="flip-note-pill" data-tr="Sedir" data-en="Cedar">Sedir</span><span class="flip-note-pill" data-tr="Sandal Ağacı" data-en="Sandalwood">Sandal Ağacı</span>
+                <span class="flip-note-pill">Vetiver</span><span class="flip-note-pill">Patchouli</span><span class="flip-note-pill">Guaiac</span>
+              </div>
+              <p class="flip-back-desc" data-tr="Toprak, orman ve ahşabın maskülen kucaklaşması. Güç ve zerafeti bir arada barındıran bu aile, hem gündüz hem gece şıklığıyla öne çıkar." data-en="The masculine embrace of earth, forest, and wood. Combining strength and elegance, this family stands out with both day and night sophistication.">Toprak, orman ve ahşabın maskülen kucaklaşması. Güç ve zerafeti bir arada barındıran bu aile, hem gündüz hem gece şıklığıyla öne çıkar.</p>
+              <div class="flip-meta">
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="📍 Ortam" data-en="📍 Occasion">📍 Ortam</div>
+                  <div class="flip-meta-val" data-tr="Ofis, akşam, her mevsim" data-en="Office, evening, all seasons">Ofis, akşam, her mevsim</div>
+                </div>
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="🏆 Öneriler" data-en="🏆 Suggestions">🏆 Öneriler</div>
+                  <div class="flip-meta-val">Cedrat Boise, Paradigme</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="flip-card reveal delay-1" data-mevsim="sonbahar kis" data-yogun="yogun">
+          <div class="flip-card-inner">
+            <div class="flip-front">
+              <img src="assets/images/oryantal koku theme.jpg" alt="Oryantal" />
+              <div class="flip-front-body">
+                <div class="flip-front-tag" data-tr="Oriental · Oryantal" data-en="Oriental · Oriental">Oriental · Oryantal</div>
+                <div class="flip-front-name" data-tr="Oryantal Ailesi" data-en="Oriental Family">Oryantal Ailesi</div>
+                <div class="flip-front-sub" data-tr="Oud · Amber · Safran · Reçine" data-en="Oud · Amber · Saffron · Resin">Oud · Amber · Safran · Reçine</div>
+              </div>
+            </div>
+            <div class="flip-back">
+              <div class="flip-back-title" data-tr="🏜️ Oryantal Ailesi" data-en="🏜️ Oriental Family">🏜️ Oryantal Ailesi</div>
+              <div class="flip-back-notes">
+                <span class="flip-note-pill">Oud</span><span class="flip-note-pill" data-tr="Amber" data-en="Amber">Amber</span>
+                <span class="flip-note-pill" data-tr="Safran" data-en="Saffron">Safran</span><span class="flip-note-pill" data-tr="Benjoin" data-en="Benzoin">Benjoin</span><span class="flip-note-pill" data-tr="Mür" data-en="Myrrh">Mür</span>
+              </div>
+              <p class="flip-back-desc" data-tr="Doğu'nun zengin mirası: ağır, sıcak, gizemli. Gece etkinlikleri için ideal olan bu aile kendinden emin ve derin bir karakter çizer." data-en="The rich heritage of the East: heavy, warm, mysterious. Ideal for night events, this family draws a confident and deep character.">Doğu'nun zengin mirası: ağır, sıcak, gizemli. Gece etkinlikleri için ideal olan bu aile kendinden emin ve derin bir karakter çizer.</p>
+              <div class="flip-meta">
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="📍 Ortam" data-en="📍 Occasion">📍 Ortam</div>
+                  <div class="flip-meta-val" data-tr="Gece, sonbahar, kış" data-en="Night, autumn, winter">Gece, sonbahar, kış</div>
+                </div>
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="🏆 Öneriler" data-en="🏆 Suggestions">🏆 Öneriler</div>
+                  <div class="flip-meta-val">Arabians Tonka, God of Fire</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="flip-card reveal delay-2" data-mevsim="ilkbahar yaz" data-yogun="hafif">
+          <div class="flip-card-inner">
+            <div class="flip-front">
+              <img src="assets/images/Aquatik theme fragrance.avif" alt="Aquatik" />
+              <div class="flip-front-body">
+                <div class="flip-front-tag" data-tr="Fresh · Aquatik" data-en="Fresh · Aquatic">Fresh · Aquatik</div>
+                <div class="flip-front-name" data-tr="Aquatik & Taze" data-en="Aquatic & Fresh">Aquatik & Taze</div>
+                <div class="flip-front-sub" data-tr="Deniz Tuzu · Ozon · Narenciye" data-en="Sea Salt · Ozone · Citrus">Deniz Tuzu · Ozon · Narenciye</div>
+              </div>
+            </div>
+            <div class="flip-back">
+              <div class="flip-back-title" data-tr="🌊 Aquatik Ailesi" data-en="🌊 Aquatic Family">🌊 Aquatik Ailesi</div>
+              <div class="flip-back-notes">
+                <span class="flip-note-pill" data-tr="Deniz Tuzu" data-en="Sea Salt">Deniz Tuzu</span><span class="flip-note-pill">Ozon</span>
+                <span class="flip-note-pill">Bergamot</span><span class="flip-note-pill">Neroli</span><span class="flip-note-pill" data-tr="Misk" data-en="Musk">Misk</span>
+              </div>
+              <p class="flip-back-desc" data-tr="Özgürlüğün, enerjinin ve temizliğin kokusu. Sıcak mevsimlerde ferahlatıcı, spor sonrasında tazeleyici - her gün takılabilir hafiflikte." data-en="The scent of freedom, energy, and cleanliness. Refreshing in warm seasons, rejuvenating after sports - light enough to wear every day.">Özgürlüğün, enerjinin ve temizliğin kokusu. Sıcak mevsimlerde ferahlatıcı, spor sonrasında tazeleyici - her gün takılabilir hafiflikte.</p>
+              <div class="flip-meta">
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="📍 Ortam" data-en="📍 Occasion">📍 Ortam</div>
+                  <div class="flip-meta-val" data-tr="Gündüz, yaz, spor" data-en="Daytime, summer, sports">Gündüz, yaz, spor</div>
+                </div>
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="🏆 Öneriler" data-en="🏆 Suggestions">🏆 Öneriler</div>
+                  <div class="flip-meta-val">Invictus, Blue Talisman</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="flip-card reveal delay-3" data-mevsim="sonbahar kis" data-yogun="yogun">
+          <div class="flip-card-inner">
+            <div class="flip-front">
+              <img src="assets/images/baharatlı koku theme.png" alt="Baharatlı" />
+              <div class="flip-front-body">
+                <div class="flip-front-tag" data-tr="Spicy · Baharatlı" data-en="Spicy · Spicy">Spicy · Baharatlı</div>
+                <div class="flip-front-name" data-tr="Baharatlı Ailesi" data-en="Spicy Family">Baharatlı Ailesi</div>
+                <div class="flip-front-sub" data-tr="Karabiber · Safran · Zencefil" data-en="Black Pepper · Saffron · Ginger">Karabiber · Safran · Zencefil</div>
+              </div>
+            </div>
+            <div class="flip-back">
+              <div class="flip-back-title" data-tr="🌶️ Baharatlı Ailesi" data-en="🌶️ Spicy Family">🌶️ Baharatlı Ailesi</div>
+              <div class="flip-back-notes">
+                <span class="flip-note-pill" data-tr="Karabiber" data-en="Black Pepper">Karabiber</span><span class="flip-note-pill" data-tr="Safran" data-en="Saffron">Safran</span>
+                <span class="flip-note-pill" data-tr="Zencefil" data-en="Ginger">Zencefil</span><span class="flip-note-pill" data-tr="Karanfil" data-en="Clove">Karanfil</span><span class="flip-note-pill" data-tr="Tarçın" data-en="Cinnamon">Tarçın</span>
+              </div>
+              <p class="flip-back-desc" data-tr="Isı, hız ve karizma. Sizi fark ettiren bu aile, soğuk havalarda vücut sıcaklığıyla birleşince bambaşka bir boyut kazanır." data-en="Heat, speed, and charisma. This family that gets you noticed takes on a whole new dimension when combined with body temperature in cold weather.">Isı, hız ve karizma. Sizi fark ettiren bu aile, soğuk havalarda vücut sıcaklığıyla birleşince bambaşka bir boyut kazanır.</p>
+              <div class="flip-meta">
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="📍 Ortam" data-en="📍 Occasion">📍 Ortam</div>
+                  <div class="flip-meta-val" data-tr="Akşam, kış, resmi" data-en="Evening, winter, formal">Akşam, kış, resmi</div>
+                </div>
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="🏆 Öneriler" data-en="🏆 Suggestions">🏆 Öneriler</div>
+                  <div class="flip-meta-val">Sauvage Elixir, Spicebomb</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="flip-card reveal" data-mevsim="sonbahar kis" data-yogun="yogun">
+          <div class="flip-card-inner">
+            <div class="flip-front">
+              <img src="assets/images/gourmand koku theme.png" alt="Tatlı" />
+              <div class="flip-front-body">
+                <div class="flip-front-tag" data-tr="Gourmand · Tatlı" data-en="Gourmand · Sweet">Gourmand · Tatlı</div>
+                <div class="flip-front-name" data-tr="Tatlı Ailesi" data-en="Sweet Family">Tatlı Ailesi</div>
+                <div class="flip-front-sub" data-tr="Vanilya · Tonka · Benzoin · Bal" data-en="Vanilla · Tonka · Benzoin · Honey">Vanilya · Tonka · Benzoin · Bal</div>
+              </div>
+            </div>
+            <div class="flip-back">
+              <div class="flip-back-title" data-tr="🍯 Tatlı / Gourmand" data-en="🍯 Sweet / Gourmand">🍯 Tatlı / Gourmand</div>
+              <div class="flip-back-notes">
+                <span class="flip-note-pill" data-tr="Vanilya" data-en="Vanilla">Vanilya</span><span class="flip-note-pill">Tonka</span>
+                <span class="flip-note-pill">Benzoin</span><span class="flip-note-pill" data-tr="Bal" data-en="Honey">Bal</span><span class="flip-note-pill" data-tr="Kakao" data-en="Cocoa">Kakao</span>
+              </div>
+              <p class="flip-back-desc" data-tr="Yenilip içilebilecekmiş gibi davetkar. Gece için vazgeçilmez olan bu aile, yakın mesafede sizi unutulmaz kılar. Özellikle sonbahar-kışta patlama yapar." data-en="Inviting, as if it could be eaten or drunk. Indispensable for the night, this family makes you unforgettable at close range. Especially explodes in autumn-winter.">Yenilip içilebilecekmiş gibi davetkar. Gece için vazgeçilmez olan bu aile, yakın mesafede sizi unutulmaz kılar. Özellikle sonbahar-kışta patlama yapar.</p>
+              <div class="flip-meta">
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="📍 Ortam" data-en="📍 Occasion">📍 Ortam</div>
+                  <div class="flip-meta-val" data-tr="Gece, kış, romantik" data-en="Night, winter, romantic">Gece, kış, romantik</div>
+                </div>
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="🏆 Öneriler" data-en="🏆 Suggestions">🏆 Öneriler</div>
+                  <div class="flip-meta-val">Le Male Elixir, The One</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="flip-card reveal delay-1" data-mevsim="ilkbahar yaz" data-yogun="orta">
+          <div class="flip-card-inner">
+            <div class="flip-front">
+              <img src="assets/images/çiçeksi koku theme(1).jpg" alt="Çiçeksi" />
+              <div class="flip-front-body">
+                <div class="flip-front-tag" data-tr="Floral · Çiçeksi" data-en="Floral · Floral">Floral · Çiçeksi</div>
+                <div class="flip-front-name" data-tr="Çiçeksi Ailesi" data-en="Floral Family">Çiçeksi Ailesi</div>
+                <div class="flip-front-sub" data-tr="Gül · Jasmin · Neroli · Orkide" data-en="Rose · Jasmine · Neroli · Orchid">Gül · Jasmin · Neroli · Orkide</div>
+              </div>
+            </div>
+            <div class="flip-back">
+              <div class="flip-back-title" data-tr="🌸 Çiçeksi Ailesi" data-en="🌸 Floral Family">🌸 Çiçeksi Ailesi</div>
+              <div class="flip-back-notes">
+                <span class="flip-note-pill" data-tr="Gül" data-en="Rose">Gül</span><span class="flip-note-pill" data-tr="Jasmin" data-en="Jasmine">Jasmin</span>
+                <span class="flip-note-pill">Neroli</span><span class="flip-note-pill" data-tr="Orkide" data-en="Orchid">Orkide</span><span class="flip-note-pill" data-tr="İris" data-en="Iris">İris</span>
+              </div>
+              <p class="flip-back-desc" data-tr="Artık sadece kadınlara ait değil. MYSLF ve Black Orchid gibi parfümler çiçekli notaların maskülen yorumunu mükemmel şekilde sunuyor. Cesur ve özgün bir seçim." data-en="No longer just for women. Perfumes like MYSLF and Black Orchid offer a perfect masculine interpretation of floral notes. A bold and unique choice.">Artık sadece kadınlara ait değil. MYSLF ve Black Orchid gibi parfümler çiçekli notaların maskülen yorumunu mükemmel şekilde sunuyor. Cesur ve özgün bir seçim.</p>
+              <div class="flip-meta">
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="📍 Ortam" data-en="📍 Occasion">📍 Ortam</div>
+                  <div class="flip-meta-val" data-tr="İlkbahar, gündüz, sanat" data-en="Spring, daytime, art">İlkbahar, gündüz, sanat</div>
+                </div>
+                <div class="flip-meta-box">
+                  <div class="flip-meta-label" data-tr="🏆 Öneriler" data-en="🏆 Suggestions">🏆 Öneriler</div>
+                  <div class="flip-meta-val">MYSLF, Black Orchid</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section" style="background:var(--bg-secondary);">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Zamanlama" data-en="Timing">Zamanlama</div>
+        <h2 class="section-title" data-tr="Mevsime Göre <em>Seçim</em>" data-en="Selection by <em>Season</em>">Mevsime Göre <em>Seçim</em></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="tip-list" style="max-width:900px;">
+        <div class="tip-item reveal">
+          <div class="tip-number">☀️</div>
+          <div class="tip-content">
+            <h3 data-tr="İlkbahar &amp; Yaz" data-en="Spring &amp; Summer">İlkbahar &amp; Yaz</h3>
+            <p data-tr="Sıcakta yoğun parfümler boğucu olabilir. Aquatik, narenciye ve hafif odunsu kategoriler tercih edilmeli. Invictus, MYSLF, Paradise Garden ve Blue Talisman bu mevsimin öne çıkanları." data-en="Intense perfumes can be stifling in the heat. Aquatic, citrus, and light woody categories should be preferred. Invictus, MYSLF, Paradise Garden, and Blue Talisman are the standouts of this season.">Sıcakta yoğun parfümler boğucu olabilir. Aquatik, narenciye ve hafif odunsu kategoriler tercih edilmeli. Invictus, MYSLF, Paradise Garden ve Blue Talisman bu mevsimin öne çıkanları.</p>
+          </div>
+        </div>
+        <div class="tip-item reveal delay-1">
+          <div class="tip-number">🍂</div>
+          <div class="tip-content">
+            <h3 data-tr="Sonbahar &amp; Kış" data-en="Autumn &amp; Winter">Sonbahar &amp; Kış</h3>
+            <p data-tr="Soğuk havalarda derin, ısıtıcı notalar vücut sıcaklığıyla etkileşime girer. Oryantal, odunsu ve baharatlı kategoriler bu mevsimde parlar. Sauvage Elixir, Bottled Absolu, Arabians Tonka." data-en="In cold weather, deep, warming notes interact with body temperature. Oriental, woody, and spicy categories shine in this season. Sauvage Elixir, Bottled Absolu, Arabians Tonka.">Soğuk havalarda derin, ısıtıcı notalar vücut sıcaklığıyla etkileşime girer. Oryantal, odunsu ve baharatlı kategoriler bu mevsimde parlar. Sauvage Elixir, Bottled Absolu, Arabians Tonka.</p>
+          </div>
+        </div>
+        <div class="tip-item reveal delay-2">
+          <div class="tip-number">🌙</div>
+          <div class="tip-content">
+            <h3 data-tr="Gece &amp; Özel Anlar" data-en="Night &amp; Special Moments">Gece &amp; Özel Anlar</h3>
+            <p data-tr="Tatlı, deri ve oryantal kategoriler yapay ışık altında farklı bir derinlik kazanır. Le Male Elixir, The One, Black Orchid - gece için doğanın en güçlü silahları." data-en="Sweet, leather, and oriental categories gain a different depth under artificial light. Le Male Elixir, The One, Black Orchid - nature's most powerful weapons for the night.">Tatlı, deri ve oryantal kategoriler yapay ışık altında farklı bir derinlik kazanır. Le Male Elixir, The One, Black Orchid - gece için doğanın en güçlü silahları.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="footer-brand">My Sillage</div>
+    <div class="footer-tagline" data-tr="Curated by Obsession · Est. 2024" data-en="Curated by Obsession · Est. 2024">Curated by Obsession · Est. 2024</div>
+    <div class="footer-author" data-tr="Deniz Öztürk 20210504 tarafından yapıldı" data-en="by Deniz Öztürk 20210504">Deniz Öztürk 20210504 tarafından yapıldı</div>
+    <nav class="footer-links">
+      <a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a>
+      <a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+      <a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a>
+      <a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a>
+      <a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a>
+    </nav>
+    <p class="footer-copy" data-tr="© 2024 My Sillage - Tüm hakları saklıdır." data-en="© 2024 My Sillage - All rights reserved.">© 2024 My Sillage - Tüm hakları saklıdır.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+  <script>
+    const katState = { mevsim:'tumu', yogun:'tumu' };
+
+    function katFilter(btn, group) {
+      btn.parentElement.querySelectorAll('.kat-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      katState[group] = btn.getAttribute('data-' + group);
+      applyKatFilter();
+    }
+
+    function applyKatFilter() {
+      const cards = document.querySelectorAll('#flipGrid .flip-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const mevsimData = card.getAttribute('data-mevsim') || '';
+        const yogunData  = card.getAttribute('data-yogun')  || '';
+
+        const mevsimOk = katState.mevsim === 'tumu' || mevsimData.includes(katState.mevsim);
+        const yogunOk  = katState.yogun  === 'tumu' || yogunData === katState.yogun;
+
+        if (mevsimOk && yogunOk) {
+          card.classList.remove('kat-hidden');
+          visible++;
+        } else {
+          card.classList.add('kat-hidden');
+        }
+      });
+      
+      const countEl = document.getElementById('katCount');
+      if (countEl) {
+        const lang = getCurrentLanguage();
+        const text = lang === 'en' ? `${visible} categories` : `${visible} kategori`;
+        countEl.textContent = text;
+      }
+    }
+
+    window.addEventListener('languageChanged', applyKatFilter);
+  </script>
+</body>
+</html>

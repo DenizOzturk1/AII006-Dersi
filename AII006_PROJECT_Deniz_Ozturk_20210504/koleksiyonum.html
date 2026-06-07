@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Koleksiyoncunun Köşesi - My Sillage</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .fill-control { display:flex; align-items:center; gap:.5rem; margin-top:.4rem; }
+    .fill-bar-wrap { flex:1; height:4px; background:rgba(255,255,255,.06); border-radius:2px; overflow:hidden; }
+    .fill-bar { height:100%; border-radius:2px; transition:width .5s ease; }
+    .fill-label { font-size:.5rem; letter-spacing:.15em; text-transform:uppercase; min-width:48px; text-align:right; }
+    .fill-btn { font-size:.6rem; cursor:pointer; background:none; border:none; color:var(--text-muted); padding:0; transition:color .2s; }
+    .fill-btn:hover { color:var(--gold-bright); }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-main">My Sillage</span>
+      <span class="brand-sub">Curated by Obsession</span>
+      <span class="brand-author">Deniz Öztürk 20210504</span>
+    </a>
+    <div class="nav-right">
+      <div class="lang-toggle" onclick="toggleLanguage()" title="Dil Değiştir / Change Language" data-tr-title="Dil Değiştir / Change Language" data-en-title="Change Language / Dil Değiştir">
+        <span class="lang-btn lang-btn-tr">TR</span>
+        <span class="lang-btn lang-btn-en">EN</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a></li>
+        <li><a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a></li>
+        <li><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a></li>
+        <li><a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a></li>
+        <li><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a></li>
+        <li><a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a></li>
+        <li><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a></li>
+        <li><a href="koleksiyonum.html" class="active" data-tr="Köşem" data-en="My Corner">Köşem</a></li>
+        <li><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a></li>
+      </ul>
+      <div class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir" data-tr-title="Tema Değiştir" data-en-title="Toggle Theme">
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+        <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-hero">
+      <div class="hero-eyebrow" style="justify-content:center;margin-bottom:1rem;" data-tr="Kişisel Arşiv" data-en="Personal Archive">Kişisel Arşiv</div>
+      <h1 class="page-hero-title" data-tr="Koleksiyoncunun <em>Köşesi</em>" data-en="Collector's <em>Corner</em>">Koleksiyoncunun <em>Köşesi</em></h1>
+      <p class="page-hero-sub" data-tr="Şişelerim · Hayallerim · Sonraki hedefim" data-en="My Bottles · My Dreams · Next target">Şişelerim · Hayallerim · Sonraki hedefim</p>
+    </div>
+
+
+    <section class="section" style="padding-bottom:0;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;max-width:900px;margin:0 auto;" class="reveal">
+        <div style="background:var(--bg-card);border:1px solid var(--gold-border);border-radius:8px;padding:1.5rem;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:2.8rem;color:var(--gold-bright);line-height:1;">14</div>
+          <div style="font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);margin-top:.4rem;" data-tr="Tam Şişe" data-en="Full Bottle">Tam Şişe</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--gold-border);border-radius:8px;padding:1.5rem;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:2.8rem;color:var(--gold-bright);line-height:1;">23</div>
+          <div style="font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);margin-top:.4rem;" data-tr="Denenen Decant" data-en="Decants Tested">Denenen Decant</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--gold-border);border-radius:8px;padding:1.5rem;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:2.8rem;color:var(--gold-bright);line-height:1;">8</div>
+          <div style="font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);margin-top:.4rem;" data-tr="Wishlist'te" data-en="On Wishlist">Wishlist'te</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--gold-border);border-radius:8px;padding:1.5rem;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:2.8rem;color:var(--gold-bright);line-height:1;">3</div>
+          <div style="font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);margin-top:.4rem;" data-tr="Sonraki Hedef" data-en="Next Target">Sonraki Hedef</div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section">
+      <div class="wishlist-layout">
+
+
+        <div style="display:flex;flex-direction:column;gap:1.5rem;">
+          <div class="wishlist-col reveal">
+            <div class="wishlist-col-header">
+              <span class="wishlist-col-icon">🏆</span>
+              <div>
+                <div class="wishlist-col-title" data-tr="Şişelerim" data-en="My Bottles">Şişelerim</div>
+                <div style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);" data-tr="Sahip olduklarım" data-en="Owned perfumes">Sahip olduklarım</div>
+              </div>
+              <span class="wishlist-col-count" data-tr="14 şişe" data-en="14 bottles">14 şişe</span>
+            </div>
+            <div class="wishlist-items">
+
+              <div class="wl-item">
+                <div class="wl-num">01</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Mancera</div>
+                  <div class="wl-name">Cedrat Boise</div>
+                  <div class="wl-note" data-tr="100ml · Her mevsim gidiyor · Favorim" data-en="100ml · Good for all seasons · My favorite">100ml · Her mevsim gidiyor · Favorim</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★★</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">02</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Jean Paul Gaultier</div>
+                  <div class="wl-name">Le Mâle Elixir</div>
+                  <div class="wl-note" data-tr="125ml · Kış gecelerine saklıyorum" data-en="125ml · Reserved for winter nights">125ml · Kış gecelerine saklıyorum</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★☆</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">03</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Paco Rabanne</div>
+                  <div class="wl-name">Invictus EDT</div>
+                  <div class="wl-note" data-tr="100ml · Günlük sürücüm · Bitmek üzere" data-en="100ml · My daily driver · Almost finished">100ml · Günlük sürücüm · Bitmek üzere</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★☆</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">04</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Yves Saint Laurent</div>
+                  <div class="wl-name">MYSLF EDP</div>
+                  <div class="wl-note" data-tr="60ml · İlkbahar favorisi" data-en="60ml · Spring favorite">60ml · İlkbahar favorisi</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★☆</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">05</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Dior</div>
+                  <div class="wl-name">Sauvage Elixir</div>
+                  <div class="wl-note" data-tr="60ml · Özel günlere saklıyorum" data-en="60ml · Reserved for special days">60ml · Özel günlere saklıyorum</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★★</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">06</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Viktor &amp; Rolf</div>
+                  <div class="wl-name">Spicebomb EDT</div>
+                  <div class="wl-note" data-tr="90ml · El bombası şişesi vitrine koydum" data-en="90ml · Grenade bottle displayed on shelf">90ml · El bombası şişesi vitrine koydum</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★☆</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">07</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Dolce &amp; Gabbana</div>
+                  <div class="wl-name">The One EDP</div>
+                  <div class="wl-note" data-tr="100ml · Klasik, hiç yanılmaz" data-en="100ml · Classic, never fails">100ml · Klasik, hiç yanılmaz</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★★</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">08</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Jean Paul Gaultier</div>
+                  <div class="wl-name">Paradise Garden</div>
+                  <div class="wl-note" data-tr="75ml · Yaz için sırada bekliyor" data-en="75ml · Waiting for summer">75ml · Yaz için sırada bekliyor</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★☆</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">09</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Hugo Boss</div>
+                  <div class="wl-name">Bottled Absolu</div>
+                  <div class="wl-note" data-tr="100ml · Kış silahım" data-en="100ml · My winter weapon">100ml · Kış silahım</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★★</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">10</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Montale</div>
+                  <div class="wl-name">Arabians Tonka</div>
+                  <div class="wl-note" data-tr="100ml · Niche yolculuğumun başlangıcı" data-en="100ml · Start of my niche journey">100ml · Niche yolculuğumun başlangıcı</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★★</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">11</div>
+                <div class="wl-body">
+                  <div class="wl-brand">BVLGARi</div>
+                  <div class="wl-name">Le Gemme Tygar</div>
+                  <div class="wl-note" data-tr="50ml · Lüks koleksiyonun tacı" data-en="50ml · Crown of the luxury collection">50ml · Lüks koleksiyonun tacı</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★★</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">12</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Prada</div>
+                  <div class="wl-name">Paradigme</div>
+                  <div class="wl-note" data-tr="100ml · 2025'in en güzel sürprizi" data-en="100ml · 2025's best surprise">100ml · 2025'in en güzel sürprizi</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★☆</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">13</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Tom Ford</div>
+                  <div class="wl-name">Black Orchid EDP</div>
+                  <div class="wl-note" data-tr="50ml · Tartışmalı ama bırakamıyorum" data-en="50ml · Controversial but can't leave it">50ml · Tartışmalı ama bırakamıyorum</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★★</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">14</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Marc-Antoine Barrois</div>
+                  <div class="wl-name">Ganymede EDP</div>
+                  <div class="wl-note" data-tr="100ml · En özgün şişem - uzay kokuyor" data-en="100ml · My most unique bottle - smells like space">100ml · En özgün şişem - uzay kokuyor</div>
+                </div>
+                <div>
+                  <div class="wl-stars">★★★★★</div>
+                  <span class="wl-badge wl-badge-own" data-tr="Sahip" data-en="Owned">Sahip</span>
+                </div>
+              </div>
+
+            </div>
+            <div class="wishlist-note-box" data-tr="&quot;Sauvage Elixir'i duty-free'den aldım, yarı fiyatına. Her seyahat fırsatı kaçırılmaz.&quot;" data-en="&quot;Got Sauvage Elixir from duty-free at half price. Never miss a travel opportunity.&quot;">
+              "Sauvage Elixir'i duty-free'den aldım, yarı fiyatına. Her seyahat fırsatı kaçırılmaz."
+            </div>
+          </div>
+
+
+          <div class="wishlist-col reveal" style="margin-top:0;">
+            <div class="wishlist-col-header">
+              <span class="wishlist-col-icon">✨</span>
+              <div>
+                <div class="wishlist-col-title" data-tr="Ayın Parfümü" data-en="Perfume of the Month">Ayın Parfümü</div>
+                <div style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);" data-tr="Bu ayki favorim" data-en="My favorite this month">Bu ayki favorim</div>
+              </div>
+            </div>
+            <div style="padding:1.5rem;display:flex;flex-direction:column;gap:.7rem;">
+              <div style="background:var(--bg-primary);border:1px solid rgba(212,168,67,0.08);border-radius:6px;padding:4rem 2rem;display:flex;flex-direction:column;gap:2.5rem;position:relative;min-height:300px;justify-content:center;" id="monthlyCard">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                  <div>
+                    <div style="font-family:var(--font-display);font-size:2.2rem;color:var(--gold-bright);line-height:1.1;" id="monthlyName">Mancera Cedrat Boise</div>
+                    <div style="font-size:.85rem;color:var(--text-secondary);margin-top:.6rem;" id="monthlyNote" data-tr="Her mevsim gidiyor · Bu ay en çok kullananım" data-en="Good for all seasons · My most used this month">Her mevsim gidiyor · Bu ay en çok kullananım</div>
+                  </div>
+                  <div style="font-size:3.5rem;" id="monthlyEmoji">🌿</div>
+                </div>
+                
+                <div style="border-top:1px solid rgba(212,168,67,0.08);padding-top:1rem;">
+                  <select id="monthlySelect" onchange="setMonthly()" style="width:100%;background:var(--bg-secondary);border:1px solid var(--gold-border);color:var(--text-primary);font-family:var(--font-ui);font-size:.65rem;letter-spacing:.1em;padding:.6rem .8rem;border-radius:4px;cursor:pointer;outline:none;">
+                    <option value="Mancera Cedrat Boise|🌿|Her mevsim gidiyor · Bu ay en çok kullananım">Mancera Cedrat Boise</option>
+                    <option value="JPG Le Male Elixir|🌙|Kış gecelerine saklıyorum">JPG Le Male Elixir</option>
+                    <option value="Dior Sauvage Elixir|⚡|Özel günlere saklıyorum">Dior Sauvage Elixir</option>
+                    <option value="Paco Rabanne Invictus|🏆|Günlük sürücüm">Paco Rabanne Invictus</option>
+                    <option value="YSL MYSLF|🌸|İlkbahar favorisi">YSL MYSLF</option>
+                    <option value="Boss Bottled Absolu|🔥|Kış silahım">Boss Bottled Absolu</option>
+                    <option value="Tom Ford Black Orchid|🖤|Tartışmalı ama bırakamıyorum">Tom Ford Black Orchid</option>
+                    <option value="Montale Arabians Tonka|⚫Niche yolculuğumun başlangıcı">Montale Arabians Tonka</option>
+                    <option value="BVLGARi Tygar|🍋|Lüks koleksiyonun tacı">BVLGARi Tygar</option>
+                    <option value="D&G The One|☕|Klasik, hiç yanılmaz">D&G The One</option>
+                    <option value="Marc-Antoine Barrois Ganymede|💫|En özgün şişem">Marc-Antoine Barrois Ganymede</option>
+                    <option value="Prada Paradigme|👔|2025'in en güzel sürprizi">Prada Paradigme</option>
+                    <option value="V&R Spicebomb EDT|🌶️|El bombası şişesi vitrine koydum">V&R Spicebomb EDT</option>
+                    <option value="JPG Paradise Garden|🌺|Yaz için sırada bekliyor">JPG Paradise Garden</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+
+          <div class="wishlist-col reveal delay-1">
+            <div class="wishlist-col-header">
+              <span class="wishlist-col-icon">🎯</span>
+              <div>
+                <div class="wishlist-col-title" data-tr="Sonraki 3 Hedef" data-en="Next 3 Targets">Sonraki 3 Hedef</div>
+                <div style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);" data-tr="Kesin alacaklarım" data-en="Must haves">Kesin alacaklarım</div>
+              </div>
+              <span class="wishlist-col-count" data-tr="3 şişe" data-en="3 bottles">3 şişe</span>
+            </div>
+            <div class="wishlist-items">
+
+              <div class="wl-item">
+                <div class="wl-num">01</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Parfums de Marly</div>
+                  <div class="wl-name">Layton</div>
+                  <div class="wl-note" data-tr="125ml · İmza kokum olmaya aday · Sırada" data-en="125ml · Signature scent candidate · Next in line">125ml · İmza kokum olmaya aday · Sırada</div>
+                </div>
+                <span class="wl-badge wl-badge-next" data-tr="Sırada" data-en="Next">Sırada</span>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">02</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Louis Vuitton</div>
+                  <div class="wl-name">Imagination EDP</div>
+                  <div class="wl-note" data-tr="100ml · LV butiğinden · Duty free planı" data-en="100ml · From LV boutique · Duty free plan">100ml · LV butiğinden · Duty free planı</div>
+                </div>
+                <span class="wl-badge wl-badge-next" data-tr="Sırada" data-en="Next">Sırada</span>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">03</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Montale</div>
+                  <div class="wl-name">Blue Talisman</div>
+                  <div class="wl-note" data-tr="100ml · Cedrat Boise'nin su kardeşi" data-en="100ml · Cedrat Boise's aquatic sibling">100ml · Cedrat Boise'nin su kardeşi</div>
+                </div>
+                <span class="wl-badge wl-badge-next" data-tr="Sırada" data-en="Next">Sırada</span>
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="wishlist-col reveal delay-2">
+            <div class="wishlist-col-header">
+              <span class="wishlist-col-icon">💭</span>
+              <div>
+                <div class="wishlist-col-title" data-tr="Hayal Listesi" data-en="Wishlist">Hayal Listesi</div>
+                <div style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);" data-tr="Bir gün belki..." data-en="Maybe one day...">Bir gün belki...</div>
+              </div>
+              <span class="wishlist-col-count" data-tr="5 şişe" data-en="5 bottles">5 şişe</span>
+            </div>
+            <div class="wishlist-items">
+
+              <div class="wl-item">
+                <div class="wl-num">01</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Creed</div>
+                  <div class="wl-name">Aventus</div>
+                  <div class="wl-note" data-tr="100ml · Efsane ama çok pahalı" data-en="100ml · Legend but too expensive">100ml · Efsane ama çok pahalı</div>
+                </div>
+                <span class="wl-badge wl-badge-want" data-tr="Hayal" data-en="Dream">Hayal</span>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">02</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Parfums de Marly</div>
+                  <div class="wl-name">Herod</div>
+                  <div class="wl-note" data-tr="125ml · Sigara + pudra + ağaç = efsane" data-en="125ml · Tobacco + powder + wood = legend">125ml · Sigara + pudra + ağaç = efsane</div>
+                </div>
+                <span class="wl-badge wl-badge-want" data-tr="Hayal" data-en="Dream">Hayal</span>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">03</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Xerjoff</div>
+                  <div class="wl-name">Naxos</div>
+                  <div class="wl-note" data-tr="100ml · Bal + tütün + lavanta = sihir" data-en="100ml · Honey + tobacco + lavender = magic">100ml · Bal + tütün + lavanta = sihir</div>
+                </div>
+                <span class="wl-badge wl-badge-want" data-tr="Hayal" data-en="Dream">Hayal</span>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">04</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Roja Parfums</div>
+                  <div class="wl-name">Enigma</div>
+                  <div class="wl-note" data-tr="100ml · Koleksiyonun zirvesi olur" data-en="100ml · Would be the peak of collection">100ml · Koleksiyonun zirvesi olur</div>
+                </div>
+                <span class="wl-badge wl-badge-want" data-tr="Hayal" data-en="Dream">Hayal</span>
+              </div>
+
+              <div class="wl-item">
+                <div class="wl-num">05</div>
+                <div class="wl-body">
+                  <div class="wl-brand">Clive Christian</div>
+                  <div class="wl-name">No. 1 Masculine</div>
+                  <div class="wl-note" data-tr="50ml · Dünya'nın en pahalı parfümü" data-en="50ml · The world's most expensive perfume">50ml · Dünya'nın en pahalı parfümü</div>
+                </div>
+                <span class="wl-badge wl-badge-want" data-tr="Hayal" data-en="Dream">Hayal</span>
+              </div>
+
+            </div>
+            <div class="wishlist-note-box" data-tr="&quot;Creed Aventus için decant buldum - kendi şişemi almak için biraz daha bekleyeceğim. Jomashop fiyatlarını takip ediyorum.&quot;" data-en="&quot;Found a decant for Creed Aventus - I'll wait a bit more for my own bottle. Following Jomashop prices.&quot;">
+              "Creed Aventus için decant buldum - kendi şişemi almak için biraz daha bekleyeceğim. Jomashop fiyatlarını takip ediyorum."
+            </div>
+          </div>
+
+
+          <div class="wishlist-col reveal delay-3">
+            <div class="wishlist-col-header">
+              <span class="wishlist-col-icon">📓</span>
+              <div>
+                <div class="wishlist-col-title" data-tr="Parfüm Günlüğü" data-en="Perfume Journal">Parfüm Günlüğü</div>
+                <div style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);" data-tr="Son notlarım" data-en="Latest notes">Son notlarım</div>
+              </div>
+            </div>
+            <div style="padding:1rem;display:flex;flex-direction:column;gap:.7rem;">
+
+              <div style="background:var(--bg-primary);border:1px solid rgba(212,168,67,0.08);border-radius:6px;padding:1rem 1.2rem;">
+                <div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.4rem;" data-tr="15 Mayıs 2025 · İstanbul · 22°C" data-en="May 15, 2025 · Istanbul · 22°C">15 Mayıs 2025 · İstanbul · 22°C</div>
+                <div style="font-family:var(--font-display);font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">Cedrat Boise · 3 sprays</div>
+                <div style="font-size:.7rem;color:var(--text-secondary);line-height:1.6;" data-tr="Sillage mükemmeldi. Akşam arkadaşlar &quot;ne bu koku?&quot; dedi. Büyük memnuniyet. Limon açılışı 45 dk sonra derin patchouli + sedir'e döndü - tam istediğim profil." data-en="Sillage was excellent. Friends asked &quot;what's that scent?&quot; in the evening. Great satisfaction. Lemon opening turned into deep patchouli + cedar after 45 mins - exactly my profile.">Sillage mükemmeldi. Akşam arkadaşlar "ne bu koku?" dedi. Büyük memnuniyet. Limon açılışı 45 dk sonra derin patchouli + sedir'e döndü - tam istediğim profil.</div>
+              </div>
+
+              <div style="background:var(--bg-primary);border:1px solid rgba(212,168,67,0.08);border-radius:6px;padding:1rem 1.2rem;">
+                <div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.4rem;" data-tr="3 Şubat 2025 · Akşam · Kapalı Mekan" data-en="Feb 3, 2025 · Evening · Indoor">3 Şubat 2025 · Akşam · Kapalı Mekan</div>
+                <div style="font-family:var(--font-display);font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">Le Male Elixir · 1 spray</div>
+                <div style="font-size:.7rem;color:var(--text-secondary);line-height:1.6;" data-tr="Tek spreyden oda doldu! 2 sprey olan gün çok yoğundu. Bu parfüm 1 sprey kuralı kesin. Tonka + bal kombinasyonu gece boyunca aktifti. 9 saat sonra hâlâ kıyafette vardı." data-en="One spray filled the room! The day with 2 sprays was too intense. The 1 spray rule is absolute for this one. Tonka + honey combo was active all night. Still on clothes after 9 hours.">Tek spreyden oda doldu! 2 sprey olan gün çok yoğundu. Bu parfüm 1 sprey kuralı kesin. Tonka + bal kombinasyonu gece boyunca aktifti. 9 saat sonra hâlâ kıyafette vardı.</div>
+              </div>
+
+              <div style="background:var(--bg-primary);border:1px solid rgba(212,168,67,0.08);border-radius:6px;padding:1rem 1.2rem;">
+                <div style="font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.4rem;" data-tr="Decant Notu · Layton · 5ml" data-en="Decant Note · Layton · 5ml">Decant Notu · Layton · 5ml</div>
+                <div style="font-family:var(--font-display);font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">Parfums de Marly · First test</div>
+                <div style="font-size:.7rem;color:var(--text-secondary);line-height:1.6;" data-tr="Beklenmedik: elma ve lavanta açılışı çok ferah ama hemen arkasından gelen vanilya ve baharatlar derinlik katıyor. Silajı çok dengeli, ofis için bile uygun olabilir. Kesinlikle tam şişeye değer." data-en="Unexpected: apple and lavender opening is very fresh, but immediately followed by vanilla and spices that add depth. Sillage is very balanced, could even be suitable for office. Definitely worth a full bottle.">Beklenmedik: elma ve lavanta açılışı çok ferah ama hemen arkasından gelen vanilya ve baharatlar derinlik katıyor. Silajı çok dengeli, ofis için bile uygun olabilir. Kesinlikle tam şişeye değer.</div>
+              </div>
+
+            </div>
+          </div>
+
+        </div> 
+      </div> 
+    </section> 
+
+
+
+
+
+
+    <section class="section" style="background:var(--bg-secondary);">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" data-tr="Kişisel Sıralama" data-en="Personal Ranking">Kişisel Sıralama</div>
+        <h2 class="section-title" data-tr="Koleksiyonumun <em>Zirvesi</em>" data-en="The <em>Peak</em> of My Collection">Koleksiyonumun <em>Zirvesi</em></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div style="max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:.8rem;">
+        <div class="wl-item reveal" style="background:var(--bg-card);">
+          <div style="font-family:var(--font-display);font-size:2rem;color:var(--gold-bright);min-width:40px;">🥇</div>
+          <div class="wl-body"><div class="wl-brand">Mancera</div><div class="wl-name">Cedrat Boise</div><div class="wl-note" data-tr="Her mevsim, her ortam - en çok kullanan favorim" data-en="Any season, any setting - my most used favorite">Her mevsim, her ortam - en çok kullanan favorim</div></div>
+          <div class="wl-stars">★★★★★</div>
+        </div>
+        <div class="wl-item reveal" style="background:var(--bg-card);">
+          <div style="font-family:var(--font-display);font-size:2rem;color:#c0c0c0;min-width:40px;">🥈</div>
+          <div class="wl-body"><div class="wl-brand">Dior</div><div class="wl-name">Sauvage Elixir</div><div class="wl-note" data-tr="Özel günlerin değişmezi - herkes dönüp bakıyor" data-en="Constant for special days - turns every head">Özel günlerin değişmezi - herkes dönüp bakıyor</div></div>
+          <div class="wl-stars">★★★★★</div>
+        </div>
+        <div class="wl-item reveal" style="background:var(--bg-card);">
+          <div style="font-family:var(--font-display);font-size:2rem;color:#cd7f32;min-width:40px;">🥉</div>
+          <div class="wl-body"><div class="wl-brand">Marc-Antoine Barrois</div><div class="wl-name">Ganymede</div><div class="wl-note" data-tr="En özgün ve en sanatsal şişem - konuşturuyor" data-en="My most unique and artistic bottle - makes people talk">En özgün ve en sanatsal şişem - konuşturuyor</div></div>
+          <div class="wl-stars">★★★★★</div>
+        </div>
+        <div class="wl-item reveal" style="background:var(--bg-card);">
+          <div style="font-family:var(--font-display);font-size:1.5rem;color:var(--gold-dim);min-width:40px; text-align:center;">4</div>
+          <div class="wl-body"><div class="wl-brand">Tom Ford</div><div class="wl-name">Black Orchid</div><div class="wl-note" data-tr="En tartışmalı ama en akılda kalıcı koku" data-en="Most controversial but most memorable scent">En tartışmalı ama en akılda kalıcı koku</div></div>
+          <div class="wl-stars">★★★★★</div>
+        </div>
+        <div class="wl-item reveal" style="background:var(--bg-card);">
+          <div style="font-family:var(--font-display);font-size:1.5rem;color:var(--gold-dim);min-width:40px; text-align:center;">5</div>
+          <div class="wl-body"><div class="wl-brand">Montale</div><div class="wl-name">Arabians Tonka</div><div class="wl-note" data-tr="Niche yolculuğumun başlattığı bağımlılık" data-en="The addiction that started my niche journey">Niche yolculuğumun başlattığı bağımlılık</div></div>
+          <div class="wl-stars">★★★★★</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="footer-brand">My Sillage</div>
+    <div class="footer-tagline" data-tr="Curated by Obsession · Est. 2024" data-en="Curated by Obsession · Est. 2024">Curated by Obsession · Est. 2024</div>
+    <div class="footer-author" data-tr="Deniz Öztürk 20210504 tarafından yapıldı" data-en="by Deniz Öztürk 20210504">Deniz Öztürk 20210504 tarafından yapıldı</div>
+    <nav class="footer-links">
+      <a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a><a href="notalar.html" data-tr="Notalar" data-en="Notes">Notalar</a>
+      <a href="kategoriler.html" data-tr="Kategoriler" data-en="Categories">Kategoriler</a><a href="koleksiyon.html" data-tr="Koleksiyon" data-en="Collection">Koleksiyon</a>
+      <a href="ipuclari.html" data-tr="İpuçları" data-en="Tips">İpuçları</a><a href="sozluk.html" data-tr="Sözlük" data-en="Glossary">Sözlük</a>
+      <a href="test.html" data-tr="DNA Testi" data-en="DNA Test">DNA Testi</a><a href="takvim.html" data-tr="Takvim" data-en="Calendar">Takvim</a>
+      <a href="koleksiyonum.html" data-tr="Köşem" data-en="My Corner">Köşem</a><a href="iletisim.html" data-tr="Fikirler &amp; Mağazalar" data-en="Ideas &amp; Stores">Fikirler &amp; Mağazalar</a>
+    </nav>
+    <p class="footer-copy" data-tr="© 2024 My Sillage - Tüm hakları saklıdır." data-en="© 2024 My Sillage - All rights reserved.">© 2024 My Sillage - Tüm hakları saklıdır.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+  <script>
+    function setMonthly() {
+      const val = document.getElementById('monthlySelect').value.split('|');
+      document.getElementById('monthlyName').textContent  = val[0] || '';
+      document.getElementById('monthlyEmoji').textContent = val[1] || '✨';
+      document.getElementById('monthlyNote').textContent  = val[2] || '';
+      localStorage.setItem('monthlyParfum', document.getElementById('monthlySelect').value);
+    }
+    const savedMonthly = localStorage.getItem('monthlyParfum');
+    if (savedMonthly) {
+      const select = document.getElementById('monthlySelect');
+      if (select) {
+        select.value = savedMonthly;
+        setMonthly();
+      }
+    }
+
+
+    const fillLevels = {
+      tr: ['%100','%75','%50','%25','Bitmek Üzere'],
+      en: ['100%','75%','50%','25%','Almost Empty']
+    };
+    const fillColors = ['#6fcf97','#d4a843','#e8c876','#eb8080','#eb5757'];
+    const fillWidths = [100, 75, 50, 25, 10];
+
+    function updateFillLabels() {
+      const lang = getCurrentLanguage();
+      const wlItems = document.querySelectorAll('.wishlist-col:first-child .wl-item');
+      wlItems.forEach((item, i) => {
+        const key = 'fill_' + i;
+        const saved = parseInt(localStorage.getItem(key) || '0');
+        const label = document.getElementById('flabel_' + i);
+        if (label) {
+          label.textContent = fillLevels[lang][saved];
+        }
+      });
+    }
+
+    const wlItems = document.querySelectorAll('.wishlist-col:first-child .wl-item');
+    wlItems.forEach((item, i) => {
+      const key = 'fill_' + i;
+      const saved = parseInt(localStorage.getItem(key) || '0');
+      const nameEl = item.querySelector('.wl-name');
+      if (!nameEl) return;
+
+      const fillDiv = document.createElement('div');
+      fillDiv.className = 'fill-control';
+      const lang = getCurrentLanguage();
+      fillDiv.innerHTML = `
+        <div class="fill-bar-wrap">
+          <div class="fill-bar" id="fbar_${i}" style="width:${fillWidths[saved]}%;background:${fillColors[saved]};"></div>
+        </div>
+        <span class="fill-label" id="flabel_${i}" style="color:${fillColors[saved]};">${fillLevels[lang][saved]}</span>
+        <button class="fill-btn" title="Doluluk güncelle" data-tr-title="Doluluk güncelle" data-en-title="Update fill level" onclick="cycleFill(${i})">⬤</button>
+      `;
+      const noteEl = item.querySelector('.wl-note');
+      if (noteEl) noteEl.after(fillDiv);
+    });
+
+    function cycleFill(idx) {
+      const key = 'fill_' + idx;
+      let cur = parseInt(localStorage.getItem(key) || '0');
+      cur = (cur + 1) % fillLevels.tr.length;
+      localStorage.setItem(key, cur);
+      const bar   = document.getElementById('fbar_' + idx);
+      const label = document.getElementById('flabel_' + idx);
+      const lang = getCurrentLanguage();
+      if (bar)   { bar.style.width = fillWidths[cur] + '%'; bar.style.background = fillColors[cur]; }
+      if (label) { label.textContent = fillLevels[lang][cur]; label.style.color = fillColors[cur]; }
+    }
+
+    window.addEventListener('languageChanged', () => {
+      updateFillLabels();
+    });
+  </script>
+</body>
+</html>
+</toolcall_result>
+
+</body>
+</html>
